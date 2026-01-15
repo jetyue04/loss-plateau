@@ -118,7 +118,7 @@ def plot_grokking(history, save_path='grokking_result.png'):
         info_lines.append(f"    - Val threshold ({history.get('val_threshold', 95):.0f}%) reached: step {history['grokking_step']:,}")
         info_lines.append(f"    - Grokking delay: {history['grokking_step'] - history['train_threshold_step']:,} steps")
     else:
-        info_lines.append(f"  ✗ Grokking not detected within training period")
+        info_lines.append(f"    Grokking not detected within training period")
     
     # Display text
     info_text = '\n'.join(info_lines)
