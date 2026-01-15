@@ -74,10 +74,47 @@ def evaluate(model, loader, criterion, device):
     return total_loss / len(loader), 100 * correct / total
 
 
-def train_model(model, train_loader, val_loader, optimizer, criterion, device, 
-                num_steps=350000, log_interval=50):
+def detect_grokking(history, train_threshold=95.0, val_threshold=95.0, min_gap=1000):
     """
-    Main training loop.
+    Detect when grokking occurs based on training and validation accuracy.
+    
+    Grokking is defined as: validation accuracy reaching the threshold after
+    training accuracy has been above threshold for at least min_gap steps.
+    
+    Args:
+        history: Dictionary containing training history
+        train_threshold: Training accuracy threshold (default: 95%)
+        val_threshold: Validation accuracy threshold (default: 95%)
+        min_gap: Minimum steps between train and val threshold crossing
+    
+    Returns:
+        grokking_step: Step when grokking occurred (None if not detected)
+        train_step: Step when training accuracy crossed threshold
+    """
+    train_step = None
+    grokking_step = None
+    
+    # Find when training accuracy first crosses threshold
+    for i, (step, train_acc) in enumerate(zip(history['steps'], history['train_acc'])):
+        if train_acc >= train_threshold:
+            train_step = step
+            break
+    
+    # Find when validation accuracy crosses threshold (must be after train + min_gap)
+    if train_step is not None:
+        for i, (step, val_acc) in enumerate(zip(history['steps'], history['val_acc'])):
+            if step > train_step + min_gap and val_acc >= val_threshold:
+                grokking_step = step
+                break
+    
+    return grokking_step, train_step
+
+
+def train_model(model, train_loader, val_loader, optimizer, criterion, device, 
+                num_steps=350000, log_interval=50, train_threshold=95.0, val_threshold=95.0,
+                config=None):
+    """
+    Main training loop with grokking detection.
     
     Args:
         model: PyTorch model
@@ -88,19 +125,29 @@ def train_model(model, train_loader, val_loader, optimizer, criterion, device,
         device: Device to train on
         num_steps: Total number of training steps
         log_interval: Steps between logging
+        train_threshold: Training accuracy threshold for grokking detection
+        val_threshold: Validation accuracy threshold for grokking detection
+        config: Dictionary with training configuration info for plotting
     
     Returns:
-        history: Dictionary containing training history
+        history: Dictionary containing training history and grokking info
     """
     model = model.to(device)
     
     history = {
         'train_loss': [], 'train_acc': [],
         'val_loss': [], 'val_acc': [],
-        'steps': []
+        'steps': [],
+        'grokking_detected': False,
+        'grokking_step': None,
+        'train_threshold_step': None,
+        'train_threshold': train_threshold,
+        'val_threshold': val_threshold,
+        'config': config if config is not None else {}
     }
     
     step = 0
+    grokking_announced = False
     print("Training...")
     pbar = tqdm(total=num_steps)
     
@@ -131,12 +178,44 @@ def train_model(model, train_loader, val_loader, optimizer, criterion, device,
                 history['val_loss'].append(val_loss)
                 history['val_acc'].append(val_acc)
                 
+                # Check for grokking in real-time
+                if not grokking_announced:
+                    grok_step, train_step = detect_grokking(history)
+                    if grok_step is not None:
+                        grokking_announced = True
+                        pbar.write(f"\n{'='*60}")
+                        pbar.write(f"  GROKKING DETECTED!  ")
+                        pbar.write(f"Training accuracy reached 95% at step: {train_step:,}")
+                        pbar.write(f"Validation accuracy reached 95% at step: {grok_step:,}")
+                        pbar.write(f"Grokking delay: {grok_step - train_step:,} steps")
+                        pbar.write(f"{'='*60}\n")
+                
                 pbar.set_postfix({
                     'train_acc': f'{train_acc:.1f}%',
                     'val_acc': f'{val_acc:.1f}%'
                 })
     
     pbar.close()
+    
+    # Final grokking detection
+    grokking_step, train_threshold_step = detect_grokking(history)
+    history['grokking_detected'] = grokking_step is not None
+    history['grokking_step'] = grokking_step
+    history['train_threshold_step'] = train_threshold_step
+    
+    print("\n" + "="*60)
     print("Training complete.")
+    print("="*60)
+    
+    if history['grokking_detected']:
+        print(f"✓ Grokking occurred at step: {grokking_step:,}")
+        print(f"  Training threshold (95%) reached at: {train_threshold_step:,}")
+        print(f"  Grokking delay: {grokking_step - train_threshold_step:,} steps")
+    else:
+        print("✗ Grokking not detected within training period")
+        if train_threshold_step:
+            print(f"  (Training threshold reached at step {train_threshold_step:,}, but validation did not follow)")
+    
+    print("="*60 + "\n")
     
     return history
