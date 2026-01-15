@@ -87,7 +87,8 @@ def main():
         num_layers=args.num_layers,
         dropout=args.dropout
     )
-    print(f"Model parameters: {sum(p.numel() for p in model.parameters()):,}")
+    model_params = sum(p.numel() for p in model.parameters())
+    print(f"Model parameters: {model_params:,}")
     
     # Create optimizer
     print(f"\nOptimizer: AdamW (lr={args.lr}, weight_decay={args.weight_decay})")
@@ -100,6 +101,24 @@ def main():
     
     criterion = nn.CrossEntropyLoss()
     
+    # Prepare config dictionary for visualization
+    config = {
+        'model_params': model_params,
+        'd_model': args.d_model,
+        'nhead': args.nhead,
+        'num_layers': args.num_layers,
+        'dropout': args.dropout,
+        'lr': args.lr,
+        'weight_decay': args.weight_decay,
+        'batch_size': batch_size,
+        'num_steps': args.num_steps,
+        'p': args.p,
+        'train_fraction': args.train_fraction,
+        'train_size': len(train_data),
+        'val_size': len(val_data),
+        'seed': args.seed,
+    }
+    
     # Train model
     print(f"\nTraining for {args.num_steps} steps...")
     history = train_model(
@@ -110,7 +129,8 @@ def main():
         criterion=criterion,
         device=device,
         num_steps=args.num_steps,
-        log_interval=args.log_interval
+        log_interval=args.log_interval,
+        config=config
     )
     
     # Plot results
@@ -120,3 +140,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    

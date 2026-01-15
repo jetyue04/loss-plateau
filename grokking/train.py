@@ -111,7 +111,8 @@ def detect_grokking(history, train_threshold=95.0, val_threshold=95.0, min_gap=1
 
 
 def train_model(model, train_loader, val_loader, optimizer, criterion, device, 
-                num_steps=350000, log_interval=50):
+                num_steps=350000, log_interval=50, train_threshold=95.0, val_threshold=95.0,
+                config=None):
     """
     Main training loop with grokking detection.
     
@@ -124,6 +125,9 @@ def train_model(model, train_loader, val_loader, optimizer, criterion, device,
         device: Device to train on
         num_steps: Total number of training steps
         log_interval: Steps between logging
+        train_threshold: Training accuracy threshold for grokking detection
+        val_threshold: Validation accuracy threshold for grokking detection
+        config: Dictionary with training configuration info for plotting
     
     Returns:
         history: Dictionary containing training history and grokking info
@@ -136,7 +140,10 @@ def train_model(model, train_loader, val_loader, optimizer, criterion, device,
         'steps': [],
         'grokking_detected': False,
         'grokking_step': None,
-        'train_threshold_step': None
+        'train_threshold_step': None,
+        'train_threshold': train_threshold,
+        'val_threshold': val_threshold,
+        'config': config if config is not None else {}
     }
     
     step = 0
@@ -177,7 +184,7 @@ def train_model(model, train_loader, val_loader, optimizer, criterion, device,
                     if grok_step is not None:
                         grokking_announced = True
                         pbar.write(f"\n{'='*60}")
-                        pbar.write(f"GROKKING DETECTED!")
+                        pbar.write(f"  GROKKING DETECTED!  ")
                         pbar.write(f"Training accuracy reached 95% at step: {train_step:,}")
                         pbar.write(f"Validation accuracy reached 95% at step: {grok_step:,}")
                         pbar.write(f"Grokking delay: {grok_step - train_step:,} steps")
