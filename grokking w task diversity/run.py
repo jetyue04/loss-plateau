@@ -53,6 +53,14 @@ def main():
     parser.add_argument('--log_interval', type=int, default=50,
                         help='Steps between logging (default: 50)')
     
+    # Checkpoint parameters
+    parser.add_argument('--checkpoint_dir', type=str, default='checkpoints',
+                        help='Directory to save checkpoints (default: checkpoints)')
+    parser.add_argument('--checkpoint_interval', type=int, default=1000,
+                        help='Steps between checkpoint saves (default: 1000)')
+    parser.add_argument('--resume', type=str, default=None,
+                        help='Resume from checkpoint: "latest" or path to checkpoint file')
+    
     # Output parameters
     parser.add_argument('--save_path', type=str, default='grokking_result.png',
                         help='Path to save the plot (default: grokking_result.png)')
@@ -163,6 +171,12 @@ def main():
     
     # Train model
     print(f"\nTraining for {args.num_steps} steps...")
+    if args.resume:
+        print(f"Note: Will attempt to resume from checkpoint")
+    print(f"Checkpoints will be saved to: {args.checkpoint_dir}/")
+    print(f"Checkpoint interval: every {args.checkpoint_interval} steps")
+    print(f"\n  If training is interrupted, resume with: --resume latest\n")
+    
     history = train_model(
         model=model,
         train_loader=train_loader,
@@ -172,7 +186,10 @@ def main():
         device=device,
         num_steps=args.num_steps,
         log_interval=args.log_interval,
-        config=config
+        config=config,
+        checkpoint_dir=args.checkpoint_dir,
+        checkpoint_interval=args.checkpoint_interval,
+        resume_from=args.resume
     )
     
     # Plot results
