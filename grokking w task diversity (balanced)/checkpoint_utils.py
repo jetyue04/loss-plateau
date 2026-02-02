@@ -121,7 +121,7 @@ def inspect_checkpoint(checkpoint_path):
             delay = history['grokking_step'] - history['train_threshold_step']
             print(f"  Grokking delay: {delay:,} steps")
     else:
-        print(f"  ✗ Grokking not yet detected")
+        print(f"    Grokking not yet detected")
         if history.get('train_threshold_step'):
             print(f"  (Training threshold reached at step {history['train_threshold_step']:,})")
     
@@ -212,7 +212,7 @@ def compare_checkpoints(checkpoint_paths):
     print(f"{'Grokking Detected':<30}", end='')
     for cp in checkpoints:
         grokking = cp['checkpoint'].get('history', {}).get('grokking_detected', False)
-        grok_str = "✓ Yes" if grokking else "✗ No"
+        grok_str = "  Yes" if grokking else "  No"
         print(f"{grok_str:>20}     ", end='')
     print()
     

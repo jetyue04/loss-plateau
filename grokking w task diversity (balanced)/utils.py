@@ -122,7 +122,7 @@ def plot_grokking(history, save_path='grokking_result.png'):
     info_lines.append(f"  Final Val Accuracy: {history['val_acc'][-1]:.2f}%")
     
     if history.get('grokking_detected', False):
-        info_lines.append(f"  ✓ GROKKING DETECTED:")
+        info_lines.append(f"    GROKKING DETECTED:")
         info_lines.append(f"    - Train threshold ({history.get('train_threshold', 95):.0f}%) reached: step {history['train_threshold_step']:,}")
         info_lines.append(f"    - Val threshold ({history.get('val_threshold', 95):.0f}%) reached: step {history['grokking_step']:,}")
         info_lines.append(f"    - Grokking delay: {history['grokking_step'] - history['train_threshold_step']:,} steps")
@@ -146,7 +146,7 @@ def plot_grokking(history, save_path='grokking_result.png'):
     print(f"Val Accuracy: {history['val_acc'][-1]:.2f}%")
     
     if history.get('grokking_detected', False):
-        print(f"\n✓ Grokking detected:")
+        print(f"\n  Grokking detected:")
         print(f"  - Training reached {history.get('train_threshold', 95):.0f}% at step: {history['train_threshold_step']:,}")
         print(f"  - Validation reached {history.get('val_threshold', 95):.0f}% at step: {history['grokking_step']:,}")
         print(f"  - Grokking delay: {history['grokking_step'] - history['train_threshold_step']:,} steps")
