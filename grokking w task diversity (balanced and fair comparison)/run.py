@@ -25,11 +25,15 @@ def main():
     parser.add_argument('--multi_task', action='store_true',
                         help='Enable multi-task training with mixed operations')
     parser.add_argument('--task_division', type=float, default=0.5,
-                        help='Proportion of division tasks (default: 0.5)')
+                        help='Proportion of division tasks in batches (default: 0.5)')
     parser.add_argument('--task_addition', type=float, default=0.5,
-                        help='Proportion of addition tasks (default: 0.5)')
+                        help='Proportion of addition tasks in batches (default: 0.5)')
     parser.add_argument('--task_subtraction', type=float, default=0.0,
-                        help='Proportion of subtraction tasks (default: 0.0)')
+                        help='Proportion of subtraction tasks in batches (default: 0.0)')
+    parser.add_argument('--fair_comparison', action='store_true', default=True,
+                        help='Use same number of training examples per task regardless of mix (default: True)')
+    parser.add_argument('--no_fair_comparison', dest='fair_comparison', action='store_false',
+                        help='Use original unfair comparison (dataset size varies with task mix)')
     
     # Model parameters
     parser.add_argument('--d_model', type=int, default=128,
@@ -93,7 +97,8 @@ def main():
             p=args.p,
             train_fraction=args.train_fraction,
             seed=args.seed,
-            task_mix=task_mix
+            task_mix=task_mix,
+            fair_comparison=args.fair_comparison
         )
     else:
         print(f"\nGenerating dataset (p={args.p}, train_fraction={args.train_fraction})...")
@@ -176,6 +181,7 @@ def main():
     
     if args.multi_task:
         config['task_mix'] = task_mix
+        config['fair_comparison'] = args.fair_comparison
     
     # Train model
     print(f"\nTraining for {args.num_steps} steps...")
@@ -183,7 +189,7 @@ def main():
         print(f"Note: Will attempt to resume from checkpoint")
     print(f"Checkpoints will be saved to: {args.checkpoint_dir}/")
     print(f"Checkpoint interval: every {args.checkpoint_interval} steps")
-    print(f"\n💡 Tip: If training is interrupted, resume with: --resume latest\n")
+    print(f"\n  Tip: If training is interrupted, resume with: --resume latest\n")
     
     history = train_model(
         model=model,

@@ -154,11 +154,18 @@ def create_balanced_dataloaders(train_data, val_data, vocab, task_mix, batch_siz
         )
         
         print(f"\nBalanced batch sampling enabled:")
-        print(f"  Each batch of {batch_size} contains:")
+        print(f"  Batch size: {batch_size}")
+        print(f"  Each batch contains:")
         for task_name, proportion in task_mix.items():
             count = train_sampler.samples_per_task[task_name]
-            print(f"    - {count} {task_name} examples ({proportion*100:.0f}%)")
+            print(f"    - {count} {task_name} examples ({proportion*100:.0f}% of batch)")
         print(f"  Total batches per epoch: {len(train_loader)}")
+        print(f"\n    Training examples per task per epoch:")
+        for task_name in task_mix.keys():
+            task_count = sum(1 for label in train_task_labels if label == task_name)
+            examples_per_epoch = min(task_count, len(train_loader) * train_sampler.samples_per_task[task_name])
+            print(f"    - {task_name}: {examples_per_epoch} examples")
+        print()
         
     else:
         # Standard dataloaders for single-task

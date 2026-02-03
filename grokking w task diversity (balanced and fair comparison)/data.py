@@ -100,7 +100,8 @@ def generate_modular_subtraction_dataset(p=97, train_fraction=0.5, seed=42):
 
 
 def generate_mixed_task_dataset(p=97, train_fraction=0.5, seed=42, 
-                                task_mix={'division': 0.5, 'addition': 0.5}):
+                                task_mix={'division': 0.5, 'addition': 0.5},
+                                fair_comparison=True):
     """
     Generate mixed dataset with multiple modular arithmetic tasks.
     
@@ -110,6 +111,9 @@ def generate_mixed_task_dataset(p=97, train_fraction=0.5, seed=42,
         seed: Random seed for reproducibility
         task_mix: Dictionary mapping task names to their proportions
                   e.g., {'division': 0.5, 'addition': 0.5}
+        fair_comparison: If True, use same number of training examples per task
+                        regardless of task_mix proportions. This ensures fair
+                        comparison across different task mixtures.
     
     Returns:
         train_data: List of training tuples (task, x, y, result)
@@ -137,23 +141,57 @@ def generate_mixed_task_dataset(p=97, train_fraction=0.5, seed=42,
         sub_train, sub_val = generate_modular_subtraction_dataset(p, train_fraction, seed)
         task_datasets['subtraction'] = (sub_train, sub_val)
     
-    # Mix tasks according to specified proportions
-    train_data = []
-    val_data = []
-    
-    for task_name, (task_train, task_val) in task_datasets.items():
-        proportion = task_mix[task_name]
+    if fair_comparison:
+        # FAIR COMPARISON MODE:
+        # Use ALL training examples from each task, regardless of task_mix
+        # The task_mix only determines batch proportions, not dataset size
+        # This ensures each task sees the same amount of data across different runs
         
-        # Add task identifier to each equation
-        train_with_task = [(task_name, x, y, result) for x, y, result in task_train]
-        val_with_task = [(task_name, x, y, result) for x, y, result in task_val]
+        train_data = []
+        val_data = []
         
-        train_data.extend(train_with_task)
-        val_data.extend(val_with_task)
-    
-    # Shuffle mixed data
-    random.shuffle(train_data)
-    random.shuffle(val_data)
+        for task_name, (task_train, task_val) in task_datasets.items():
+            # Add task identifier to each equation
+            train_with_task = [(task_name, x, y, result) for x, y, result in task_train]
+            val_with_task = [(task_name, x, y, result) for x, y, result in task_val]
+            
+            train_data.extend(train_with_task)
+            val_data.extend(val_with_task)
+        
+        # Shuffle mixed data
+        random.shuffle(train_data)
+        random.shuffle(val_data)
+        
+        print(f"\n  Fair Comparison Mode: Using ALL training examples per task")
+        print(f"   Task mix ({task_mix}) determines BATCH proportions only")
+        print(f"   Each task uses its full training set:")
+        for task_name, (task_train, task_val) in task_datasets.items():
+            print(f"     - {task_name}: {len(task_train)} train, {len(task_val)} val")
+        print(f"   Total: {len(train_data)} train, {len(val_data)} val examples")
+        
+    else:
+        # ORIGINAL MODE (UNFAIR):
+        # Scale dataset size by task_mix proportions
+        # This means different task mixes see different amounts of data per task
+        
+        train_data = []
+        val_data = []
+        
+        for task_name, (task_train, task_val) in task_datasets.items():
+            proportion = task_mix[task_name]
+            
+            # Add task identifier to each equation
+            train_with_task = [(task_name, x, y, result) for x, y, result in task_train]
+            val_with_task = [(task_name, x, y, result) for x, y, result in task_val]
+            
+            train_data.extend(train_with_task)
+            val_data.extend(val_with_task)
+        
+        # Shuffle mixed data
+        random.shuffle(train_data)
+        random.shuffle(val_data)
+        
+        print(f"\n   Original Mode (Unfair): Dataset size varies with task_mix")
     
     return train_data, val_data
 
