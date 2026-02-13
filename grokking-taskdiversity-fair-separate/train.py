@@ -38,18 +38,16 @@ def evaluate(model, loader, criterion, device):
 def train_model(model, train_loader, val_loaders, optimizer, criterion, device, 
                 num_steps=250000, log_interval=50, checkpoint_interval=1000,
                 config=None, save_dir='checkpoints'):
-    """
-    Args:
-        val_loaders: Dictionary of {task_name: DataLoader}
-    """
+    
     model = model.to(device)
     
     # Initialize history
     history = {
         'steps': [],
         'train_loss': [], 'train_acc': [],
-        # Determine separate keys for each validation task
         'val_stats': {task: {'loss': [], 'acc': []} for task in val_loaders.keys()},
+        # NEW: Dictionary to store the step where each task first "groks" (>95% acc)
+        'grok_steps': {task: None for task in val_loaders.keys()},
         'config': config if config else {}
     }
     
@@ -62,8 +60,6 @@ def train_model(model, train_loader, val_loaders, optimizer, criterion, device,
         optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
         start_step = checkpoint['step']
         history = checkpoint['history']
-        # If randomness matters for dataloader shuffling, one might load RNG states here too
-        # torch.set_rng_state(checkpoint['rng_state'])
     
     if start_step >= num_steps:
         print("Training already completed based on checkpoint.")
@@ -71,7 +67,6 @@ def train_model(model, train_loader, val_loaders, optimizer, criterion, device,
 
     print(f"Training from step {start_step} to {num_steps}...")
     
-    # Infinite iterator for training
     def infinite_iter(loader):
         while True:
             for batch in loader:
@@ -95,29 +90,29 @@ def train_model(model, train_loader, val_loaders, optimizer, criterion, device,
             
             pbar.update(1)
             
-            # Logging and Validation
             if step % log_interval == 0:
-                # 1. Evaluate Train
-                # (For speed, maybe only eval a subset? We'll stick to full eval for accuracy)
-                # To avoid slowing down too much on massive datasets, consider creating a smaller 'eval_train_loader'
                 train_loss, train_acc = evaluate(model, train_loader, criterion, device)
                 
                 history['steps'].append(step)
                 history['train_loss'].append(train_loss)
                 history['train_acc'].append(train_acc)
                 
-                # 2. Evaluate Validation (Per Task)
                 postfix_stats = {'train_acc': f"{train_acc:.1f}%"}
                 
+                # Check validation for each task
                 for task_name, loader in val_loaders.items():
                     v_loss, v_acc = evaluate(model, loader, criterion, device)
                     history['val_stats'][task_name]['loss'].append(v_loss)
                     history['val_stats'][task_name]['acc'].append(v_acc)
                     postfix_stats[f'val_{task_name}'] = f"{v_acc:.1f}%"
+                    
+                    # NEW: Detect Grokking (First time crossing 95%)
+                    if history['grok_steps'][task_name] is None and v_acc >= 95.0:
+                        history['grok_steps'][task_name] = step
+                        tqdm.write(f" Grokking detected for {task_name.upper()} at step {step}!")
                 
                 pbar.set_postfix(postfix_stats)
 
-            # Checkpointing
             if step % checkpoint_interval == 0:
                 save_checkpoint({
                     'step': step,
@@ -138,7 +133,6 @@ def train_model(model, train_loader, val_loaders, optimizer, criterion, device,
         
     pbar.close()
     
-    # Final save
     save_checkpoint({
         'step': num_steps,
         'model_state_dict': model.state_dict(),
