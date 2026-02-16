@@ -35,7 +35,7 @@ If you prefer to use pip, you can install the dependencies with:
 ```bash
 pip install -r requirements.txt
 ```
-
+- If using pip, simply ignore the conda commands and follow steps as normal.
 **Note**: Make sure you have Python 3.10 or higher installed.
 
 ## Quick Start
