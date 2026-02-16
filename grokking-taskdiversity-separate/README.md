@@ -17,6 +17,7 @@ The implementation supports:
 
 ## Installation
 
+To install the dependencies, run the following command from the root directory of the project:
 ```bash
 pip install -r requirements.txt
 ```
