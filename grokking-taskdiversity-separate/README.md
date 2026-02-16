@@ -87,7 +87,7 @@ python run.py \
 
 ### Training Parameters
 - `--batch_size`: Batch size (default: 512)
-- `--num_steps`: Total training steps (default: 400000)
+- `--num_steps`: Total training steps (default: 400,000)
 
 ### Output Parameters
 - `--checkpoint_dir`: Directory to save checkpoints (default: `checkpoints`)
