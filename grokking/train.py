@@ -1,58 +1,67 @@
+'''
+train.py contains the training loop, evaluation functions, and checkpoint management
+for grokking experiments.
+
+This module handles:
+- Training transformer models on modular arithmetic tasks
+- Per-task validation and metric tracking
+- Automatic grokking detection (when validation accuracy exceeds 95%)
+- Checkpoint saving and loading for resumable training
+- Progress tracking and logging
+'''
+
 import torch
 import torch.nn as nn
 from tqdm import tqdm
+import os
+import glob
 
 
-def train_epoch(model, loader, optimizer, criterion, device):
+def save_checkpoint(state, save_dir='checkpoints', filename='checkpoint.pt'):
     """
-    Train for one epoch.
+    Save a training checkpoint to disk.
     
-    Args:
-        model: PyTorch model
-        loader: DataLoader for training data
-        optimizer: Optimizer
-        criterion: Loss function
-        device: Device to train on
+    Creates the checkpoint directory if it doesn't exist and saves the complete
+    training state including model weights, optimizer state, and training history.
     
-    Returns:
-        avg_loss: Average loss for the epoch
-        accuracy: Accuracy percentage
+    :param state: Dictionary containing checkpoint data (model_state_dict, 
+                  optimizer_state_dict, step, history)
+    :param save_dir: Directory to save checkpoints
+    :param filename: Name of the checkpoint file
     """
-    model.train()
-    total_loss = 0
-    correct = 0
-    total = 0
+    os.makedirs(save_dir, exist_ok=True)
+    path = os.path.join(save_dir, filename)
+    torch.save(state, path)
+
+
+def load_checkpoint(save_dir='checkpoints', filename='checkpoint.pt', device='cpu'):
+    """
+    Load a training checkpoint from disk if it exists.
     
-    for X_batch, y_batch in loader:
-        X_batch, y_batch = X_batch.to(device), y_batch.to(device)
-        
-        optimizer.zero_grad()
-        outputs = model(X_batch)
-        loss = criterion(outputs, y_batch)
-        loss.backward()
-        optimizer.step()
-        
-        total_loss += loss.item()
-        _, predicted = outputs.max(1)
-        correct += (predicted == y_batch).sum().item()
-        total += y_batch.size(0)
-    
-    return total_loss / len(loader), 100 * correct / total
+    :param save_dir: Directory containing checkpoints
+    :param filename: Name of the checkpoint file to load
+    :param device: Device to map the checkpoint to ('cpu' or 'cuda')
+    :return: Checkpoint dictionary if found, None otherwise
+    """
+    path = os.path.join(save_dir, filename)
+    if os.path.exists(path):
+        print(f"Resuming from checkpoint: {path}")
+        return torch.load(path, map_location=device)
+    return None
 
 
 def evaluate(model, loader, criterion, device):
     """
-    Evaluate model on validation/test set.
+    Evaluate model performance on a dataset.
     
-    Args:
-        model: PyTorch model
-        loader: DataLoader for evaluation data
-        criterion: Loss function
-        device: Device to evaluate on
+    Computes average loss and accuracy over all batches in the data loader.
+    Sets model to eval mode and disables gradient computation for efficiency.
     
-    Returns:
-        avg_loss: Average loss
-        accuracy: Accuracy percentage
+    :param model: The transformer model to evaluate
+    :param loader: DataLoader containing evaluation data
+    :param criterion: Loss function (e.g., CrossEntropyLoss)
+    :param device: Device to run evaluation on ('cpu' or 'cuda')
+    :return: Tuple of (average_loss, accuracy_percentage)
     """
     model.eval()
     total_loss = 0
@@ -62,7 +71,6 @@ def evaluate(model, loader, criterion, device):
     with torch.no_grad():
         for X_batch, y_batch in loader:
             X_batch, y_batch = X_batch.to(device), y_batch.to(device)
-            
             outputs = model(X_batch)
             loss = criterion(outputs, y_batch)
             
@@ -70,152 +78,154 @@ def evaluate(model, loader, criterion, device):
             _, predicted = outputs.max(1)
             correct += (predicted == y_batch).sum().item()
             total += y_batch.size(0)
-    
+            
     return total_loss / len(loader), 100 * correct / total
 
 
-def detect_grokking(history, train_threshold=95.0, val_threshold=95.0, min_gap=1000):
+def train_model(model, train_loader, val_loaders, optimizer, criterion, device, 
+                num_steps=400000, log_interval=50, checkpoint_interval=1000,
+                config=None, save_dir='checkpoints'):
     """
-    Detect when grokking occurs based on training and validation accuracy.
+    Train a transformer model on modular arithmetic tasks with multi-task validation.
     
-    Grokking is defined as: validation accuracy reaching the threshold after
-    training accuracy has been above threshold for at least min_gap steps.
+    This function implements the main training loop with the following features:
+    - Step-based training (not epoch-based) for precise control
+    - Per-task validation tracking
+    - Automatic grokking detection (when validation accuracy first exceeds 95%)
+    - Periodic checkpointing for resumable training
+    - Progress bar with real-time metrics
+    - Graceful interrupt handling (Ctrl+C saves checkpoint)
     
-    Args:
-        history: Dictionary containing training history
-        train_threshold: Training accuracy threshold (default: 95%)
-        val_threshold: Validation accuracy threshold (default: 95%)
-        min_gap: Minimum steps between train and val threshold crossing
-    
-    Returns:
-        grokking_step: Step when grokking occurred (None if not detected)
-        train_step: Step when training accuracy crossed threshold
+    :param model: Transformer model to train
+    :param train_loader: DataLoader for training data (combined across tasks)
+    :param val_loaders: Dictionary mapping task names to validation DataLoaders
+    :param optimizer: PyTorch optimizer (typically AdamW)
+    :param criterion: Loss function (typically CrossEntropyLoss)
+    :param device: Device to train on ('cpu' or 'cuda')
+    :param num_steps: Total number of training steps
+    :param log_interval: Steps between evaluation and logging
+    :param checkpoint_interval: Steps between checkpoint saves
+    :param config: Optional configuration dict to store in history
+    :param save_dir: Directory to save checkpoints
+    :return: Dictionary containing complete training history with keys:
+        - 'steps': List of step numbers where metrics were logged
+        - 'train_loss': Training loss at each logged step
+        - 'train_acc': Training accuracy at each logged step
+        - 'val_stats': Dict mapping task names to their loss and accuracy lists
+        - 'grok_steps': Dict mapping task names to step where they first grokked
+        - 'config': Configuration parameters
     """
-    train_step = None
-    grokking_step = None
     
-    # Find when training accuracy first crosses threshold
-    for i, (step, train_acc) in enumerate(zip(history['steps'], history['train_acc'])):
-        if train_acc >= train_threshold:
-            train_step = step
-            break
-    
-    # Find when validation accuracy crosses threshold (must be after train + min_gap)
-    if train_step is not None:
-        for i, (step, val_acc) in enumerate(zip(history['steps'], history['val_acc'])):
-            if step > train_step + min_gap and val_acc >= val_threshold:
-                grokking_step = step
-                break
-    
-    return grokking_step, train_step
-
-
-def train_model(model, train_loader, val_loader, optimizer, criterion, device, 
-                num_steps=350000, log_interval=50, train_threshold=95.0, val_threshold=95.0,
-                config=None):
-    """
-    Main training loop with grokking detection.
-    
-    Args:
-        model: PyTorch model
-        train_loader: DataLoader for training data
-        val_loader: DataLoader for validation data
-        optimizer: Optimizer
-        criterion: Loss function
-        device: Device to train on
-        num_steps: Total number of training steps
-        log_interval: Steps between logging
-        train_threshold: Training accuracy threshold for grokking detection
-        val_threshold: Validation accuracy threshold for grokking detection
-        config: Dictionary with training configuration info for plotting
-    
-    Returns:
-        history: Dictionary containing training history and grokking info
-    """
     model = model.to(device)
     
+    # Initialize history to track all metrics
     history = {
-        'train_loss': [], 'train_acc': [],
-        'val_loss': [], 'val_acc': [],
         'steps': [],
-        'grokking_detected': False,
-        'grokking_step': None,
-        'train_threshold_step': None,
-        'train_threshold': train_threshold,
-        'val_threshold': val_threshold,
-        'config': config if config is not None else {}
+        'train_loss': [], 
+        'train_acc': [],
+        'val_stats': {task: {'loss': [], 'acc': []} for task in val_loaders.keys()},
+        'grok_steps': {task: None for task in val_loaders.keys()},
+        'config': config if config else {}
     }
     
-    step = 0
-    grokking_announced = False
-    print("Training...")
-    pbar = tqdm(total=num_steps)
+    start_step = 0
     
-    while step < num_steps:
-        for X_batch, y_batch in train_loader:
-            if step >= num_steps:
-                break
-                
-            model.train()
+    # Attempt to load checkpoint for resuming training
+    checkpoint = load_checkpoint(save_dir, device=device)
+    if checkpoint:
+        model.load_state_dict(checkpoint['model_state_dict'])
+        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+        start_step = checkpoint['step']
+        history = checkpoint['history']
+    
+    if start_step >= num_steps:
+        print("Training already completed based on checkpoint.")
+        return history
+
+    print(f"Training from step {start_step} to {num_steps}...")
+    
+    def infinite_iter(loader):
+        """
+        Create an infinite iterator over the dataloader.
+        
+        This allows step-based training without worrying about epoch boundaries.
+        """
+        while True:
+            for batch in loader:
+                yield batch
+    
+    train_iter = infinite_iter(train_loader)
+    
+    model.train()
+    pbar = tqdm(total=num_steps, initial=start_step)
+    
+    try:
+        for step in range(start_step + 1, num_steps + 1):
+            # Get next training batch
+            X_batch, y_batch = next(train_iter)
             X_batch, y_batch = X_batch.to(device), y_batch.to(device)
             
+            # Standard training step
             optimizer.zero_grad()
             outputs = model(X_batch)
             loss = criterion(outputs, y_batch)
             loss.backward()
             optimizer.step()
             
-            step += 1
             pbar.update(1)
             
+            # Periodic evaluation and logging
             if step % log_interval == 0:
                 train_loss, train_acc = evaluate(model, train_loader, criterion, device)
-                val_loss, val_acc = evaluate(model, val_loader, criterion, device)
                 
                 history['steps'].append(step)
                 history['train_loss'].append(train_loss)
                 history['train_acc'].append(train_acc)
-                history['val_loss'].append(val_loss)
-                history['val_acc'].append(val_acc)
                 
-                # Check for grokking in real-time
-                if not grokking_announced:
-                    grok_step, train_step = detect_grokking(history)
-                    if grok_step is not None:
-                        grokking_announced = True
-                        pbar.write(f"\n{'='*60}")
-                        pbar.write(f"  GROKKING DETECTED!  ")
-                        pbar.write(f"Training accuracy reached 95% at step: {train_step:,}")
-                        pbar.write(f"Validation accuracy reached 95% at step: {grok_step:,}")
-                        pbar.write(f"Grokking delay: {grok_step - train_step:,} steps")
-                        pbar.write(f"{'='*60}\n")
+                postfix_stats = {'train_acc': f"{train_acc:.1f}%"}
                 
-                pbar.set_postfix({
-                    'train_acc': f'{train_acc:.1f}%',
-                    'val_acc': f'{val_acc:.1f}%'
-                })
-    
+                # Evaluate on each task separately
+                for task_name, loader in val_loaders.items():
+                    v_loss, v_acc = evaluate(model, loader, criterion, device)
+                    history['val_stats'][task_name]['loss'].append(v_loss)
+                    history['val_stats'][task_name]['acc'].append(v_acc)
+                    postfix_stats[f'val_{task_name}'] = f"{v_acc:.1f}%"
+                    
+                    # Detect grokking: first time validation accuracy exceeds 95%
+                    if history['grok_steps'][task_name] is None and v_acc >= 95.0:
+                        history['grok_steps'][task_name] = step
+                        tqdm.write(f"✓ Grokking detected for {task_name.upper()} at step {step}!")
+                
+                pbar.set_postfix(postfix_stats)
+
+            # Periodic checkpoint saving
+            if step % checkpoint_interval == 0:
+                save_checkpoint({
+                    'step': step,
+                    'model_state_dict': model.state_dict(),
+                    'optimizer_state_dict': optimizer.state_dict(),
+                    'history': history
+                }, save_dir)
+                
+    except KeyboardInterrupt:
+        # Handle Ctrl+C gracefully by saving checkpoint
+        print("\nTraining interrupted! Saving checkpoint...")
+        save_checkpoint({
+            'step': step,
+            'model_state_dict': model.state_dict(),
+            'optimizer_state_dict': optimizer.state_dict(),
+            'history': history
+        }, save_dir)
+        return history
+        
     pbar.close()
     
-    # Final grokking detection
-    grokking_step, train_threshold_step = detect_grokking(history)
-    history['grokking_detected'] = grokking_step is not None
-    history['grokking_step'] = grokking_step
-    history['train_threshold_step'] = train_threshold_step
-    
-    print("\n" + "="*60)
-    print("Training complete.")
-    print("="*60)
-    
-    if history['grokking_detected']:
-        print(f"✓ Grokking occurred at step: {grokking_step:,}")
-        print(f"  Training threshold (95%) reached at: {train_threshold_step:,}")
-        print(f"  Grokking delay: {grokking_step - train_threshold_step:,} steps")
-    else:
-        print("✗ Grokking not detected within training period")
-        if train_threshold_step:
-            print(f"  (Training threshold reached at step {train_threshold_step:,}, but validation did not follow)")
-    
-    print("="*60 + "\n")
+    # Save final checkpoint
+    save_checkpoint({
+        'step': num_steps,
+        'model_state_dict': model.state_dict(),
+        'optimizer_state_dict': optimizer.state_dict(),
+        'history': history
+    }, save_dir)
     
     return history
