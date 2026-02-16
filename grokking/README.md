@@ -17,15 +17,33 @@ The implementation supports:
 
 ## Installation
 
-To install the dependencies, run the following command from the root directory of the project:
+### Using Conda (Recommended)
+
+1. Create the conda environment from the environment file:
+```bash
+conda env create -f environment.yml
+```
+
+2. Activate the environment:
+```bash
+conda activate grokking
+```
+
+### Using pip (Alternative)
+
+If you prefer to use pip, you can install the dependencies with:
 ```bash
 pip install -r requirements.txt
 ```
 
+**Note**: Make sure you have Python 3.10 or higher installed.
+
 ## Quick Start
 
-Run with default parameters (single task - division (baseline)):
+After setting up the conda environment (see Installation section above), activate it and run:
+
 ```bash
+conda activate grokking
 python run.py
 ```
 
@@ -133,7 +151,8 @@ python run.py --tasks div add sub mult --d_model 256 --nhead 8 --num_layers 4
 ```
 .
 ├── README.md           # This file
-├── requirements.txt    # Python dependencies
+├── requirements.txt    # Python dependencies (pip)
+├── environment.yml     # Conda environment specification
 ├── run.py             # Main script to run experiments
 ├── data.py            # Data generation and preprocessing
 ├── model.py           # Transformer model definition
