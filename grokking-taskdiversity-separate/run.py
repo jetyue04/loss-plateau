@@ -24,7 +24,7 @@ def main():
     parser.add_argument('--lr', type=float, default=1e-3)
     parser.add_argument('--weight_decay', type=float, default=1e-3)
     parser.add_argument('--batch_size', type=int, default=512)
-    parser.add_argument('--num_steps', type=int, default=100000)
+    parser.add_argument('--num_steps', type=int, default=400000)
     parser.add_argument('--checkpoint_dir', type=str, default='checkpoints')
     parser.add_argument('--save_path', type=str, default='grokking_result.png')
     
