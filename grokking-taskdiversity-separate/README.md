@@ -13,7 +13,7 @@ The implementation supports:
 - **Checkpoint system**: Resume training from saved checkpoints
 - **Comprehensive visualization**: Generate plots showing accuracy and loss curves for all tasks
 
-<img src="./grokking_plot.png" alt="Grokking Visualization" style="width: 500px; height: auto;">
+<img src="./grokking_plot.png" alt="Grokking Visualization" style="width: 800px; height: auto;">
 
 ## Installation
 
