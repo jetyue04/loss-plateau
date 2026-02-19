@@ -66,7 +66,7 @@ def replot_from_checkpoint(checkpoint_dir, save_path, num_steps_override=None):
         grok_pct = grok_pcts.get(task)
         if grok_pct is not None:
             ax1.axvline(x=grok_pct, color=color, linestyle=':', alpha=0.8)
-            ax1.text(grok_pct, 50, f" {grok_pct:.1f}%",
+            ax1.text(grok_pct, 50, f" {grok_pct:.1f}% (step {grok_steps.get(task):,})",
                      rotation=90, verticalalignment='center', color=color, fontweight='bold')
 
     ax1.set_xlabel('Training Progress (%)')
@@ -93,8 +93,9 @@ def replot_from_checkpoint(checkpoint_dir, save_path, num_steps_override=None):
     ax2.legend(loc='upper left')
     ax2.grid(True, alpha=0.3)
 
+    plt.suptitle(f'Total Training Steps: {num_steps:,}', y=1.02, fontsize=12, color='gray')
     plt.tight_layout()
-    plt.savefig(save_path, dpi=150)
+    plt.savefig(save_path, dpi=150, bbox_inches='tight')
     print(f"Plot saved to: {save_path}")
 
     # Print grokking summary
