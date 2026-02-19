@@ -75,7 +75,7 @@ def replot_from_checkpoint(checkpoint_dir, save_path, num_steps_override=None):
     ax1.set_xlim(left=max(x_vals[0], 0.001))
     ax1.set_xscale('log')
     ax1.xaxis.set_major_formatter(plt.FuncFormatter(lambda val, _: f'{val:.4g}%'))
-    ax1.legend()
+    ax1.legend(loc='upper left')
     ax1.grid(True, alpha=0.3)
 
     # ===== Right Panel: Loss =====
@@ -92,7 +92,7 @@ def replot_from_checkpoint(checkpoint_dir, save_path, num_steps_override=None):
     ax2.set_xscale('log')
     ax2.set_yscale('log')
     ax2.xaxis.set_major_formatter(plt.FuncFormatter(lambda val, _: f'{val:.4g}%'))
-    ax2.legend()
+    ax2.legend(loc='upper left')
     ax2.grid(True, alpha=0.3)
 
     plt.tight_layout()
