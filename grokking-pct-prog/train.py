@@ -1,108 +1,247 @@
 '''
-utils.py contains visualization utilities for grokking experiments.
+train.py contains the training loop, evaluation functions, and checkpoint management
+for grokking experiments.
 
-This module provides functions to create plots showing the grokking 
-phenomenon, including per-task accuracy and loss curves with
-automatic grokking detection markers.
+This module handles:
+- Training transformer models on modular arithmetic tasks
+- Per-task validation and metric tracking
+- Automatic grokking detection (when validation accuracy exceeds 95%)
+- Checkpoint saving and loading for resumable training
+- Progress tracking and logging
 '''
 
-import matplotlib.pyplot as plt
+import torch
+import torch.nn as nn
+from tqdm import tqdm
+import os
+import glob
 
 
-def plot_grokking(history, save_path='grokking_result.png'):
+def save_checkpoint(state, save_dir='checkpoints', filename='checkpoint.pt'):
     """
-    Create a comprehensive visualization of the grokking phenomenon.
+    Save a training checkpoint to disk.
     
-    Generates a two-panel figure showing:
-    - Left panel: Accuracy curves over training steps (log scale)
-      - Combined training accuracy (dashed black line)
-      - Per-task validation accuracy (colored solid lines)
-      - Vertical lines marking grokking points (when validation exceeds 95%)
-    - Right panel: Loss curves over training steps (log-log scale)
-      - Combined training loss (dashed black line)
-      - Per-task validation loss (colored solid lines)
+    Creates the checkpoint directory if it doesn't exist and saves the complete
+    training state including model weights, optimizer state, and training history.
     
-    Each task is assigned a distinct color:
-    - Division: red
-    - Addition: blue
-    - Subtraction: green
-    - Multiplication: purple
-    
-    :param history: Dictionary containing training history with keys:
-        - 'steps': List of step numbers
-        - 'train_acc': Training accuracy at each step
-        - 'train_loss': Training loss at each step
-        - 'val_stats': Dict mapping task names to {'acc': [...], 'loss': [...]}
-        - 'grok_steps': Dict mapping task names to step where they grokked
-    :param save_path: Path where the plot image will be saved
+    :param state: Dictionary containing checkpoint data (model_state_dict, 
+                  optimizer_state_dict, step, history)
+    :param save_dir: Directory to save checkpoints
+    :param filename: Name of the checkpoint file
     """
-    # Create figure with two side-by-side subplots
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
-    
-    steps = history['steps']
-    # Use progress_pct if available (new format), otherwise compute from steps
-    num_steps = history.get('num_steps', steps[-1] if steps else 1)
-    x_vals = history.get('progress_pct', [s / num_steps * 100 for s in steps])
-    
-    grok_steps = history.get('grok_steps', {})
-    grok_pcts = history.get('grok_pcts', {})
-    
-    # ===== Left Panel: Accuracy Curves =====
-    # Plot combined training accuracy
-    ax1.plot(x_vals, history['train_acc'], 'k--', label='Train (Combined)', alpha=0.3)
-    
-    val_stats = history['val_stats']
-    colors = {'div': 'red', 'add': 'blue', 'sub': 'green', 'mult': 'purple'}
-    
-    # Plot validation accuracy for each task
-    for task, stats in val_stats.items():
-        color = colors.get(task, 'orange')
-        acc = stats['acc']
-        ax1.plot(x_vals, acc, label=f'Val ({task.upper()})', color=color, linewidth=2)
-        
-        # Mark grokking point with vertical line
-        grok_pct = grok_pcts.get(task)
-        if grok_pct is None:
-            # Fall back to computing from step if pct not stored
-            grok_step = grok_steps.get(task)
-            if grok_step is not None:
-                grok_pct = grok_step / num_steps * 100
-        
-        if grok_pct is not None:
-            ax1.axvline(x=grok_pct, color=color, linestyle=':', alpha=0.8)
-            ax1.text(grok_pct, 50, f" {grok_pct:.1f}%", 
-                     rotation=90, verticalalignment='center', color=color, fontweight='bold')
+    os.makedirs(save_dir, exist_ok=True)
+    path = os.path.join(save_dir, filename)
+    torch.save(state, path)
 
-    ax1.set_xlabel('Training Progress (%)')
-    ax1.set_ylabel('Accuracy (%)')
-    ax1.set_title('Grokking: Accuracy per Task')
-    ax1.set_xlim(left=max(x_vals[0] if x_vals else 0, 0.001))
-    ax1.set_xscale('log')  # Log scale emphasizes the sudden transition
-    ax1.xaxis.set_major_formatter(plt.FuncFormatter(lambda val, _: f'{val:.4g}%'))
-    ax1.legend()
-    ax1.grid(True, alpha=0.3)
+
+def load_checkpoint(save_dir='checkpoints', filename='checkpoint.pt', device='cpu'):
+    """
+    Load a training checkpoint from disk if it exists.
     
-    # ===== Right Panel: Loss Curves =====
-    # Plot combined training loss
-    ax2.plot(x_vals, history['train_loss'], 'k--', label='Train Loss', alpha=0.3)
+    :param save_dir: Directory containing checkpoints
+    :param filename: Name of the checkpoint file to load
+    :param device: Device to map the checkpoint to ('cpu' or 'cuda')
+    :return: Checkpoint dictionary if found, None otherwise
+    """
+    path = os.path.join(save_dir, filename)
+    if os.path.exists(path):
+        print(f"Resuming from checkpoint: {path}")
+        return torch.load(path, map_location=device)
+    return None
+
+
+def evaluate(model, loader, criterion, device):
+    """
+    Evaluate model performance on a dataset.
     
-    # Plot validation loss for each task
-    for task, stats in val_stats.items():
-        color = colors.get(task, 'orange')
-        loss = stats['loss']
-        ax2.plot(x_vals, loss, label=f'Val Loss ({task.upper()})', color=color, linewidth=1.5)
+    Computes average loss and accuracy over all batches in the data loader.
+    Sets model to eval mode and disables gradient computation for efficiency.
+    
+    :param model: The transformer model to evaluate
+    :param loader: DataLoader containing evaluation data
+    :param criterion: Loss function (e.g., CrossEntropyLoss)
+    :param device: Device to run evaluation on ('cpu' or 'cuda')
+    :return: Tuple of (average_loss, accuracy_percentage)
+    """
+    model.eval()
+    total_loss = 0
+    correct = 0
+    total = 0
+    
+    with torch.no_grad():
+        for X_batch, y_batch in loader:
+            X_batch, y_batch = X_batch.to(device), y_batch.to(device)
+            outputs = model(X_batch)
+            loss = criterion(outputs, y_batch)
+            
+            total_loss += loss.item()
+            _, predicted = outputs.max(1)
+            correct += (predicted == y_batch).sum().item()
+            total += y_batch.size(0)
+            
+    return total_loss / len(loader), 100 * correct / total
+
+
+def train_model(model, train_loader, val_loaders, optimizer, criterion, device, 
+                num_steps=400000, log_interval=50, checkpoint_interval=1000,
+                config=None, save_dir='checkpoints'):
+    """
+    Train a transformer model on modular arithmetic tasks with multi-task validation.
+    
+    This function implements the main training loop with the following features:
+    - Step-based training (not epoch-based) for precise control
+    - Per-task validation tracking
+    - Automatic grokking detection (when validation accuracy first exceeds 95%)
+    - Periodic checkpointing for resumable training
+    - Progress bar with real-time metrics
+    - Graceful interrupt handling (Ctrl+C saves checkpoint)
+    
+    :param model: Transformer model to train
+    :param train_loader: DataLoader for training data (combined across tasks)
+    :param val_loaders: Dictionary mapping task names to validation DataLoaders
+    :param optimizer: PyTorch optimizer (typically AdamW)
+    :param criterion: Loss function (typically CrossEntropyLoss)
+    :param device: Device to train on ('cpu' or 'cuda')
+    :param num_steps: Total number of training steps
+    :param log_interval: Steps between evaluation and logging
+    :param checkpoint_interval: Steps between checkpoint saves
+    :param config: Optional configuration dict to store in history
+    :param save_dir: Directory to save checkpoints
+    :return: Dictionary containing complete training history with keys:
+        - 'steps': List of step numbers where metrics were logged
+        - 'train_loss': Training loss at each logged step
+        - 'train_acc': Training accuracy at each logged step
+        - 'val_stats': Dict mapping task names to their loss and accuracy lists
+        - 'grok_steps': Dict mapping task names to step where they first grokked
+        - 'config': Configuration parameters
+    """
+    
+    model = model.to(device)
+    
+    # Initialize history to track all metrics
+    history = {
+        'steps': [],
+        'progress_pct': [],  # Percentage of total training completed
+        'train_loss': [], 
+        'train_acc': [],
+        'val_stats': {task: {'loss': [], 'acc': []} for task in val_loaders.keys()},
+        'grok_steps': {task: None for task in val_loaders.keys()},
+        'grok_pcts': {task: None for task in val_loaders.keys()},  # Grok point as percentage
+        'num_steps': num_steps,
+        'config': config if config else {}
+    }
+    
+    start_step = 0
+    
+    # Attempt to load checkpoint for resuming training
+    checkpoint = load_checkpoint(save_dir, device=device)
+    if checkpoint:
+        model.load_state_dict(checkpoint['model_state_dict'])
+        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+        start_step = checkpoint['step']
+        history = checkpoint['history']
+        # Ensure new keys exist for older checkpoints
+        if 'progress_pct' not in history:
+            history['progress_pct'] = [s / num_steps * 100 for s in history['steps']]
+        if 'grok_pcts' not in history:
+            history['grok_pcts'] = {
+                task: (gs / num_steps * 100 if gs is not None else None)
+                for task, gs in history['grok_steps'].items()
+            }
+        if 'num_steps' not in history:
+            history['num_steps'] = num_steps
+    
+    if start_step >= num_steps:
+        print("Training already completed based on checkpoint.")
+        return history
+
+    print(f"Training from step {start_step} to {num_steps}...")
+    
+    def infinite_iter(loader):
+        """
+        Create an infinite iterator over the dataloader.
         
-    ax2.set_xlabel('Training Progress (%)')
-    ax2.set_ylabel('Loss')
-    ax2.set_title('Loss Curves')
-    ax2.set_xlim(left=max(x_vals[0] if x_vals else 0, 0.001))
-    ax2.set_xscale('log')   # Log scale for x
-    ax2.set_yscale('log')   # Log scale for loss (shows double descent)
-    ax2.xaxis.set_major_formatter(plt.FuncFormatter(lambda val, _: f'{val:.4g}%'))
-    ax2.legend()
-    ax2.grid(True, alpha=0.3)
+        This allows step-based training without worrying about epoch boundaries.
+        """
+        while True:
+            for batch in loader:
+                yield batch
     
-    # Finalize and save
-    plt.tight_layout()
-    plt.savefig(save_path, dpi=150)
-    print(f"Plot saved to {save_path}")
+    train_iter = infinite_iter(train_loader)
+    
+    model.train()
+    pbar = tqdm(total=num_steps, initial=start_step)
+    
+    try:
+        for step in range(start_step + 1, num_steps + 1):
+            # Get next training batch
+            X_batch, y_batch = next(train_iter)
+            X_batch, y_batch = X_batch.to(device), y_batch.to(device)
+            
+            # Standard training step
+            optimizer.zero_grad()
+            outputs = model(X_batch)
+            loss = criterion(outputs, y_batch)
+            loss.backward()
+            optimizer.step()
+            
+            pbar.update(1)
+            
+            # Periodic evaluation and logging
+            if step % log_interval == 0:
+                train_loss, train_acc = evaluate(model, train_loader, criterion, device)
+                
+                pct = step / num_steps * 100
+                history['steps'].append(step)
+                history['progress_pct'].append(pct)
+                history['train_loss'].append(train_loss)
+                history['train_acc'].append(train_acc)
+                
+                postfix_stats = {'train_acc': f"{train_acc:.1f}%"}
+                
+                # Evaluate on each task separately
+                for task_name, loader in val_loaders.items():
+                    v_loss, v_acc = evaluate(model, loader, criterion, device)
+                    history['val_stats'][task_name]['loss'].append(v_loss)
+                    history['val_stats'][task_name]['acc'].append(v_acc)
+                    postfix_stats[f'val_{task_name}'] = f"{v_acc:.1f}%"
+                    
+                    # Detect grokking: first time validation accuracy exceeds 95%
+                    if history['grok_steps'][task_name] is None and v_acc >= 95.0:
+                        history['grok_steps'][task_name] = step
+                        history['grok_pcts'][task_name] = pct
+                        tqdm.write(f"✓ Grokking detected for {task_name.upper()} at step {step} ({pct:.1f}%)")
+                
+                pbar.set_postfix(postfix_stats)
+
+            # Periodic checkpoint saving
+            if step % checkpoint_interval == 0:
+                save_checkpoint({
+                    'step': step,
+                    'model_state_dict': model.state_dict(),
+                    'optimizer_state_dict': optimizer.state_dict(),
+                    'history': history
+                }, save_dir)
+                
+    except KeyboardInterrupt:
+        # Handle Ctrl+C gracefully by saving checkpoint
+        print("\nTraining interrupted! Saving checkpoint...")
+        save_checkpoint({
+            'step': step,
+            'model_state_dict': model.state_dict(),
+            'optimizer_state_dict': optimizer.state_dict(),
+            'history': history
+        }, save_dir)
+        return history
+        
+    pbar.close()
+    
+    # Save final checkpoint
+    save_checkpoint({
+        'step': num_steps,
+        'model_state_dict': model.state_dict(),
+        'optimizer_state_dict': optimizer.state_dict(),
+        'history': history
+    }, save_dir)
+    
+    return history
