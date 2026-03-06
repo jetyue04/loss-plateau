@@ -3,6 +3,11 @@ layout: default
 title: Grokking
 ---
 
+<div class="page-nav">
+  <a href="{{ site.baseurl }}/" class="btn btn-secondary">← Home</a>
+  <a href="{{ site.baseurl }}/loss-plateau/" class="btn btn-secondary">Loss Plateau →</a>
+</div>
+
 <div class="hero">
   <h1>Grokking: Shortening the Delay</h1>
   <p>How we reduced a 332,000-step generalization delay down to just 1,050 steps.</p>

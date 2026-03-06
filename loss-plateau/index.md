@@ -3,6 +3,11 @@ layout: default
 title: Loss Plateau
 ---
 
+<div class="page-nav">
+  <a href="{{ site.baseurl }}/" class="btn btn-secondary">← Home</a>
+  <a href="{{ site.baseurl }}/grokking/" class="btn btn-secondary">← Grokking</a>
+</div>
+
 <div class="hero">
   <h1>Training-Loss Plateau</h1>
   <p>Investigating why Transformers stall early in training — and how task diversity shortens the wait.</p>
