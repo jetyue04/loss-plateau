@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title }} | {{ site.title }}</title>
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a class="nav-brand" href="{{ site.baseurl }}/">Shortening the Loss Plateau</a>
+      <ul class="nav-links">
+        <li><a href="{{ site.baseurl }}/" {% if page.url == '/' or page.url == '/index.html' %}class="active"{% endif %}>Home</a></li>
+        <li><a href="{{ site.baseurl }}/grokking/" {% if page.url contains 'grokking' %}class="active"{% endif %}>Grokking</a></li>
+        <li><a href="{{ site.baseurl }}/tf-loss-plateau/" {% if page.url contains 'tf-loss-plateau' %}class="active"{% endif %}>Loss Plateau</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <main class="main-content">
+    {{ content }}
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <p>DSC 180B Capstone · UC San Diego · 2025</p>
+      <p><a href="https://github.com/jetyue04/loss-plateau" target="_blank">GitHub Repository</a></p>
+    </div>
+  </footer>
+
+</body>
+</html>
+```
+
+**What this does:**
+- `{{ page.title }}` and `{{ site.title }}` — Jekyll fills these in automatically per page
+- `{{ site.baseurl }}` — makes all links work correctly under `/loss-plateau/`
+- `class="active"` — highlights the current page in the nav
+- `{{ content }}` — this is where each page's markdown gets injected
+
+---
+
+**Folder structure after this step:**
+```
+gh-pages/
+├── _config.yml
+├── _layouts/
+│   └── default.html    ← new
+└── index.md
