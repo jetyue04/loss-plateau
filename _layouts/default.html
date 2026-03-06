@@ -37,20 +37,3 @@
 
 </body>
 </html>
-```
-
-**What this does:**
-- `{{ page.title }}` and `{{ site.title }}` — Jekyll fills these in automatically per page
-- `{{ site.baseurl }}` — makes all links work correctly under `/loss-plateau/`
-- `class="active"` — highlights the current page in the nav
-- `{{ content }}` — this is where each page's markdown gets injected
-
----
-
-**Folder structure after this step:**
-```
-gh-pages/
-├── _config.yml
-├── _layouts/
-│   └── default.html    ← new
-└── index.md
