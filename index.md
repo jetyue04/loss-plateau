@@ -3,58 +3,84 @@ layout: default
 title: Home
 ---
 
-# Shortening the Loss Plateau
-## Transformer Optimization Research Project
+<div class="hero">
+  <h1>Shortening the Loss Plateau</h1>
+  <div class="hero-links">
+    <a class="btn btn-primary" href="https://github.com/jetyue04/loss-plateau" target="_blank">GitHub Repository</a>
+    <a class="btn btn-secondary" href="{{ site.baseurl }}/grokking/">Grokking →</a>
+    <a class="btn btn-secondary" href="{{ site.baseurl }}/tf-loss-plateau/">Loss Plateau →</a>
+  </div>
+</div>
 
-This project studies optimization stagnation in Transformer training, focusing on two phenomena:
+<div class="main-content">
 
-- Early training-loss plateaus caused by representation collapse and slow attention structure formation
-- Grokking, where models memorize data early but generalize only after long training delays
+  <div class="section">
+    <h2 class="section-title">Overview</h2>
+    <p class="section-intro">
+      Transformer models often waste enormous amounts of computation getting "stuck" during training.
+      This project identifies two distinct stalling phenomena and investigates how training strategy,
+      optimizer choice, and initialization can dramatically accelerate learning.
+    </p>
+    <div class="card-grid">
+      <div class="card">
+        <h3>📉 Training-Loss Plateau</h3>
+        <p>Early in training, loss stalls due to representation collapse and repetition bias in token embeddings.
+        Attention structure forms slowly, delaying useful learning.</p>
+      </div>
+      <div class="card">
+        <h3>⚡ Grokking</h3>
+        <p>Models memorize training data almost instantly but take hundreds of thousands of steps before
+        generalizing. We investigate what drives this delay and how to eliminate it.</p>
+      </div>
+      <div class="card">
+        <h3>🎯 Our Approach</h3>
+        <p>We systematically test task diversity, optimizer noise (SGD vs AdamW), and initialization
+        constraints across modular arithmetic tasks with a decoder-only Transformer.</p>
+      </div>
+    </div>
+  </div>
 
-We investigate how **task diversity, initialization constraints, and optimizer choice** can accelerate learning dynamics.
+  <div class="section">
+    <h2 class="section-title">Key Findings</h2>
+    <p class="section-intro">Across both phenomena, constraining the model's initial capacity proved to be the most powerful intervention.</p>
+    <div class="card-grid">
+      <div class="card">
+        <h3>4× Faster via Task Diversity</h3>
+        <p>Training on 4 arithmetic tasks simultaneously with strictly balanced batching reduced
+        Division grokking from 334,000 → ~80,000 steps.</p>
+      </div>
+      <div class="card">
+        <h3>8× Faster via SGD</h3>
+        <p>Replacing AdamW with SGD (LR=0.005) introduced gradient noise that escaped the
+        memorization basin, achieving stable grokking at 44,900 steps.</p>
+      </div>
+      <div class="card">
+        <h3>~316× Faster via Initialization</h3>
+        <p>Sparse or small weight initialization virtually eliminated the grokking plateau,
+        reducing the delay from ~332,000 steps to just 1,050 steps.</p>
+      </div>
+    </div>
+  </div>
 
-GitHub: https://github.com/jetyue04/loss-plateau
+  <div class="section">
+    <h2 class="section-title">Team</h2>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="avatar">J</div>
+        <h4>Jet Zhang Yue</h4>
+        <p>Training-Loss Plateau</p>
+      </div>
+      <div class="team-card">
+        <div class="avatar">S</div>
+        <h4>Samuel</h4>
+        <p>Task Diversity & Grokking Dynamics</p>
+      </div>
+      <div class="team-card">
+        <div class="avatar">T</div>
+        <h4>Tommy</h4>
+        <p>Optimizer & Initialization</p>
+      </div>
+    </div>
+  </div>
 
----
-
-## 🧠 Motivation
-Transformers often exhibit long optimization stagnation phases during training.
-
-We study:
-- Training loss plateaus
-- Grokking generalization delays
-- Methods to accelerate convergence
-
-Our hypothesis is that **diverse training objectives and constrained capacity** promote better representation learning.
-
----
-
-## 📉 Loss Plateau
-We replicated training-loss plateau behavior on shallow Transformers trained on algorithmic sequence tasks.
-
-Key findings:
-- Representation collapse occurs during early training
-- Repetition bias appears in embeddings
-- Attention structure forms slowly during plateau phases
-
-Multi-task training significantly shortens plateau duration compared to single-task training.
-
-### Methods
-
-### Results
-
-## Grokking
-Grokking is a delayed generalization phenomenon where:
-
-- Training accuracy rises quickly
-- Validation accuracy remains flat for long periods
-
-We study modular arithmetic tasks and observe that:
-- Task diversity accelerates grokking
-- Optimization noise can influence generalization timing
-
-### Methods
-
-### Results
-
-### Summary
+</div>
