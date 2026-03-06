@@ -280,15 +280,3 @@ body {
   .nav-container { flex-direction: column; height: auto; padding: 16px 0; gap: 12px; }
   .main-content { padding: 40px 20px; }
 }
-```
-
-**Folder structure after this step:**
-```
-gh-pages/
-├── _config.yml
-├── _layouts/
-│   └── default.html
-├── assets/
-│   └── css/
-│       └── style.css    ← new
-└── index.md
