@@ -1,2 +1,27 @@
 title: Shortening the Loss Plateau
-theme: minima
+description: Shortening Grokking Loss Plateau
+remote_theme: pages-themes/cayman@v0.2.0
+plugins:
+  - jekyll-remote-theme
+
+header_pages:
+  - index.md
+  - grokking/index.md
+  - tf-loss-plateau/index.md
+```
+
+**Why `remote_theme` instead of `theme`?** Cayman isn't a "gem-based" theme, so GitHub Pages needs `remote_theme` to pull it directly from GitHub.
+
+---
+
+## Step 2: File structure to create
+
+Here's the full structure you'll be building toward:
+```
+loss-plateau/
+├── _config.yml          ← already exists, just updated
+├── index.md             ← home page (already exists, we'll rewrite)
+├── grokking/
+│   └── index.md         ← your page (to create)
+└── tf-loss-plateau/
+    └── index.md         ← Jet's page (to create as a stub)
