@@ -1,3 +1,4 @@
 title: Shortening the Loss Plateau
-description: UCSD DSC 180B Capstone — Investigating optimization stagnation in Transformer training.
-theme: jekyll-theme-cayman
+description: UCSD DSC 180B Capstone Project
+baseurl: "/loss-plateau"
+url: "https://jetyue04.github.io"
