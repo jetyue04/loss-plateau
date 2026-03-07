@@ -210,7 +210,7 @@ def train_model(model, train_loader, val_loaders, optimizer, criterion, device,
                 }, save_dir)
                 
     except KeyboardInterrupt:
-        # Handle Ctrl+C gracefully by saving checkpoint
+        # Handle Ctrl+C by saving checkpoint
         print("\nTraining interrupted! Saving checkpoint...")
         save_checkpoint({
             'step': step,
