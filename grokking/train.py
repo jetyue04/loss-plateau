@@ -125,8 +125,10 @@ def train_model(model, train_loader, val_loaders, optimizer, criterion, device,
         'train_acc': [],
         'val_stats': {task: {'loss': [], 'acc': []} for task in val_loaders.keys()},
         'grok_steps': {task: None for task in val_loaders.keys()},
-        'config': config if config else {}
+        'config': dict(config) if config else {}
     }
+    # Store num_steps so plotting utilities can convert steps to % progress
+    history['config']['num_steps'] = num_steps
     
     start_step = 0
     
