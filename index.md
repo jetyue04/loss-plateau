@@ -155,24 +155,24 @@ title: Home
 </div>
 
   <div class="section">
-    <h2 class="section-title">Team</h2>
-    <div class="team-grid">
-      <div class="team-card">
-        <div class="avatar">J</div>
-        <h4>Jet Yue</h4>
-        <p>Training-Loss Plateau</p>
-      </div>
-      <div class="team-card">
-        <div class="avatar">S</div>
-        <h4>Samuel</h4>
-        <p>Task Diversity & Grokking Dynamics</p>
-      </div>
-      <div class="team-card">
-        <div class="avatar">T</div>
-        <h4>Tommy</h4>
-        <p>Optimizer & Initialization</p>
-      </div>
+  <h2 class="section-title">Team</h2>
+  <div class="team-grid">
+    <a href="https://www.linkedin.com/in/jyue04/" target="_blank" class="team-card">
+      <div class="avatar">J</div>
+      <h4>Jet Yue</h4>
+      <p>Training-Loss Plateau</p>
+    </a>
+    <a href="SAMUEL_LINKEDIN_URL" target="_blank" class="team-card">
+      <div class="avatar">S</div>
+      <h4>Samuel</h4>
+      <p>Task Diversity & Grokking Dynamics</p>
+    </a>
+    <a href="TOMMY_LINKEDIN_URL" target="_blank" class="team-card">
+      <div class="avatar">T</div>
+      <h4>Tommy</h4>
+      <p>Optimizer & Initialization</p>
+    </a>
     </div>
-  </div>
+  </div>  
 
 </div>
