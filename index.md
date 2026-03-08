@@ -4,7 +4,7 @@ title: Home
 ---
 
 <div class="hero">
-  <h1>Shortening the Loss Plateau</h1>
+  <h1>📈 Shortening the Loss Plateau</h1>
   <div class="hero-links">
     <a class="btn btn-primary" href="https://github.com/jetyue04/loss-plateau" target="_blank">GitHub Repository</a>
     <a class="btn btn-secondary" href="{{ site.baseurl }}/grokking/">Grokking →</a>
