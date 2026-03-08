@@ -15,28 +15,52 @@ title: Home
 <div class="main-content">
 
   <div class="section">
-    <h2 class="section-title">Overview</h2>
+    <h2 class="section-title">Core Question</h2>
     <p class="section-intro">
-      Transformer models often waste enormous amounts of computation getting "stuck" during training.
-      This project identifies two distinct stalling phenomena and investigates how training strategy,
-      optimizer choice, and initialization can dramatically accelerate learning.
+      Transformer models often spend enormous amounts of compute stuck in inefficient
+      training regimes. These stalls appear in two well-known forms:
+      <b>training-loss plateaus</b> and <b>grokking delays</b>.
     </p>
+
+    <p>
+      In this project we investigate whether these phenomena arise from similar
+      optimization dynamics, and whether the same interventions can shorten
+      both forms of stalled learning.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Two Forms of Training Stall</h2>
+
     <div class="card-grid">
+
       <div class="card">
-        <h3>📉 Training-Loss Plateau</h3>
-        <p>Early in training, loss stalls due to representation collapse and repetition bias in token embeddings.
-        Attention structure forms slowly, delaying useful learning.</p>
+        <h3>Training-Loss Plateau</h3>
+        <p>
+          Early in training, loss stalls due to representation collapse and
+          repetition bias in token embeddings. Attention structure forms
+          slowly, delaying useful learning.
+        </p>
       </div>
+
       <div class="card">
-        <h3>⚡ Grokking</h3>
-        <p>Models memorize training data almost instantly but take hundreds of thousands of steps before
-        generalizing. We investigate what drives this delay and how to eliminate it.</p>
+        <h3>Grokking (Generalization Plateau)</h3>
+        <p>
+          Models memorize training data almost instantly but take hundreds of
+          thousands of steps before generalizing. We investigate what drives
+          this delay and how to eliminate it.
+        </p>
       </div>
+
       <div class="card">
-        <h3>🎯 Our Approach</h3>
-        <p>We systematically test task diversity, optimizer noise (SGD vs AdamW), and initialization
-        constraints across modular arithmetic tasks with a decoder-only Transformer.</p>
+        <h3>Our Approach</h3>
+        <p>
+          We test whether shared interventions can accelerate both phenomena.
+          Specifically, we study task diversity, optimizer noise (SGD vs AdamW),
+          and initialization constraints in modular arithmetic transformers.
+        </p>
       </div>
+
     </div>
   </div>
 
