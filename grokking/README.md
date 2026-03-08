@@ -13,7 +13,7 @@ The implementation supports:
 - **Checkpoint system**: Resume training from saved checkpoints
 - **Visualization**: Accuracy curves plotted on a log-scale training-progress (%) x-axis
 
-<img src="./grokking_plot.png" alt="Grokking Visualization" style="width: 1100px; height: auto;">
+<img src="./grokking_plot.png" alt="Grokking Visualization" style="width: 900px; height: auto;">
 
 ---
 
