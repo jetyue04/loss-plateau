@@ -113,19 +113,24 @@ title: Home
   training dynamics across both loss plateaus and grokking.
   </p>
   <h3 class="subsection-title">Loss Plateau Insights</h3>
+
   <div class="card-grid">
     <div class="card">
-      <h3>Representation Collapse</h3>
+      <h3>Slow Representation and Attention Formation</h3>
       <p>
-      Early training exhibits embedding repetition and limited attention
-      structure, causing gradients to produce minimal improvements in loss.
+        The loss plateau is driven by slow development of meaningful internal
+        representations. Early in training, attention maps and token embeddings
+        change very slowly, limiting gradient signal quality and delaying useful
+        learning.
       </p>
     </div>
     <div class="card">
-      <h3>Slow Attention Formation</h3>
+      <h3>Task Diversity Accelerates Learning</h3>
       <p>
-      Useful attention patterns emerge gradually, delaying the model's ability
-      to exploit structure in modular arithmetic tasks.
+        Training on multiple arithmetic tasks simultaneously shortens the loss
+        plateau. By distributing training across tasks, the model requires fewer
+        samples per task while learning more generalizable representations,
+        allowing loss to converge faster.
       </p>
     </div>
   </div>
