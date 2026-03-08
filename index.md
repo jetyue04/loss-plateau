@@ -31,9 +31,7 @@ title: Home
 
   <div class="section">
     <h2 class="section-title">Two Forms of Training Stall</h2>
-
     <div class="card-grid">
-
       <div class="card">
         <h3>Training-Loss Plateau</h3>
         <p>
@@ -42,7 +40,6 @@ title: Home
           slowly, delaying useful learning.
         </p>
       </div>
-
       <div class="card">
         <h3>Grokking (Generalization Plateau)</h3>
         <p>
@@ -51,7 +48,6 @@ title: Home
           this delay and how to eliminate it.
         </p>
       </div>
-
       <div class="card">
         <h3>Our Approach</h3>
         <p>
@@ -60,28 +56,49 @@ title: Home
           and initialization constraints in modular arithmetic transformers.
         </p>
       </div>
-
     </div>
   </div>
 
   <div class="section">
     <h2 class="section-title">Key Findings</h2>
-    <p class="section-intro">Across both phenomena, constraining the model's initial capacity proved to be the most powerful intervention.</p>
+    <p class="section-intro">
+    Our experiments reveal that training stalls arise from inefficient early
+    representation learning. Several interventions significantly accelerate
+    training dynamics across both loss plateaus and grokking.
+    </p>
+    <h3 class="subsection-title">Loss Plateau Insights</h3>
+    <div class="card-grid">
+      <div class="card">
+        <h3>Representation Collapse</h3>
+        <p>
+        Early training exhibits embedding repetition and limited attention
+        structure, causing gradients to produce minimal improvements in loss.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Slow Attention Formation</h3>
+        <p>
+        Useful attention patterns emerge gradually, delaying the model's ability
+        to exploit structure in modular arithmetic tasks.
+        </p>
+      </div>
+    </div>
+    <h3 class="subsection-title">Grokking Acceleration</h3>
     <div class="card-grid">
       <div class="card">
         <h3>4× Faster via Task Diversity</h3>
-        <p>Training on 4 arithmetic tasks simultaneously with strictly balanced batching reduced
-        Division grokking from 334,000 → ~80,000 steps.</p>
+        <p>Training on 4 arithmetic tasks simultaneously reduced Division grokking
+        from 334,000 → ~80,000 steps.</p>
       </div>
       <div class="card">
         <h3>8× Faster via SGD</h3>
-        <p>Replacing AdamW with SGD (LR=0.005) introduced gradient noise that escaped the
+        <p>Replacing AdamW with SGD introduced gradient noise that escaped the
         memorization basin, achieving stable grokking at 44,900 steps.</p>
       </div>
       <div class="card">
-        <h3>~316× Faster via Initialization</h3>
-        <p>Sparse or small weight initialization virtually eliminated the grokking plateau,
-        reducing the delay from ~332,000 steps to just 1,050 steps.</p>
+        <h3>316× Faster via Initialization</h3>
+        <p>Sparse or small weight initialization reduced the delay from
+        ~332,000 steps to just 1,050 steps.</p>
       </div>
     </div>
   </div>
