@@ -19,7 +19,7 @@ title: Home
     <p class="section-intro">
       Transformer models often spend enormous amounts of compute stuck in inefficient
       training regimes. These stalls appear in two well-known forms:
-      <b>training-loss plateaus</b> and <b>grokking delays</b>.
+      <b>training-loss plateaus</b> and <b>grokking (generization plateau)</b>.
     </p>
     <p>
       In this project we investigate whether these phenomena arise from similar
@@ -129,7 +129,7 @@ title: Home
       </p>
     </div>
   </div>
-  <h3 class="subsection-title">Grokking Acceleration</h3>
+  <h3 class="subsection-title" style="margin-top:40px;"> Grokking Acceleration</h3>
   <div class="card-grid">
     <div class="card">
       <h3>4× Faster via Task Diversity</h3>
