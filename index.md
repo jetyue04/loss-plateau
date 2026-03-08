@@ -67,7 +67,7 @@ title: Home
     <div class="team-grid">
       <div class="team-card">
         <div class="avatar">J</div>
-        <h4>Jet Zhang Yue</h4>
+        <h4>Jet Yue</h4>
         <p>Training-Loss Plateau</p>
       </div>
       <div class="team-card">
