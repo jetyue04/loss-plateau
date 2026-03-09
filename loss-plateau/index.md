@@ -124,14 +124,84 @@ title: Loss Plateau
       <li><strong>Prefix Sum (PS):</strong> y<sub>i</sub> = Σ<sub>j=1…i</sub> x<sub>j</sub> mod p</li>
     </ul>
     <p>
-      Sequence length is n=16 and modulus p=17 for initial tasks, with task-specific separator tokens to distinguish sequences in multi-task batches. For experiments focused on grokking, we expand to modular division, addition, subtraction, and multiplication with modulus p=97.
+        Sequence length is n=16 and modulus p=17 for initial tasks, with task-specific separator tokens to distinguish sequences in multi-task batches. Each task is chosen such that the model can solve it to 100% accuracy.
     </p>
   </div>
 
   <div class="section">
-    <h2 class="section-title">Results</h2>
-    <p class="section-intro">
-      This section is being updated by Jet. Check back soon.
+  <h2 class="section-title">Experiments</h2>
+  <p class="section-intro">
+    We conducted three main experiments to investigate the effects of task diversity, baseline performance, and transfer learning in our Transformer setup.
+  </p>
+
+  <!-- Experiment 1 -->
+  <div class="section">
+    <h3>Experiment 1 — Baseline with MWS</h3>
+    <p>
+      The model is trained on a single algorithmic task, Moving Window Sum (MWS), using sequence length n=16 and modulus p=17. 
+      This baseline establishes the classic grokking curve and confirms that the model can achieve 100% training and validation accuracy on a simple task.
     </p>
+    <div class="callout">
+      <strong>Key insight:</strong> Baseline grokking occurs after sufficient training steps, providing a reference for all later interventions.
+    </div>
+    <!-- Optional figure -->
+    <!--
+    <figure class="figure">
+      <img src="{{ site.baseurl }}/assets/images/mws_baseline.png" alt="MWS baseline">
+      <figcaption>Figure — Baseline grokking on MWS.</figcaption>
+    </figure>
+    -->
+  </div>
+
+  <!-- Experiment 2 -->
+  <div class="section">
+    <h3>Experiment 2 — Task Diversity</h3>
+    <p>
+      We train the model on multiple algorithmic tasks simultaneously (e.g., MWS, MWP, MWD, PS) with balanced batches. 
+      This examines whether shared representations across tasks accelerate grokking on the hardest task, Modular Division.
+    </p>
+    <div class="callout">
+      <strong>Observation:</strong> Balanced multi-task training encourages internal synergy, reducing grokking delays significantly compared to single-task training.
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <h3>2-Task (MWS + MWP)</h3>
+        <p>Validation remains low; limited synergy observed. Grokking delay unchanged.</p>
+      </div>
+      <div class="card">
+        <h3>3-Task (MWS + MWP + MWD)</h3>
+        <p>Partial acceleration: validation rises earlier but full grokking not yet achieved.</p>
+      </div>
+      <div class="card">
+        <h3>4-Task Balanced</h3>
+        <p>Strong acceleration; grokking delay reduced significantly, demonstrating the benefits of strict balanced batching.</p>
+      </div>
+    </div>
+    <!-- Optional figure -->
+    <!--
+    <figure class="figure">
+      <img src="{{ site.baseurl }}/assets/images/task_diversity.png" alt="Task diversity results">
+      <figcaption>Figure — Grokking acceleration with increasing task diversity.</figcaption>
+    </figure>
+    -->
+    </div>
+    <!-- Experiment 3 -->
+    <div class="section">
+      <h3>Experiment 3 — Transfer Learning</h3>
+      <p>
+        The model is pretrained on a simpler task (MWS) before fine-tuning on a more difficult target task (e.g., Modular Division). 
+        This tests whether prior learning can shorten grokking delays on complex tasks.
+      </p>
+      <div class="callout">
+        <strong>Observation:</strong> Pretraining accelerates generalization, allowing the model to grok the target task much faster than training from scratch.
+      </div>
+      <!-- Optional figure -->
+      <!--
+      <figure class="figure">
+        <img src="{{ site.baseurl }}/assets/images/transfer_learning.png" alt="Transfer learning results">
+        <figcaption>Figure — Transfer learning accelerates grokking on harder tasks.</figcaption>
+      </figure>
+      -->
+    </div>
   </div>
 </div>
