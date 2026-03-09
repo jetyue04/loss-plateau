@@ -139,18 +139,10 @@ title: Loss Plateau
     <h3>Experiment 1 — Baseline with MWS</h3>
     <p>
       The model is trained on a single algorithmic task, Moving Window Sum (MWS), using sequence length n=16 and modulus p=17. 
-      This baseline establishes the classic grokking curve and confirms that the model can achieve 100% training and validation accuracy on a simple task.
     </p>
     <div class="callout">
-      <strong>Key insight:</strong> Baseline grokking occurs after sufficient training steps, providing a reference for all later interventions.
+      <strong>Key insight:</strong> We observed the expected characteristics associated to the loss plateau: Representation collapse, Repetition Bias and slow formation of the optimal attention map.
     </div>
-    <!-- Optional figure -->
-    <!--
-    <figure class="figure">
-      <img src="{{ site.baseurl }}/assets/images/mws_baseline.png" alt="MWS baseline">
-      <figcaption>Figure — Baseline grokking on MWS.</figcaption>
-    </figure>
-    -->
   </div>
 
   <!-- Experiment 2 -->
@@ -159,32 +151,80 @@ title: Loss Plateau
     <p>
       We train the model on multiple algorithmic tasks simultaneously (e.g., MWS, MWP, MWD, PS) with balanced batches. 
       This examines whether shared representations across tasks accelerate grokking on the hardest task, Modular Division.
+      To ensure **fairness**, the training batch size is fixed across tasks. When mixing multiple tasks, the number of training samples is split evenly among all tasks. 
+      Each task is uniquely identified using a separate separator token. We measure the loss plateau in terms of the number of training samples observed. 
     </p>
     <div class="callout">
-      <strong>Observation:</strong> Balanced multi-task training encourages internal synergy, reducing grokking delays significantly compared to single-task training.
+      <strong>Observation:</strong> Multi-task training allows the model to learn each task using fewer training samples and reduces the training loss plateau. The plateau emerges multiple times as the model first learns one task, then the next, with optimal attention maps forming progressively.
     </div>
     <div class="card-grid">
       <div class="card">
-        <h3>2-Task (MWS + MWP)</h3>
-        <p>Validation remains low; limited synergy observed. Grokking delay unchanged.</p>
+        <h3>Moving Window Sum (MWS)</h3>
+        <figure class="figure" style="max-width:600px; margin:0 auto;">
+          <img src="{{ site.baseurl }}/assets/images/MWS_diversity.png" alt="MWS Task Plateau">
+          <figcaption class="figure-caption">
+            Plateau emerges as the model initially focuses on MWS. Once learned, the model moves to the next task, creating successive plateaus before full generalization.
+          </figcaption>
+        </figure>
       </div>
       <div class="card">
-        <h3>3-Task (MWS + MWP + MWD)</h3>
-        <p>Partial acceleration: validation rises earlier but full grokking not yet achieved.</p>
+        <h3>Moving Window Product (MWP)</h3>
+        <p>Partial acceleration: validation rises earlier but full grokking is not yet achieved.</p>
+        <figure class="figure" style="max-width:600px; margin:0 auto;">
+          <img src="{{ site.baseurl }}/assets/images/MWP_diversity.png" alt="MWP Task Plateau">
+          <figcaption class="figure-caption">
+            Plateau emerges as the model learns MWP after MWS. Validation accuracy rises in steps, showing sequential task learning and multiple plateaus.
+          </figcaption>
+        </figure>
       </div>
       <div class="card">
-        <h3>4-Task Balanced</h3>
+        <h3>Moving Window Division (MWD)</h3>
         <p>Strong acceleration; grokking delay reduced significantly, demonstrating the benefits of strict balanced batching.</p>
+        <figure class="figure" style="max-width:600px; margin:0 auto;">
+          <img src="{{ site.baseurl }}/assets/images/MWD_diversity.png" alt="MWD Task Plateau">
+          <figcaption class="figure-caption">
+            Plateau emerges last as the model tackles MWD (hardest task). Balanced multi-task batching allows sequential learning while minimizing training samples needed for each task.
+          </figcaption>
+        </figure>
       </div>
     </div>
-    <!-- Optional figure -->
-    <!--
-    <figure class="figure">
-      <img src="{{ site.baseurl }}/assets/images/task_diversity.png" alt="Task diversity results">
-      <figcaption>Figure — Grokking acceleration with increasing task diversity.</figcaption>
-    </figure>
-    -->
-    </div>
+    <!-- Summary Table -->
+    <h4>Plateau Reduction Summary</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>#Tasks</th>
+          <th>MWS</th>
+          <th>MWP</th>
+          <th>MWD</th>
+          <th>AVG % Speedup</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>16,256</td>
+          <td>93,568</td>
+          <td>34,560</td>
+          <td>N/A</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>13,600</td>
+          <td>24,096</td>
+          <td>19,680</td>
+          <td>44.55%</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>10,542</td>
+          <td>13,288</td>
+          <td>10,794</td>
+          <td>63.24%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
     <!-- Experiment 3 -->
     <div class="section">
       <h3>Experiment 3 — Transfer Learning</h3>
