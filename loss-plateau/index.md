@@ -149,20 +149,21 @@ title: Loss Plateau
   <div class="section">
     <h3>Experiment 2 — Task Diversity</h3>
     <p>
-      We train the model on multiple algorithmic tasks simultaneously (e.g., MWS, MWP, MWD, PS) with balanced batches. 
-      This examines whether shared representations across tasks accelerate grokking on the hardest task, Modular Division.
-      To ensure **fairness**, the training batch size is fixed across tasks. When mixing multiple tasks, the number of training samples is split evenly among all tasks. 
-      Each task is uniquely identified using a separate separator token. We measure the loss plateau in terms of the number of training samples observed. 
+      We train the model on multiple algorithmic tasks simultaneously (e.g., MWS, MWP, MWD, PS) using balanced batches. 
+      This setup examines whether shared representations across tasks can accelerate grokking on the hardest task, Modular Division. 
+      To ensure <strong>fairness</strong>, the overall training batch size is kept constant across experiments. When multiple tasks are included in a batch, the number of training samples is divided evenly among all tasks, and each task is uniquely identified by a separate separator token. 
+      Notably, the loss plateau can emerge multiple times: the model often learns one task first, then others sequentially. 
+      We measure the plateau in terms of the total number of training samples observed until each task is fully learned.
     </p>
     <div class="callout">
-      <strong>Observation:</strong> Multi-task training allows the model to learn each task using fewer training samples and reduces the training loss plateau. The plateau emerges multiple times as the model first learns one task, then the next, with optimal attention maps forming progressively.
+      <strong>Observation:</strong> Multi-task training allows the model to learn each task using fewer training samples and reduces the training loss plateau. The optimal attention map is able to form with less training samples seen. The loss also spikes as the model tries to learn several tasks.
     </div>
     <div class="card">
       <h3>Moving Window Sum (MWS)</h3>
       <figure class="figure" style="max-width:600px; margin:0 auto;">
         <img src="{{ site.baseurl }}/assets/images/MWS_diversity.png" alt="MWS Task Plateau">
         <figcaption class="figure-caption">
-          Plateau emerges as the model initially focuses on MWS. Once learned, the model moves to the next task, creating successive plateaus before full generalization.
+          The model shows moderate acceleration for MWS. A small plateau is observed initially, and the task is learned before other tasks.
         </figcaption>
       </figure>
     </div>
@@ -172,7 +173,7 @@ title: Loss Plateau
       <figure class="figure" style="max-width:600px; margin:0 auto;">
         <img src="{{ site.baseurl }}/assets/images/MWP_diversity.png" alt="MWP Task Plateau">
         <figcaption class="figure-caption">
-          Plateau emerges as the model learns MWP after MWS. Validation accuracy rises in steps, showing sequential task learning and multiple plateaus.
+          MWP shows the largest reduction in plateau duration. The task is learned more quickly thanks to shared multi-task representations.
         </figcaption>
       </figure>
     </div>
@@ -182,12 +183,17 @@ title: Loss Plateau
       <figure class="figure" style="max-width:600px; margin:0 auto;">
         <img src="{{ site.baseurl }}/assets/images/MWD_diversity.png" alt="MWD Task Plateau">
         <figcaption class="figure-caption">
-          Plateau emerges last as the model tackles MWD (hardest task). Balanced multi-task batching allows sequential learning while minimizing training samples needed for each task.
+          MWD experiences a longer plateau initially, but acceleration is significant with task diversity.
         </figcaption>
       </figure>
     </div>
     <!-- Summary Table -->
     <h4>Plateau Reduction Summary</h4>
+    <p>
+      The table below shows, for each task and multi-task configuration, the number of training examples
+      the model sees until the plateau in loss ends. The last column reports the average % speedup 
+      relative to the single-task baseline, computed as: <code>1 - (Current / Baseline)</code>.
+    </p>
     <table style="width:100%; border-collapse: collapse; text-align:center;">
       <thead>
         <tr style="background-color:#f2f2f2;">
