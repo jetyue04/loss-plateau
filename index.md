@@ -52,29 +52,6 @@ title: 📈 Home
 </div>
 
 <div class="section">
-  <h2 class="section-title">Two Forms of Training Stall</h2>
-  <div class="card-grid">
-    <div class="card">
-      <h3>Training-Loss Plateau</h3>
-      <p>
-        Early in training, loss stalls due to representation collapse and
-        repetition bias in token embeddings. Attention structure forms
-        slowly, delaying useful learning.
-      </p>
-    </div>
-
-    <div class="card">
-      <h3>Grokking (Generalization Plateau)</h3>
-      <p>
-        Models memorize training data almost instantly but take hundreds of
-        thousands of steps before generalizing. We investigate what drives
-        this delay and how to eliminate it.
-      </p>
-    </div>
-  </div>
-</div>
-
-<div class="section">
   <h2 class="section-title">Our Approach</h2>
   <p class="section-intro">
     We test whether shared interventions can accelerate both phenomena.
