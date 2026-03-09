@@ -1,0 +1,11 @@
+{"time":"2026-01-23T00:51:24.543447-08:00","level":"INFO","msg":"stream: starting","core version":"0.24.0"}
+{"time":"2026-01-23T00:51:25.056244-08:00","level":"INFO","msg":"stream: created new stream","id":"jjg8usaf"}
+{"time":"2026-01-23T00:51:25.056322-08:00","level":"INFO","msg":"handler: started","stream_id":"jjg8usaf"}
+{"time":"2026-01-23T00:51:25.05652-08:00","level":"INFO","msg":"writer: started","stream_id":"jjg8usaf"}
+{"time":"2026-01-23T00:51:25.056531-08:00","level":"INFO","msg":"stream: started","id":"jjg8usaf"}
+{"time":"2026-01-23T00:51:25.056582-08:00","level":"INFO","msg":"sender: started","stream_id":"jjg8usaf"}
+{"time":"2026-01-23T00:51:26.11054-08:00","level":"INFO","msg":"stream: closing","id":"jjg8usaf"}
+{"time":"2026-01-23T00:51:26.604865-08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2026-01-23T00:51:26.764826-08:00","level":"INFO","msg":"handler: closed","stream_id":"jjg8usaf"}
+{"time":"2026-01-23T00:51:26.765127-08:00","level":"INFO","msg":"sender: closed","stream_id":"jjg8usaf"}
+{"time":"2026-01-23T00:51:26.765149-08:00","level":"INFO","msg":"stream: closed","id":"jjg8usaf"}

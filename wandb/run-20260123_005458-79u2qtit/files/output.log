@@ -1,0 +1,168 @@
+Step 0 -- Train loss: 2.645388603210449, Train Acc: 0.2119140625 Test Acc: 0.177734375
+Step 1 -- Train loss: 2.382061719894409, Train Acc: 0.36962890625 Test Acc: 0.376953125
+Step 2 -- Train loss: 2.1639199256896973, Train Acc: 0.41845703125 Test Acc: 0.39453125
+Step 3 -- Train loss: 1.9764056205749512, Train Acc: 0.4267578125 Test Acc: 0.41796875
+Step 4 -- Train loss: 1.8594427108764648, Train Acc: 0.44287109375 Test Acc: 0.4453125
+Step 5 -- Train loss: 1.8048732280731201, Train Acc: 0.42529296875 Test Acc: 0.42578125
+Step 6 -- Train loss: 1.7359751462936401, Train Acc: 0.4345703125 Test Acc: 0.427734375
+Step 7 -- Train loss: 1.7140926122665405, Train Acc: 0.427734375 Test Acc: 0.41796875
+Step 8 -- Train loss: 1.7418606281280518, Train Acc: 0.41748046875 Test Acc: 0.421875
+Step 9 -- Train loss: 1.665266752243042, Train Acc: 0.42578125 Test Acc: 0.423828125
+Step 10 -- Train loss: 1.6670678853988647, Train Acc: 0.40234375 Test Acc: 0.400390625
+Step 11 -- Train loss: 1.6692081689834595, Train Acc: 0.40283203125 Test Acc: 0.4140625
+Step 12 -- Train loss: 1.6242785453796387, Train Acc: 0.42431640625 Test Acc: 0.419921875
+Step 13 -- Train loss: 1.637764573097229, Train Acc: 0.41064453125 Test Acc: 0.427734375
+Step 14 -- Train loss: 1.6441653966903687, Train Acc: 0.4365234375 Test Acc: 0.4453125
+Step 15 -- Train loss: 1.6680351495742798, Train Acc: 0.40771484375 Test Acc: 0.396484375
+Step 16 -- Train loss: 1.6181588172912598, Train Acc: 0.39306640625 Test Acc: 0.44140625
+Step 17 -- Train loss: 1.6232608556747437, Train Acc: 0.38525390625 Test Acc: 0.4296875
+Step 18 -- Train loss: 1.62311589717865, Train Acc: 0.40771484375 Test Acc: 0.390625
+Step 19 -- Train loss: 1.605567455291748, Train Acc: 0.3857421875 Test Acc: 0.35546875
+Step 20 -- Train loss: 1.5653284788131714, Train Acc: 0.38818359375 Test Acc: 0.369140625
+Step 21 -- Train loss: 1.6225292682647705, Train Acc: 0.38525390625 Test Acc: 0.3515625
+Step 22 -- Train loss: 1.5851163864135742, Train Acc: 0.380859375 Test Acc: 0.37890625
+Step 23 -- Train loss: 1.5718541145324707, Train Acc: 0.4111328125 Test Acc: 0.39453125
+Step 24 -- Train loss: 1.5403385162353516, Train Acc: 0.41259765625 Test Acc: 0.400390625
+Step 25 -- Train loss: 1.5634281635284424, Train Acc: 0.3994140625 Test Acc: 0.419921875
+Step 26 -- Train loss: 1.5866658687591553, Train Acc: 0.38720703125 Test Acc: 0.3984375
+Step 27 -- Train loss: 1.5714164972305298, Train Acc: 0.3935546875 Test Acc: 0.412109375
+Step 28 -- Train loss: 1.6076339483261108, Train Acc: 0.388671875 Test Acc: 0.40625
+Step 29 -- Train loss: 1.571439504623413, Train Acc: 0.39453125 Test Acc: 0.400390625
+Step 30 -- Train loss: 1.5656343698501587, Train Acc: 0.4072265625 Test Acc: 0.412109375
+Step 31 -- Train loss: 1.567711591720581, Train Acc: 0.416015625 Test Acc: 0.404296875
+Step 32 -- Train loss: 1.5761574506759644, Train Acc: 0.4287109375 Test Acc: 0.41015625
+Step 33 -- Train loss: 1.578169584274292, Train Acc: 0.44384765625 Test Acc: 0.408203125
+Step 34 -- Train loss: 1.5346605777740479, Train Acc: 0.42138671875 Test Acc: 0.435546875
+Step 35 -- Train loss: 1.547295093536377, Train Acc: 0.4453125 Test Acc: 0.44921875
+Step 36 -- Train loss: 1.5471950769424438, Train Acc: 0.4150390625 Test Acc: 0.412109375
+Step 37 -- Train loss: 1.5368738174438477, Train Acc: 0.4140625 Test Acc: 0.43359375
+Step 38 -- Train loss: 1.5320558547973633, Train Acc: 0.4208984375 Test Acc: 0.400390625
+Step 39 -- Train loss: 1.5425889492034912, Train Acc: 0.43701171875 Test Acc: 0.40625
+Traceback (most recent call last):
+  File "/Users/jetyue04/ml-research/tf-loss-plateau/train.py", line 122, in <module>
+    main(args)
+  File "/Users/jetyue04/ml-research/tf-loss-plateau/train.py", line 100, in main
+    train_step(
+  File "/Users/jetyue04/ml-research/tf-loss-plateau/./src/multi_task_train.py", line 200, in train_step
+    wandb.log({f"{task_name}/cosine_sim_fig": metrics["cosine_sim_fig"]}, step=step)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 400, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 458, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 445, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2042, in log
+    self._log(data=data, step=step, commit=commit)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1753, in _log
+    self._partial_history_callback(data, step, commit)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 400, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1581, in _partial_history_callback
+    self._backend.interface.publish_partial_history(
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 689, in publish_partial_history
+    data = history_dict_to_json(run, data, step=user_step, ignore_copy_err=True)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/wandb/sdk/data_types/utils.py", line 54, in history_dict_to_json
+    payload[key] = val_to_json(
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/wandb/sdk/data_types/utils.py", line 88, in val_to_json
+    val = Plotly.make_plot_media(val)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/wandb/sdk/data_types/plotly.py", line 48, in make_plot_media
+    return Image(val)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/wandb/sdk/data_types/image.py", line 277, in __init__
+    self._initialize_from_data(data_or_path, mode, file_type, normalize)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/wandb/sdk/data_types/image.py", line 407, in _initialize_from_data
+    util.ensure_matplotlib_figure(data).savefig(buf, format=self.format)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/matplotlib/figure.py", line 3490, in savefig
+    self.canvas.print_figure(fname, **kwargs)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/matplotlib/backend_bases.py", line 2155, in print_figure
+    self.figure.draw(renderer)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/matplotlib/artist.py", line 94, in draw_wrapper
+    result = draw(artist, renderer, *args, **kwargs)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/matplotlib/artist.py", line 71, in draw_wrapper
+    return draw(artist, renderer)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/matplotlib/figure.py", line 3257, in draw
+    mimage._draw_list_compositing_images(
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/matplotlib/image.py", line 134, in _draw_list_compositing_images
+    a.draw(renderer)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/matplotlib/artist.py", line 71, in draw_wrapper
+    return draw(artist, renderer)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/matplotlib/axes/_base.py", line 3216, in draw
+    mimage._draw_list_compositing_images(
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/matplotlib/image.py", line 134, in _draw_list_compositing_images
+    a.draw(renderer)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/matplotlib/artist.py", line 71, in draw_wrapper
+    return draw(artist, renderer)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/matplotlib/text.py", line 752, in draw
+    bbox, info, descent = self._get_layout(renderer)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/matplotlib/text.py", line 373, in _get_layout
+    _, lp_h, lp_d = _get_text_metrics_with_cache(
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/matplotlib/text.py", line 70, in _get_text_metrics_with_cache
+    weakref.ref(renderer), text, fontprop.copy(), ismath, dpi)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/matplotlib/font_manager.py", line 963, in copy
+    return copy.copy(self)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/copy.py", line 82, in copy
+    copier = getattr(cls, "__copy__", None)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/Users/jetyue04/ml-research/tf-loss-plateau/train.py", line 122, in <module>
+    main(args)
+  File "/Users/jetyue04/ml-research/tf-loss-plateau/train.py", line 100, in main
+    train_step(
+  File "/Users/jetyue04/ml-research/tf-loss-plateau/./src/multi_task_train.py", line 200, in train_step
+    wandb.log({f"{task_name}/cosine_sim_fig": metrics["cosine_sim_fig"]}, step=step)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 400, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 458, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 445, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2042, in log
+    self._log(data=data, step=step, commit=commit)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1753, in _log
+    self._partial_history_callback(data, step, commit)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 400, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1581, in _partial_history_callback
+    self._backend.interface.publish_partial_history(
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 689, in publish_partial_history
+    data = history_dict_to_json(run, data, step=user_step, ignore_copy_err=True)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/wandb/sdk/data_types/utils.py", line 54, in history_dict_to_json
+    payload[key] = val_to_json(
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/wandb/sdk/data_types/utils.py", line 88, in val_to_json
+    val = Plotly.make_plot_media(val)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/wandb/sdk/data_types/plotly.py", line 48, in make_plot_media
+    return Image(val)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/wandb/sdk/data_types/image.py", line 277, in __init__
+    self._initialize_from_data(data_or_path, mode, file_type, normalize)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/wandb/sdk/data_types/image.py", line 407, in _initialize_from_data
+    util.ensure_matplotlib_figure(data).savefig(buf, format=self.format)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/matplotlib/figure.py", line 3490, in savefig
+    self.canvas.print_figure(fname, **kwargs)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/matplotlib/backend_bases.py", line 2155, in print_figure
+    self.figure.draw(renderer)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/matplotlib/artist.py", line 94, in draw_wrapper
+    result = draw(artist, renderer, *args, **kwargs)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/matplotlib/artist.py", line 71, in draw_wrapper
+    return draw(artist, renderer)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/matplotlib/figure.py", line 3257, in draw
+    mimage._draw_list_compositing_images(
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/matplotlib/image.py", line 134, in _draw_list_compositing_images
+    a.draw(renderer)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/matplotlib/artist.py", line 71, in draw_wrapper
+    return draw(artist, renderer)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/matplotlib/axes/_base.py", line 3216, in draw
+    mimage._draw_list_compositing_images(
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/matplotlib/image.py", line 134, in _draw_list_compositing_images
+    a.draw(renderer)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/matplotlib/artist.py", line 71, in draw_wrapper
+    return draw(artist, renderer)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/matplotlib/text.py", line 752, in draw
+    bbox, info, descent = self._get_layout(renderer)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/matplotlib/text.py", line 373, in _get_layout
+    _, lp_h, lp_d = _get_text_metrics_with_cache(
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/matplotlib/text.py", line 70, in _get_text_metrics_with_cache
+    weakref.ref(renderer), text, fontprop.copy(), ismath, dpi)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/matplotlib/font_manager.py", line 963, in copy
+    return copy.copy(self)
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/copy.py", line 82, in copy
+    copier = getattr(cls, "__copy__", None)
+KeyboardInterrupt

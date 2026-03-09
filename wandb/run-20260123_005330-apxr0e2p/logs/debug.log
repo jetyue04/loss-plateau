@@ -1,0 +1,22 @@
+2026-01-23 00:53:30,290 INFO    MainThread:36022 [wandb_setup.py:_flush():81] Current SDK version is 0.24.0
+2026-01-23 00:53:30,290 INFO    MainThread:36022 [wandb_setup.py:_flush():81] Configure stats pid to 36022
+2026-01-23 00:53:30,290 INFO    MainThread:36022 [wandb_setup.py:_flush():81] Loading settings from environment variables
+2026-01-23 00:53:30,290 INFO    MainThread:36022 [wandb_init.py:setup_run_log_directory():717] Logging user logs to /Users/jetyue04/ml-research/tf-loss-plateau/wandb/run-20260123_005330-apxr0e2p/logs/debug.log
+2026-01-23 00:53:30,290 INFO    MainThread:36022 [wandb_init.py:setup_run_log_directory():718] Logging internal logs to /Users/jetyue04/ml-research/tf-loss-plateau/wandb/run-20260123_005330-apxr0e2p/logs/debug-internal.log
+2026-01-23 00:53:30,290 INFO    MainThread:36022 [wandb_init.py:init():844] calling init triggers
+2026-01-23 00:53:30,291 INFO    MainThread:36022 [wandb_init.py:init():849] wandb.init called with sweep_config: {}
+config: {'model': DotMap(n_layer=1, n_head=1, n_embd=256, linear=True, vocab_size=18, block_size=33), 'data': DotMap(tasks=[DotMap(name='MovingWindowQuotient', sep=17, n_train=128, n_test=32, min_num=1, max_num=16, k=2, p=17)], min_num=1, max_num=16, k=2, p=17, cot=False, num_tokens=16, n_train=256, n_test=64, fixed_len=True, mix='random'), 'train': DotMap(lr=0.0001, grad_clip=-1, num_steps=500, norm_type='none_rank', wandb=True, wandb_run_name='mws_linear_embeddingNotFrozen', wandb_project='loss_plateau_tf', save_ckpt=False, ckpt_freq=20, seed=67, mask_input=True, freeze_embedding=False), '_wandb': {}}
+2026-01-23 00:53:30,291 INFO    MainThread:36022 [wandb_init.py:init():892] starting backend
+2026-01-23 00:53:30,578 INFO    MainThread:36022 [wandb_init.py:init():895] sending inform_init request
+2026-01-23 00:53:30,601 INFO    MainThread:36022 [wandb_init.py:init():903] backend started and connected
+2026-01-23 00:53:30,604 INFO    MainThread:36022 [wandb_init.py:init():973] updated telemetry
+2026-01-23 00:53:30,623 INFO    MainThread:36022 [wandb_init.py:init():997] communicating run to backend with 90.0 second timeout
+2026-01-23 00:53:31,077 INFO    MainThread:36022 [wandb_init.py:init():1044] starting run threads in backend
+2026-01-23 00:53:31,258 INFO    MainThread:36022 [wandb_run.py:_console_start():2529] atexit reg
+2026-01-23 00:53:31,258 INFO    MainThread:36022 [wandb_run.py:_redirect():2377] redirect: wrap_raw
+2026-01-23 00:53:31,258 INFO    MainThread:36022 [wandb_run.py:_redirect():2446] Wrapping output streams.
+2026-01-23 00:53:31,258 INFO    MainThread:36022 [wandb_run.py:_redirect():2469] Redirects installed.
+2026-01-23 00:53:31,261 INFO    MainThread:36022 [wandb_init.py:init():1084] run started, returning control to user process
+2026-01-23 00:53:31,261 INFO    MainThread:36022 [wandb_watch.py:_watch():68] Watching
+2026-01-23 00:53:31,264 INFO    wandb-AsyncioManager-main:36022 [service_client.py:_forward_responses():80] Reached EOF.
+2026-01-23 00:53:31,264 INFO    wandb-AsyncioManager-main:36022 [mailbox.py:close():137] Closing mailbox, abandoning 1 handles.

@@ -1,0 +1,41 @@
+{
+  "os": "macOS-26.1-arm64-arm-64bit",
+  "python": "CPython 3.10.0",
+  "startedAt": "2026-01-23T08:56:19.154168Z",
+  "args": [
+    "--config",
+    "src/configs/mwq.yaml"
+  ],
+  "program": "/Users/jetyue04/ml-research/tf-loss-plateau/train.py",
+  "codePath": "train.py",
+  "codePathLocal": "train.py",
+  "git": {
+    "remote": "git@github.com:jetyue04/tf-loss-plateau.git",
+    "commit": "6fc4c0ba94fbb7aa988f76d9b21a4f7fb321b80a"
+  },
+  "email": "jetyue04@gmail.com",
+  "root": "/Users/jetyue04/ml-research/tf-loss-plateau",
+  "host": "Jets-MacBook-Pro-2.local",
+  "executable": "/Users/jetyue04/miniforge3/envs/l1ad/bin/python3",
+  "cpu_count": 10,
+  "cpu_count_logical": 10,
+  "disk": {
+    "/": {
+      "total": "994662584320",
+      "used": "526652555264"
+    }
+  },
+  "memory": {
+    "total": "17179869184"
+  },
+  "apple": {
+    "name": "Apple M1 Pro",
+    "ecpuCores": 2,
+    "pcpuCores": 8,
+    "gpuCores": 16,
+    "memoryGb": 16,
+    "swapTotalBytes": "4294967296",
+    "ramTotalBytes": "17179869184"
+  },
+  "writerId": "vrxg6fgjt2vwuzhg1euhrdia47j8sbk7"
+}

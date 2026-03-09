@@ -1,0 +1,16 @@
+{"time":"2026-01-23T00:56:19.250368-08:00","level":"INFO","msg":"main: starting server","port-filename":"/var/folders/v_/7wh4xmnn02qbm4wqq_37tpsw0000gn/T/tmpxu0uk6xh/port-36752.txt","pid":36752,"log-level":0,"disable-analytics":false,"shutdown-on-parent-exit":false,"enable-dcgm-profiling":false}
+{"time":"2026-01-23T00:56:19.251179-08:00","level":"INFO","msg":"server: will exit if parent process dies","ppid":36752}
+{"time":"2026-01-23T00:56:19.25118-08:00","level":"INFO","msg":"server: accepting connections","addr":{"Name":"/var/folders/v_/7wh4xmnn02qbm4wqq_37tpsw0000gn/T/wandb-36752-36779-2974524960/socket","Net":"unix"}}
+{"time":"2026-01-23T00:56:19.446773-08:00","level":"INFO","msg":"connection: ManageConnectionData: new connection created","id":"1"}
+{"time":"2026-01-23T00:56:19.491097-08:00","level":"INFO","msg":"handleInformInit: received","streamId":"q4ebbqpc","id":"1"}
+{"time":"2026-01-23T00:56:20.083815-08:00","level":"INFO","msg":"handleInformInit: stream started","streamId":"q4ebbqpc","id":"1"}
+{"time":"2026-01-23T01:10:39.571147-08:00","level":"INFO","msg":"handleInformFinish: finish message received","streamId":"q4ebbqpc","id":"1"}
+{"time":"2026-01-23T01:10:39.575437-08:00","level":"INFO","msg":"handleInformFinish: stream closed","streamId":"q4ebbqpc","id":"1"}
+{"time":"2026-01-23T01:10:39.575468-08:00","level":"INFO","msg":"handleInformTeardown: server teardown initiated","id":"1"}
+{"time":"2026-01-23T01:10:39.575485-08:00","level":"INFO","msg":"handleInformTeardown: server shutdown complete","id":"1"}
+{"time":"2026-01-23T01:10:39.575494-08:00","level":"INFO","msg":"connection: closing","id":"1"}
+{"time":"2026-01-23T01:10:39.575506-08:00","level":"INFO","msg":"server is shutting down"}
+{"time":"2026-01-23T01:10:39.575518-08:00","level":"INFO","msg":"connection: closed successfully","id":"1"}
+{"time":"2026-01-23T01:10:39.575542-08:00","level":"INFO","msg":"connection: ManageConnectionData: connection closed","id":"1"}
+{"time":"2026-01-23T01:10:39.575786-08:00","level":"INFO","msg":"server: listener closed","addr":{"Name":"/var/folders/v_/7wh4xmnn02qbm4wqq_37tpsw0000gn/T/wandb-36752-36779-2974524960/socket","Net":"unix"}}
+{"time":"2026-01-23T01:10:39.575809-08:00","level":"INFO","msg":"server is closed"}

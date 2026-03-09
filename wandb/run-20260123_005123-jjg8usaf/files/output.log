@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "/Users/jetyue04/ml-research/tf-loss-plateau/train.py", line 122, in <module>
+    main(args)
+  File "/Users/jetyue04/ml-research/tf-loss-plateau/train.py", line 100, in main
+    train_step(
+  File "/Users/jetyue04/ml-research/tf-loss-plateau/./src/multi_task_train.py", line 179, in train_step
+    metrics = calc_metric(
+  File "/Users/jetyue04/ml-research/tf-loss-plateau/./src/multi_task_train.py", line 23, in calc_metric
+    t_train_acc = torch.mean((t_train_pred[:, acc_start:] == t_train[:, acc_start:]).float()).item()
+RuntimeError: The size of tensor a (15) must match the size of tensor b (0) at non-singleton dimension 1
+Traceback (most recent call last):
+  File "/Users/jetyue04/ml-research/tf-loss-plateau/train.py", line 122, in <module>
+    main(args)
+  File "/Users/jetyue04/ml-research/tf-loss-plateau/train.py", line 100, in main
+    train_step(
+  File "/Users/jetyue04/ml-research/tf-loss-plateau/./src/multi_task_train.py", line 179, in train_step
+    metrics = calc_metric(
+  File "/Users/jetyue04/ml-research/tf-loss-plateau/./src/multi_task_train.py", line 23, in calc_metric
+    t_train_acc = torch.mean((t_train_pred[:, acc_start:] == t_train[:, acc_start:]).float()).item()
+RuntimeError: The size of tensor a (15) must match the size of tensor b (0) at non-singleton dimension 1

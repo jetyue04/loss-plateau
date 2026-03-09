@@ -1,0 +1,24 @@
+Traceback (most recent call last):
+  File "/Users/jetyue04/ml-research/tf-loss-plateau/train.py", line 122, in <module>
+    main(args)
+  File "/Users/jetyue04/ml-research/tf-loss-plateau/train.py", line 100, in main
+    train_step(
+  File "/Users/jetyue04/ml-research/tf-loss-plateau/./src/multi_task_train.py", line 128, in train_step
+    data = sampler.sample(
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+  File "/Users/jetyue04/ml-research/tf-loss-plateau/./src/data/moving_window_quotient.py", line 39, in sample
+    q_full[:, self.k - 1 :] = q
+RuntimeError: The expanded size of the tensor (15) must match the existing size (14) at non-singleton dimension 1.  Target sizes: [160, 15].  Tensor sizes: [160, 14]
+Traceback (most recent call last):
+  File "/Users/jetyue04/ml-research/tf-loss-plateau/train.py", line 122, in <module>
+    main(args)
+  File "/Users/jetyue04/ml-research/tf-loss-plateau/train.py", line 100, in main
+    train_step(
+  File "/Users/jetyue04/ml-research/tf-loss-plateau/./src/multi_task_train.py", line 128, in train_step
+    data = sampler.sample(
+  File "/Users/jetyue04/miniforge3/envs/l1ad/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+  File "/Users/jetyue04/ml-research/tf-loss-plateau/./src/data/moving_window_quotient.py", line 39, in sample
+    q_full[:, self.k - 1 :] = q
+RuntimeError: The expanded size of the tensor (15) must match the existing size (14) at non-singleton dimension 1.  Target sizes: [160, 15].  Tensor sizes: [160, 14]
