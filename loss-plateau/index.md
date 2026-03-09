@@ -30,7 +30,7 @@ title: Loss Plateau
     </figure>
 
   <div class="section">
-    <h2 class="section-title">Three Training Phenomena</h2>
+    <h2 class="section-title">Training Phenomena during the plateau</h2>
     <p class="section-intro">
       During long training runs we observed three recurring behaviors inside the
       Transformer: slow formation of attention maps, representation collapse,
@@ -85,45 +85,51 @@ title: Loss Plateau
         </figure>
       </div>
     <!-- </div> -->
-</div>
-
-
-
-
-
-</div>
-  <!-- <div class="section">
-    <h2 class="section-title">What is the Training-Loss Plateau?</h2>
-    <p class="section-intro">
-      Before grokking even occurs, Transformers exhibit a separate stalling phenomenon
-      early in training. Loss stops decreasing for a prolonged period despite continued
-      gradient updates — wasting significant computation.
-    </p>
-    <div class="card-grid">
-      <div class="card">
-        <h3>Representation Collapse</h3>
-        <p>Token embeddings early in training suffer from repetition bias — they fail to
-        form distinct, meaningful representations, causing the loss to stall.</p>
-      </div>
-      <div class="card">
-        <h3>Slow Attention Formation</h3>
-        <p>Attention maps form very slowly during the plateau phase. The model cannot
-        route information effectively until structure emerges.</p>
-      </div>
-      <div class="card">
-        <h3>Multi-Task Shortcut</h3>
-        <p>Training on diverse tasks forces the model to build shared representations
-        faster, significantly shortening the plateau duration.</p>
-      </div>
+    <div class="section">
+      <h2 class="section-title">Experimental Setup</h2>
+      <p class="section-intro">
+        In this study, we trained a shallow Transformer on modular arithmetic tasks to investigate the grokking phenomenon. 
+        We describe the model architecture, training procedure, and tasks used below.
+      </p>
+      <h3>Model Architecture</h3>
+      <p>
+        We use a single-layer Transformer with causal attention and a two-layer feedforward MLP. 
+        Tokens are embedded and summed with absolute positional embeddings. Pre-LayerNorm is applied before each attention and MLP block, and residual connections surround both blocks. The MLP uses GELU activations with an intermediate dimensionality four times the hidden size. A final linear layer maps hidden states to vocabulary logits for next-token prediction. 
+        Sequence generation uses greedy decoding, selecting the highest-logit token at each step.
+      </p>
+      <p>
+        Formally, for a sequence of tokens \(s_1, \dots, s_L\), the model computes:
+      </p>
+      <p style="text-align:center;">
+        \[
+        \text{TF}_\theta(s_1, \dots, s_L) = 
+        \text{LM} \circ (\text{Id} + \text{MLP}) \circ (\text{Id} + \text{Attn}) \circ \text{Embed}(s_1, \dots, s_L),
+        \]
+      </p>
+      <p>
+        where <code>Embed</code> produces token plus positional embeddings, <code>Attn</code> is the causal linear attention operation, and <code>LM</code> is the output projection to the vocabulary.
+      </p>
+      <h3>Training Procedure</h3>
+      <p>
+        Models are trained online with batches of 256 sequences drawn freshly at each step. 
+        The objective is next-token cross-entropy loss, and accuracy is measured on the generated output. 
+        For multi-task experiments, batches contain sequences from multiple tasks, with samples evenly distributed across tasks. To ensure fair comparisons, batch size, vocabulary, model architecture, and the number of examples per task are kept constant across experiments.
+      </p>
+      <h3>Algorithmic Tasks</h3>
+      <p>
+        We evaluated several deterministic sequence-to-sequence tasks, including:
+      </p>
+      <ul>
+        <li><strong>Moving Window Sum (MWS):</strong> \(y_i = x_1\) if \(i=1\), else \((x_{i-1}+x_i) \bmod p\).</li>
+        <li><strong>Moving Window Product (MWP):</strong> \(y_i = x_1\) if \(i=1\), else \((x_{i-1} \cdot x_i) \bmod p\).</li>
+        <li><strong>Moving Window Difference (MWD):</strong> \(y_i = x_1\) if \(i=1\), else \((x_i - x_{i-1}) \bmod p\).</li>
+        <li><strong>Prefix Sum (PS):</strong> \(y_i = \sum_{j=1}^{i} x_j \bmod p\).</li>
+      </ul>
+      <p>
+        Sequence length is \(n=16\) and modulus \(p=17\) for initial tasks, with task-specific separator tokens to distinguish sequences in multi-task batches. 
+        For experiments focused on grokking, we expand to modular division, addition, subtraction, and multiplication with modulus \(p=97\).
+      </p>
     </div>
-  </div> -->
-
-  <div class="section">
-    <h2 class="section-title">Methods</h2>
-    <p class="section-intro">
-      This section is being updated by Jet. Check back soon.
-    </p>
-  </div>
 
   <div class="section">
     <h2 class="section-title">Results</h2>
@@ -131,5 +137,4 @@ title: Loss Plateau
       This section is being updated by Jet. Check back soon.
     </p>
   </div>
-
 </div>
