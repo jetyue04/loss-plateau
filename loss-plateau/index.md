@@ -288,23 +288,14 @@ title: Loss Plateau
       <div class="card">
         <h4>Single-Task Baseline</h4>
         <p>Training on one task (e.g., MWS) shows a long loss plateau. Attention maps form slowly, representations collapse, and repetition bias occurs early.</p>
-        <ul>
-          <li>Takeaway: Single-task learning is slow and prone to plateaus.</li>
-        </ul>
       </div>
       <div class="card">
         <h4>Task Diversity</h4>
         <p>Training on multiple tasks simultaneously reduces the number of examples needed to exit plateaus. Tasks are often learned sequentially, and shared representations accelerate learning.</p>
-        <ul>
-          <li>Takeaway: Multi-task learning shortens plateaus and speeds up learning for all tasks.</li>
-        </ul>
       </div>
       <div class="card">
         <h4>Transfer Learning</h4>
         <p>Pretraining on one task before fine-tuning on another significantly shortens or eliminates the plateau. Attention maps remain stable if target functions differ; they reorganize if target functions are shared.</p>
-        <ul>
-          <li>Takeaway: Transfer learning enables faster learning and reduces the examples needed for generalization.</li>
-        </ul>
       </div>
     </div>
   </div>
