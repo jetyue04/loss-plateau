@@ -157,73 +157,71 @@ title: Loss Plateau
     <div class="callout">
       <strong>Observation:</strong> Multi-task training allows the model to learn each task using fewer training samples and reduces the training loss plateau. The plateau emerges multiple times as the model first learns one task, then the next, with optimal attention maps forming progressively.
     </div>
-    <div class="card-grid">
-      <div class="card">
-        <h3>Moving Window Sum (MWS)</h3>
-        <figure class="figure" style="max-width:600px; margin:0 auto;">
-          <img src="{{ site.baseurl }}/assets/images/MWS_diversity.png" alt="MWS Task Plateau">
-          <figcaption class="figure-caption">
-            Plateau emerges as the model initially focuses on MWS. Once learned, the model moves to the next task, creating successive plateaus before full generalization.
-          </figcaption>
-        </figure>
-      </div>
-      <div class="card">
-        <h3>Moving Window Product (MWP)</h3>
-        <p>Partial acceleration: validation rises earlier but full grokking is not yet achieved.</p>
-        <figure class="figure" style="max-width:600px; margin:0 auto;">
-          <img src="{{ site.baseurl }}/assets/images/MWP_diversity.png" alt="MWP Task Plateau">
-          <figcaption class="figure-caption">
-            Plateau emerges as the model learns MWP after MWS. Validation accuracy rises in steps, showing sequential task learning and multiple plateaus.
-          </figcaption>
-        </figure>
-      </div>
-      <div class="card">
-        <h3>Moving Window Division (MWD)</h3>
-        <p>Strong acceleration; grokking delay reduced significantly, demonstrating the benefits of strict balanced batching.</p>
-        <figure class="figure" style="max-width:600px; margin:0 auto;">
-          <img src="{{ site.baseurl }}/assets/images/MWD_diversity.png" alt="MWD Task Plateau">
-          <figcaption class="figure-caption">
-            Plateau emerges last as the model tackles MWD (hardest task). Balanced multi-task batching allows sequential learning while minimizing training samples needed for each task.
-          </figcaption>
-        </figure>
-      </div>
+    <div class="card">
+      <h3>Moving Window Sum (MWS)</h3>
+      <figure class="figure" style="max-width:600px; margin:0 auto;">
+        <img src="{{ site.baseurl }}/assets/images/MWS_diversity.png" alt="MWS Task Plateau">
+        <figcaption class="figure-caption">
+          Plateau emerges as the model initially focuses on MWS. Once learned, the model moves to the next task, creating successive plateaus before full generalization.
+        </figcaption>
+      </figure>
+    </div>
+    <div class="card">
+      <h3>Moving Window Product (MWP)</h3>
+      <p>Partial acceleration: validation rises earlier but full grokking is not yet achieved.</p>
+      <figure class="figure" style="max-width:600px; margin:0 auto;">
+        <img src="{{ site.baseurl }}/assets/images/MWP_diversity.png" alt="MWP Task Plateau">
+        <figcaption class="figure-caption">
+          Plateau emerges as the model learns MWP after MWS. Validation accuracy rises in steps, showing sequential task learning and multiple plateaus.
+        </figcaption>
+      </figure>
+    </div>
+    <div class="card">
+      <h3>Moving Window Division (MWD)</h3>
+      <p>Strong acceleration; grokking delay reduced significantly, demonstrating the benefits of strict balanced batching.</p>
+      <figure class="figure" style="max-width:600px; margin:0 auto;">
+        <img src="{{ site.baseurl }}/assets/images/MWD_diversity.png" alt="MWD Task Plateau">
+        <figcaption class="figure-caption">
+          Plateau emerges last as the model tackles MWD (hardest task). Balanced multi-task batching allows sequential learning while minimizing training samples needed for each task.
+        </figcaption>
+      </figure>
     </div>
     <!-- Summary Table -->
     <h4>Plateau Reduction Summary</h4>
-    <table>
+    <table style="width:100%; border-collapse: collapse; text-align:center;">
       <thead>
-        <tr>
-          <th>#Tasks</th>
-          <th>MWS</th>
-          <th>MWP</th>
-          <th>MWD</th>
-          <th>AVG % Speedup</th>
+        <tr style="background-color:#f2f2f2;">
+          <th style="padding:8px; border:1px solid #ccc;">#Tasks</th>
+          <th style="padding:8px; border:1px solid #ccc;">MWS</th>
+          <th style="padding:8px; border:1px solid #ccc;">MWP</th>
+          <th style="padding:8px; border:1px solid #ccc;">MWD</th>
+          <th style="padding:8px; border:1px solid #ccc;">AVG % Speedup</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>1</td>
-          <td>16,256</td>
-          <td>93,568</td>
-          <td>34,560</td>
-          <td>N/A</td>
+          <td style="padding:8px; border:1px solid #ccc;">1</td>
+          <td style="padding:8px; border:1px solid #ccc;">16,256</td>
+          <td style="padding:8px; border:1px solid #ccc;">93,568</td>
+          <td style="padding:8px; border:1px solid #ccc;">34,560</td>
+          <td style="padding:8px; border:1px solid #ccc;">N/A</td>
         </tr>
         <tr>
-          <td>2</td>
-          <td>13,600</td>
-          <td>24,096</td>
-          <td>19,680</td>
-          <td>44.55%</td>
+          <td style="padding:8px; border:1px solid #ccc;">2</td>
+          <td style="padding:8px; border:1px solid #ccc;">13,600</td>
+          <td style="padding:8px; border:1px solid #ccc;">24,096</td>
+          <td style="padding:8px; border:1px solid #ccc;">19,680</td>
+          <td style="padding:8px; border:1px solid #ccc;">44.55%</td>
         </tr>
         <tr>
-          <td>3</td>
-          <td>10,542</td>
-          <td>13,288</td>
-          <td>10,794</td>
-          <td>63.24%</td>
+          <td style="padding:8px; border:1px solid #ccc;">3</td>
+          <td style="padding:8px; border:1px solid #ccc;">10,542</td>
+          <td style="padding:8px; border:1px solid #ccc;">13,288</td>
+          <td style="padding:8px; border:1px solid #ccc;">10,794</td>
+          <td style="padding:8px; border:1px solid #ccc;">63.24%</td>
         </tr>
       </tbody>
-    </table>
+      </table>
   </div>
     <!-- Experiment 3 -->
     <div class="section">
