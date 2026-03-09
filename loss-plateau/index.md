@@ -292,7 +292,6 @@ title: Loss Plateau
           <li>Takeaway: Single-task learning is slow and prone to plateaus.</li>
         </ul>
       </div>
-
       <div class="card">
         <h4>Task Diversity</h4>
         <p>Training on multiple tasks simultaneously reduces the number of examples needed to exit plateaus. Tasks are often learned sequentially, and shared representations accelerate learning.</p>
@@ -300,7 +299,6 @@ title: Loss Plateau
           <li>Takeaway: Multi-task learning shortens plateaus and speeds up learning for all tasks.</li>
         </ul>
       </div>
-
       <div class="card">
         <h4>Transfer Learning</h4>
         <p>Pretraining on one task before fine-tuning on another significantly shortens or eliminates the plateau. Attention maps remain stable if target functions differ; they reorganize if target functions are shared.</p>
@@ -310,4 +308,19 @@ title: Loss Plateau
       </div>
     </div>
   </div>
+
+  <div class="section">
+  <h2 class="section-title">References</h2>
+  <p class="section-intro">
+    Jaeyeon Kim, Sehyun Kwon, Joo Young Choi, Jongho Park, Jaewoong Cho, Jason D. Lee, Ernest K. Ryu (2025). 
+    <em>Task Diversity Shortens the ICL Plateau</em>. arXiv:2410.05448. 
+    <a href="https://arxiv.org/abs/2410.05448" target="_blank">https://arxiv.org/abs/2410.05448</a>.<br><br>
+    Pulkit Gopalani, Wei Hu (2025). 
+    <em>What Happens During the Loss Plateau? Understanding Abrupt Learning in Transformers</em>. arXiv:2506.13688. 
+    <a href="https://arxiv.org/abs/2506.13688" target="_blank">https://arxiv.org/abs/2506.13688</a>.<br><br>
+    Jianliang He, Xintian Pan, Siyu Chen, Zhuoran Yang (2025). 
+    <em>In-Context Linear Regression Demystified: Training Dynamics and Mechanistic Interpretability of Multi-Head Softmax Attention</em>. arXiv:2503.12734. 
+    <a href="https://arxiv.org/abs/2503.12734" target="_blank">https://arxiv.org/abs/2503.12734</a>.<br><br>
+  </p>
+</div>
 </div>
