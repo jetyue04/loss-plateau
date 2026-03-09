@@ -25,12 +25,12 @@ title: Loss Plateau
   </p>
 
   <!-- Main Plateau Figure -->
-  <div class="figure">
+  <figure class="figure">
     <img src="{{ site.baseurl }}/assets/images/plateau_curve.png" alt="Training loss plateau">
-    <p class="figure-caption">
+    <figcaption class="figure-caption">
       Training loss remains nearly constant for many iterations before suddenly decreasing.
-    </p>
-  </div>
+    </figcaption>
+  </figure>
 </div>
   <!-- <div class="section">
     <h2 class="section-title">What is the Training-Loss Plateau?</h2>
