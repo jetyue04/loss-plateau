@@ -1,6 +1,6 @@
 ---
 layout: default
-title: 📈 Home
+title: Home
 ---
 
 <div class="hero">
@@ -145,7 +145,7 @@ title: 📈 Home
       <h4>Samuel Cho</h4>
       <p>Task Diversity & Grokking Dynamics</p>
     </a>
-    <a href="TOMMY_LINKEDIN_URL" target="_blank" class="team-card">
+    <a href="https://www.linkedin.com/in/tommy-li-76647082/" target="_blank" class="team-card">
       <div class="avatar">T</div>
       <h4>Tommy Li</h4>
       <p>Optimizer & Initialization</p>
