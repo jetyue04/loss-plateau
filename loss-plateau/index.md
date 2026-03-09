@@ -45,7 +45,7 @@ title: Loss Plateau
           steps they gradually sharpen into structured patterns that implement
           algorithmic behavior.
         </p>
-        <figure class="figure" style="max-width:600px; margin:0 auto;>
+        <figure class="figure" style="max-width:600px; margin:0 auto;">
           <img src="{{ site.baseurl }}/assets/images/attn_map.jpg" alt="Attention map formation">
           <figcaption class="figure-caption">Attention Map during loss plateau: The attention map forms slowly</figcaption>
         </figure>
@@ -57,7 +57,7 @@ title: Loss Plateau
           becoming increasingly aligned. This collapse suggests the model is
           discovering a lower-dimensional structure for the task.
         </p>
-        <figure class="figure" style="max-width:600px; margin:0 auto;>
+        <figure class="figure" style="max-width:600px; margin:0 auto;">
           <img src="{{ site.baseurl }}/assets/images/representation_collapse.jpg" alt="Representation collapse">
         <figcaption class="figure-caption">The cosine similarity of the hidden state collapses to ~1 during plateau</figcaption>
         </figure>
@@ -69,7 +69,7 @@ title: Loss Plateau
           This shortcut can dominate predictions until stronger algorithmic
           structure emerges.
         </p>
-        <figure class="figure" style="max-width:600px; margin:0 auto;>
+        <figure class="figure" style="max-width:600px; margin:0 auto;">
           <img src="{{ site.baseurl }}/assets/images/repetition_bias.png" alt="Repetition bias">
           <figcaption class="figure-caption">The model initially prefers repeating recent tokens during plateau</figcaption>
         </figure>
