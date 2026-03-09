@@ -85,50 +85,48 @@ title: Loss Plateau
         </figure>
       </div>
     <!-- </div> -->
-    <div class="section">
-      <h2 class="section-title">Experimental Setup</h2>
-      <p class="section-intro">
-        In this study, we trained a shallow Transformer on modular arithmetic tasks to investigate the grokking phenomenon. 
-        We describe the model architecture, training procedure, and tasks used below.
-      </p>
-      <h3>Model Architecture</h3>
-      <p>
-        We use a single-layer Transformer with causal attention and a two-layer feedforward MLP. 
-        Tokens are embedded and summed with absolute positional embeddings. Pre-LayerNorm is applied before each attention and MLP block, and residual connections surround both blocks. The MLP uses GELU activations with an intermediate dimensionality four times the hidden size. A final linear layer maps hidden states to vocabulary logits for next-token prediction. 
-        Sequence generation uses greedy decoding, selecting the highest-logit token at each step.
-      </p>
-      <p>
-        Formally, for a sequence of tokens <code>s<sub>1</sub>, …, s<sub>L</sub></code>, the model computes:
-      </p>
-      <div style="text-align:center; margin: 1em 0;">
-        <code>
-          TF<sub>θ</sub>(s<sub>1</sub>, …, s<sub>L</sub>) = LM ∘ (Id + MLP) ∘ (Id + Attn) ∘ Embed(s<sub>1</sub>, …, s<sub>L</sub>)
-        </code>
-      </div>
-      <p>
-        where <code>Embed</code> produces token plus positional embeddings, <code>Attn</code> is the causal linear attention operation, and <code>LM</code> is the output projection to the vocabulary.
-      </p>
-      <h3>Training Procedure</h3>
-      <p>
-        Models are trained online with batches of 256 sequences drawn freshly at each step. 
-        The objective is next-token cross-entropy loss, and accuracy is measured on the generated output. 
-        For multi-task experiments, batches contain sequences from multiple tasks, with samples evenly distributed across tasks. To ensure fair comparisons, batch size, vocabulary, model architecture, and the number of examples per task are kept constant across experiments.
-      </p>
-      <h3>Algorithmic Tasks</h3>
-      <p>
-        We evaluated several deterministic sequence-to-sequence tasks, including:
-      </p>
-      <ul>
-        <li><strong>Moving Window Sum (MWS):</strong> y<sub>i</sub> = x<sub>1</sub> if i=1, else (x<sub>i-1</sub> + x<sub>i</sub>) mod p</li>
-        <li><strong>Moving Window Product (MWP):</strong> y<sub>i</sub> = x<sub>1</sub> if i=1, else (x<sub>i-1</sub> × x<sub>i</sub>) mod p</li>
-        <li><strong>Moving Window Difference (MWD):</strong> y<sub>i</sub> = x<sub>1</sub> if i=1, else (x<sub>i</sub> - x<sub>i-1</sub>) mod p</li>
-        <li><strong>Prefix Sum (PS):</strong> y<sub>i</sub> = Σ<sub>j=1…i</sub> x<sub>j</sub> mod p</li>
-      </ul>
-      <p>
-        Sequence length is n=16 and modulus p=17 for initial tasks, with task-specific separator tokens to distinguish sequences in multi-task batches. 
-        For experiments focused on grokking, we expand to modular division, addition, subtraction, and multiplication with modulus p=97.
-      </p>
-    </div>
+  <div class="section">
+    <h2 class="section-title">Experimental Setup</h2>
+    <p class="section-intro">
+      In this study, we trained a shallow Transformer on modular arithmetic tasks to investigate the grokking phenomenon.
+      We describe the model architecture, training procedure, and tasks used below.
+    </p>
+    <h3 style="margin-top:2em;">Model Architecture</h3>
+    <p>
+      We use a 1-layer, 1-head Transformer with causal masking and linear attention. This architecture is able to solve simple algorithmic tasks such as MWS to perfect accuracy.
+    </p>
+    <p style="text-align:center; margin:1em 0;">
+      <code>
+        TF<sub>θ</sub>(s<sub>1</sub>, …, s<sub>L</sub>) = LM ∘ (Id + MLP) ∘ (Id + Attn) ∘ Embed(s<sub>1</sub>, …, s<sub>L</sub>)
+      </code>
+    </p>
+    <p>
+      where <code>Embed</code> outputs the sum of token and absolute positional embeddings <code>h<sub>i</sub> ∈ ℝ<sup>d</sup></code>, and <code>Attn</code> denotes the causal linear attention operation:
+    </p>
+    <p style="text-align:center; margin:1em 0;">
+      <code>
+        [Attn(h<sub>1</sub>, …, h<sub>L</sub>)]<sub>i</sub> = W<sub>O</sub> ( ∑<sub>j=1</sub><sup>i</sup> (h<sub>j</sub><sup>T</sup> W<sub>K</sub><sup>T</sup> W<sub>Q</sub> h<sub>i</sub>) W<sub>V</sub> h<sub>j</sub> ), &nbsp; W<sub>O</sub>, W<sub>K</sub>, W<sub>Q</sub>, W<sub>V</sub> ∈ ℝ<sup>d×d</sup>
+      </code>
+    </p>
+    <p>
+      The <code>MLP</code> is a 2-layer feedforward network, <code>h<sub>i</sub> ↦ W<sub>2</sub>(σ(W<sub>1</sub> h<sub>i</sub>))</code>, with <code>W<sub>1</sub> ∈ ℝ<sup>4d×d</sup></code>, <code>W<sub>2</sub> ∈ ℝ<sup>d×4d</sup></code>, and σ the GELU activation. <code>LM</code> is a linear layer mapping hidden states <code>h<sub>i</sub> ∈ ℝ<sup>d</sup></code> to logits <code>v<sub>i</sub> ∈ ℝ<sup>|V|</sup></code>. All linear maps include bias terms, and pre-LayerNorm is applied before Attn, MLP, and LM. For sequence generation, we use greedy decoding, selecting the token with the maximum logit at each step.
+    </p>
+    <h3 style="margin-top:2em;">Training Procedure</h3>
+    <p>
+      Models are trained online with batches of 256 sequences drawn freshly at each step. The objective is next-token cross-entropy loss, and accuracy is measured on the generated output. For multi-task experiments, batches contain sequences from multiple tasks, with samples evenly distributed across tasks. To ensure fair comparisons, batch size, vocabulary, model architecture, and the number of examples per task are kept constant across experiments.
+    </p>
+    <h3 style="margin-top:2em;">Algorithmic Tasks</h3>
+    <p>We evaluated several deterministic sequence-to-sequence tasks, including:</p>
+    <ul style="margin-left:2em;">
+      <li><strong>Moving Window Sum (MWS):</strong> y<sub>i</sub> = x<sub>1</sub> if i=1, else (x<sub>i-1</sub> + x<sub>i</sub>) mod p</li>
+      <li><strong>Moving Window Product (MWP):</strong> y<sub>i</sub> = x<sub>1</sub> if i=1, else (x<sub>i-1</sub> × x<sub>i</sub>) mod p</li>
+      <li><strong>Moving Window Difference (MWD):</strong> y<sub>i</sub> = x<sub>1</sub> if i=1, else (x<sub>i</sub> - x<sub>i-1</sub>) mod p</li>
+      <li><strong>Prefix Sum (PS):</strong> y<sub>i</sub> = Σ<sub>j=1…i</sub> x<sub>j</sub> mod p</li>
+    </ul>
+    <p>
+      Sequence length is n=16 and modulus p=17 for initial tasks, with task-specific separator tokens to distinguish sequences in multi-task batches. For experiments focused on grokking, we expand to modular division, addition, subtraction, and multiplication with modulus p=97.
+    </p>
+  </div>
 
   <div class="section">
     <h2 class="section-title">Results</h2>
