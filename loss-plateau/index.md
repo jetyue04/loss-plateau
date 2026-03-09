@@ -265,6 +265,7 @@ title: Loss Plateau
       Examination shows that attention matrix weights remain stable while bias terms shift significantly. 
       The MLP weights also remain stable. Freezing the MLP layer and rerunning the experiment reproduces the same phenomenon.
     </p>
+    <div style="margin-top:40px;"></div> 
     <h4>Same Attention Map: MWS → MWP</h4>
     <p>
       Pretraining on MWS and fine-tuning on Moving Window Product (MWP) significantly shortens the loss plateau. 
@@ -279,5 +280,34 @@ title: Loss Plateau
     <p>
       Analysis indicates that attention matrix weights remain stable, while the MLP layer weights shift significantly to accommodate the new target function.
     </p>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Key Findings & Takeaways</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h4>Single-Task Baseline</h4>
+        <p>Training on one task (e.g., MWS) shows a long loss plateau. Attention maps form slowly, representations collapse, and repetition bias occurs early.</p>
+        <ul>
+          <li>Takeaway: Single-task learning is slow and prone to plateaus.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h4>Task Diversity</h4>
+        <p>Training on multiple tasks simultaneously reduces the number of examples needed to exit plateaus. Tasks are often learned sequentially, and shared representations accelerate learning.</p>
+        <ul>
+          <li>Takeaway: Multi-task learning shortens plateaus and speeds up learning for all tasks.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h4>Transfer Learning</h4>
+        <p>Pretraining on one task before fine-tuning on another significantly shortens or eliminates the plateau. Attention maps remain stable if target functions differ; they reorganize if target functions are shared.</p>
+        <ul>
+          <li>Takeaway: Transfer learning enables faster learning and reduces the examples needed for generalization.</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </div>
