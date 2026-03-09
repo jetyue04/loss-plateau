@@ -38,13 +38,12 @@ title: Grokking
     </p>
     <div class="callout">
       <strong>Our baseline:</strong> A small 2-layer decoder Transformer trained on modular division (mod 97)
-      memorized the training data in ~2,000 steps but required <strong>334,000 total steps</strong>
-      to truly generalize — a grokking delay of ~332,000 steps.
+      memorized the training data in ~0.2% training progress but required <strong>~83.5%</strong> training progress, or 334,000 total steps, to truly generalize — a grokking delay of ~83.3% training progress.
     </div>
     <figure class="figure">
       <img src="https://raw.githubusercontent.com/jetyue04/loss-plateau/main/grokking/grokking_plot.png"
-           alt="Baseline grokking at 334k steps">
-      <figcaption>Figure 1 — Baseline (AdamW, Division only). Training accuracy (orange dashed) saturates near step 2,000 while validation accuracy (red) stays flat until the abrupt transition at 334,000 steps. The x-axis is on a log scale to make the gap visible.</figcaption>
+           alt="Baseline grokking at 0.2% training progress">
+      <figcaption>Figure 1 — Baseline (AdamW, Division only). Training accuracy (orange dashed) reaches near perfect accuracy at around 0.2% training progress while validation accuracy (red) stays flat until the sudden transition at 83.5% training progress. The x-axis is on a log scale to make the gap visible.</figcaption>
     </figure>
   </div>
   <!-- WHY DOES IT HAPPEN -->
@@ -119,15 +118,15 @@ title: Grokking
     </p>
     <div class="card-grid">
       <div class="card">
-        <h3>🥇 Multiplication</h3>
+        <h3>1st — Multiplication</h3>
         <p>Grokked at <strong>4.3%</strong> training progress<br>(68,250 steps)</p>
       </div>
       <div class="card">
-        <h3>🥈 Division</h3>
+        <h3>2nd — Division</h3>
         <p>Grokked at <strong>4.7%</strong> training progress<br>(75,750 steps)</p>
       </div>
       <div class="card">
-        <h3>🥉 Addition</h3>
+        <h3>3rd — Addition</h3>
         <p>Grokked at <strong>6.5%</strong> training progress<br>(104,150 steps)</p>
       </div>
       <div class="card">
@@ -136,7 +135,7 @@ title: Grokking
       </div>
     </div>
     <figure class="figure">
-      <img src="https://raw.githubusercontent.com/jetyue04/loss-plateau/main/grokking/4_task_split.png"
+      <img src="https://raw.githubusercontent.com/jetyue04/loss-plateau/main/grokking/task_diversity_plots/div_add_sub_mult.png"
            alt="4-task training result">
       <figcaption>Figure 2 — All four tasks trained simultaneously. The black curve shows the baseline (division only). All four tasks grok well before the baseline, with multiplication and division leading the way.</figcaption>
     </figure>
@@ -150,7 +149,7 @@ title: Grokking
       subtraction do not — making their joint training especially synergistic.
     </p>
     <figure class="figure">
-      <img src="https://raw.githubusercontent.com/jetyue04/loss-plateau/main/grokking/div_mult_result.png"
+      <img src="https://raw.githubusercontent.com/jetyue04/loss-plateau/main/grokking/task_diversity_plots/div_mult.png"
            alt="Div + Mult task combination">
       <figcaption>Figure 3 — Division + Multiplication (2-task). Both tasks grok at just ~0.7% training progress, the fastest result across all task combination experiments.</figcaption>
     </figure>
