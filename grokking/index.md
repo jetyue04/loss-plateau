@@ -138,11 +138,7 @@ title: Grokking
       </div>
     </div>
     <figure class="figure">
-<<<<<<< HEAD
       <img src="https://raw.githubusercontent.com/jetyue04/loss-plateau/main/grokking/task_diversity_plots/div_add_sub_mult.png"
-=======
-      <img src="https://raw.githubusercontent.com/jetyue04/loss-plateau/main/grokking/tommy_plots/4_task_split.png"
->>>>>>> tommy-web
            alt="4-task training result">
       <figcaption>Figure 2 — All four tasks trained simultaneously. The black curve shows the baseline (division only). All four tasks grok well before the baseline, with multiplication and division leading the way.</figcaption>
     </figure>
