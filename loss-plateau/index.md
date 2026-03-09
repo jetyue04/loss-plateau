@@ -37,7 +37,7 @@ title: Loss Plateau
       and repetition bias. These phenomena reveal how internal structure evolves
       before the model fully generalizes.
     </p>
-    <div class="card-grid">
+    <!-- <div class="card-grid"> -->
       <div class="card">
         <h3>Slow Formation of Attention Maps</h3>
         <p>
@@ -74,7 +74,7 @@ title: Loss Plateau
           <figcaption class="figure-caption">The model initially prefers repeating recent tokens during plateau</figcaption>
         </figure>
       </div>
-    </div>
+    <!-- </div> -->
 </div>
 
 
