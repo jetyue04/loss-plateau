@@ -164,12 +164,12 @@ title: 📈 Home
     </a>
     <a href="SAMUEL_LINKEDIN_URL" target="_blank" class="team-card">
       <div class="avatar">S</div>
-      <h4>Samuel</h4>
+      <h4>Samuel Cho</h4>
       <p>Task Diversity & Grokking Dynamics</p>
     </a>
     <a href="TOMMY_LINKEDIN_URL" target="_blank" class="team-card">
       <div class="avatar">T</div>
-      <h4>Tommy</h4>
+      <h4>Tommy Li</h4>
       <p>Optimizer & Initialization</p>
     </a>
     </div>
