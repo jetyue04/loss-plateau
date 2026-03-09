@@ -41,37 +41,47 @@ title: Loss Plateau
       <div class="card">
         <h3>Slow Formation of Attention Maps</h3>
         <p>
-          Early attention heads appear diffuse and noisy. Over many training
-          steps they gradually sharpen into structured patterns that implement
-          algorithmic behavior.
+          During the early phase of training, attention heads are largely diffuse and lack structure. 
+          Over many iterations, the heads gradually learn to focus on meaningful tokens, forming 
+          algorithmically relevant patterns. This slow emergence indicates that the model first 
+          organizes its internal computations before accurate long-range dependencies can be learned.
         </p>
         <figure class="figure" style="max-width:600px; margin:0 auto;">
           <img src="{{ site.baseurl }}/assets/images/attn_map.jpg" alt="Attention map formation">
-          <figcaption class="figure-caption">Attention Map during loss plateau: The attention map forms slowly</figcaption>
+          <figcaption class="figure-caption">
+            Attention Map during loss plateau: The attention head patterns sharpen gradually as training progresses.
+          </figcaption>
         </figure>
       </div>
       <div class="card">
         <h3>Representation Collapse</h3>
         <p>
-          Hidden representations compress during training, with token embeddings
-          becoming increasingly aligned. This collapse suggests the model is
-          discovering a lower-dimensional structure for the task.
+          As training continues, hidden representations of tokens increasingly compress into a 
+          lower-dimensional subspace. Token embeddings become highly correlated, effectively 
+          collapsing the representational space. This phenomenon often precedes generalization, 
+          suggesting that the model has discovered a compact encoding of the underlying rules.
         </p>
         <figure class="figure" style="max-width:600px; margin:0 auto;">
           <img src="{{ site.baseurl }}/assets/images/representation_collapse.jpg" alt="Representation collapse">
-        <figcaption class="figure-caption">The cosine similarity of the hidden state collapses to ~1 during plateau</figcaption>
+          <figcaption class="figure-caption">
+            Cosine similarity of hidden states approaches 1 during plateau, reflecting compression of the representation space.
+          </figcaption>
         </figure>
       </div>
       <div class="card">
         <h3>Repetition Bias</h3>
         <p>
-          Early in training the model tends to repeat recently seen tokens.
-          This shortcut can dominate predictions until stronger algorithmic
-          structure emerges.
+          Early in training, the model exhibits a tendency to repeat recently seen tokens 
+          rather than performing the correct transformation. This repetition bias serves 
+          as a short-term shortcut that dominates predictions until the model learns more 
+          robust algorithmic structure. Monitoring this bias can reveal when the model transitions 
+          toward generalization.
         </p>
         <figure class="figure" style="max-width:600px; margin:0 auto;">
           <img src="{{ site.baseurl }}/assets/images/repetition_bias.png" alt="Repetition bias">
-          <figcaption class="figure-caption">The model initially prefers repeating recent tokens during plateau</figcaption>
+          <figcaption class="figure-caption">
+            The model initially prefers repeating recent tokens during the plateau phase, before learning the true sequence pattern.
+          </figcaption>
         </figure>
       </div>
     <!-- </div> -->
