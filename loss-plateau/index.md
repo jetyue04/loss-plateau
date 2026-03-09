@@ -98,14 +98,13 @@ title: Loss Plateau
         Sequence generation uses greedy decoding, selecting the highest-logit token at each step.
       </p>
       <p>
-        Formally, for a sequence of tokens \(s_1, \dots, s_L\), the model computes:
+        Formally, for a sequence of tokens <code>s<sub>1</sub>, …, s<sub>L</sub></code>, the model computes:
       </p>
-      <p style="text-align:center;">
-        \[
-        \text{TF}_\theta(s_1, \dots, s_L) = 
-        \text{LM} \circ (\text{Id} + \text{MLP}) \circ (\text{Id} + \text{Attn}) \circ \text{Embed}(s_1, \dots, s_L),
-        \]
-      </p>
+      <div style="text-align:center; margin: 1em 0;">
+        <code>
+          TF<sub>θ</sub>(s<sub>1</sub>, …, s<sub>L</sub>) = LM ∘ (Id + MLP) ∘ (Id + Attn) ∘ Embed(s<sub>1</sub>, …, s<sub>L</sub>)
+        </code>
+      </div>
       <p>
         where <code>Embed</code> produces token plus positional embeddings, <code>Attn</code> is the causal linear attention operation, and <code>LM</code> is the output projection to the vocabulary.
       </p>
@@ -120,14 +119,14 @@ title: Loss Plateau
         We evaluated several deterministic sequence-to-sequence tasks, including:
       </p>
       <ul>
-        <li><strong>Moving Window Sum (MWS):</strong> \(y_i = x_1\) if \(i=1\), else \((x_{i-1}+x_i) \bmod p\).</li>
-        <li><strong>Moving Window Product (MWP):</strong> \(y_i = x_1\) if \(i=1\), else \((x_{i-1} \cdot x_i) \bmod p\).</li>
-        <li><strong>Moving Window Difference (MWD):</strong> \(y_i = x_1\) if \(i=1\), else \((x_i - x_{i-1}) \bmod p\).</li>
-        <li><strong>Prefix Sum (PS):</strong> \(y_i = \sum_{j=1}^{i} x_j \bmod p\).</li>
+        <li><strong>Moving Window Sum (MWS):</strong> y<sub>i</sub> = x<sub>1</sub> if i=1, else (x<sub>i-1</sub> + x<sub>i</sub>) mod p</li>
+        <li><strong>Moving Window Product (MWP):</strong> y<sub>i</sub> = x<sub>1</sub> if i=1, else (x<sub>i-1</sub> × x<sub>i</sub>) mod p</li>
+        <li><strong>Moving Window Difference (MWD):</strong> y<sub>i</sub> = x<sub>1</sub> if i=1, else (x<sub>i</sub> - x<sub>i-1</sub>) mod p</li>
+        <li><strong>Prefix Sum (PS):</strong> y<sub>i</sub> = Σ<sub>j=1…i</sub> x<sub>j</sub> mod p</li>
       </ul>
       <p>
-        Sequence length is \(n=16\) and modulus \(p=17\) for initial tasks, with task-specific separator tokens to distinguish sequences in multi-task batches. 
-        For experiments focused on grokking, we expand to modular division, addition, subtraction, and multiplication with modulus \(p=97\).
+        Sequence length is n=16 and modulus p=17 for initial tasks, with task-specific separator tokens to distinguish sequences in multi-task batches. 
+        For experiments focused on grokking, we expand to modular division, addition, subtraction, and multiplication with modulus p=97.
       </p>
     </div>
 
