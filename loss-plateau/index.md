@@ -227,51 +227,57 @@ title: Loss Plateau
   </div>
     <!-- Experiment 3 -->
     <div class="section">
-      <h3>Experiment 3 — Transfer Learning</h3>
-      <p>
-        Since incorporating task diversity into training shortens the loss plateau, and allows the model to learn the task on less training samples, we examine this phenoenon by conducting transfer learning. We pretrian the model on a taask before fine-tuning on a more difficult task.
-      </p>
-      <div class="callout">
-        <strong>Observation:</strong> Pretraining tasks shortens the loss plateau significantly. It is observed that the attention (K, Q, V) matrices remain stable while their respective bias term shifts signifcantly.
-      </div>
-      <h3>Same Target Function: Prefix Sum -> MWS</h3>
-      <p>
-        When pretraining on prefix sum and then transfering the model on MWS, the loss plateau disappears. Here, the attention map is different while the target functino is shared between the two tasks.
-      </p>
-      <figure class="figure" style="max-width:600px; margin:0 auto;">
-        <img src="{{ site.baseurl }}/assets/images/transfer_mws.png">
-      </figure>
-      <div class="card-grid">
-        <div class="card">
-          <h4>The initial attention map for initialization</h4>
-          <figure class="figure" style="max-width:600px; margin:0 auto;">
-            <img src="{{ site.baseurl }}/assets/images/transfer_mws_init_attn.png">
-          </figure>
-        </div>
-          <div class="card">
-          <h4>The final attention map for initialization</h4>
-          <figure class="figure" style="max-width:600px; margin:0 auto;">
-            <img src="{{ site.baseurl }}/assets/images/transfer_mws_fin_attn.png">
-          </figure>
-        </div>
-      </div>
-      <p>
-        Upon examination, the attention matrices weights remain stable while the bias terms shift signifanctly. The MLP weights also remain stable. This is verified by rerunning the experiment freezing the MLP layer and the same phenomena occured.
-      </p>
-      <h3>Same Attention Map: MWS -> MWP</h3>
-      <p>
-        When pretraining on MWS and finetuning on MWP, the loss plateau shortens significantly. Her, they share the same attention map but has different target functions.
-      </p>
-      <figure class="figure" style="max-width:600px; margin:0 auto;">
-        <img src="{{ site.baseurl }}/assets/images/transfer_mws_mwp.png">
-        <figcaption class="figure-caption">
-          Model shows significant acceleration and shortening of the loss plateau when pretrained on MWS.
-        </figcaption>
-      </figure>
-      <p>
-        Upon examination, the attention matrices weights and weights remain stable while MLP layers shifted significantly.
-      </p>
+    <h3>Experiment 3 — Transfer Learning</h3>
+    <p>
+      Since incorporating task diversity shortens the loss plateau and allows the model to learn tasks using fewer training samples, we investigate this phenomenon via transfer learning. 
+      We pretrain the model on a simpler task before fine-tuning on a more difficult task.
+    </p>
+    <div class="callout">
+      <strong>Observation:</strong> Pretraining significantly shortens the loss plateau. 
+      The attention (K, Q, V) matrices remain largely stable, while their respective bias terms shift significantly.
     </div>
+    <h4>Same Target Function: Prefix Sum → MWS</h4>
+    <p>
+      Pretraining on Prefix Sum and then fine-tuning on Moving Window Sum (MWS) eliminates the loss plateau entirely. 
+      Here, the attention map is reorganized while the target function is shared between the two tasks.
+    </p>
+    <figure class="figure" style="max-width:600px; margin:0 auto;">
+      <img src="{{ site.baseurl }}/assets/images/transfer_mws.png" alt="Transfer learning: Prefix Sum to MWS">
+      <figcaption class="figure-caption">
+        Loss plateau disappears when pretraining on Prefix Sum before fine-tuning on MWS.
+      </figcaption>
+    </figure>
+    <div class="card-grid">
+      <div class="card">
+        <h4>Initial Attention Map</h4>
+        <figure class="figure" style="max-width:600px; margin:0 auto;">
+          <img src="{{ site.baseurl }}/assets/images/transfer_mws_init_attn.png" alt="Initial attention map">
+        </figure>
+      </div>
+      <div class="card">
+        <h4>Final Attention Map</h4>
+        <figure class="figure" style="max-width:600px; margin:0 auto;">
+          <img src="{{ site.baseurl }}/assets/images/transfer_mws_fin_attn.png" alt="Final attention map">
+        </figure>
+      </div>
     </div>
+    <p>
+      Examination shows that attention matrix weights remain stable while bias terms shift significantly. 
+      The MLP weights also remain stable. Freezing the MLP layer and rerunning the experiment reproduces the same phenomenon.
+    </p>
+    <h4>Same Attention Map: MWS → MWP</h4>
+    <p>
+      Pretraining on MWS and fine-tuning on Moving Window Product (MWP) significantly shortens the loss plateau. 
+      Here, the attention map remains largely unchanged, while the target functions differ between tasks.
+    </p>
+    <figure class="figure" style="max-width:600px; margin:0 auto;">
+      <img src="{{ site.baseurl }}/assets/images/transfer_mws_mwp.png" alt="Transfer learning: MWS to MWP">
+      <figcaption class="figure-caption">
+        Loss plateau shortens significantly when pretrained on MWS before fine-tuning on MWP.
+      </figcaption>
+    </figure>
+    <p>
+      Analysis indicates that attention matrix weights remain stable, while the MLP layer weights shift significantly to accommodate the new target function.
+    </p>
   </div>
 </div>
