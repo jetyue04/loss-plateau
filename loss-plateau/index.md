@@ -88,7 +88,7 @@ title: Loss Plateau
   <div class="section">
     <h2 class="section-title">Experimental Setup</h2>
     <p class="section-intro">
-      In this study, we trained a shallow Transformer on modular arithmetic tasks to investigate the grokking phenomenon.
+      In this study, we trained a shallow Transformer on modular arithmetic tasks to investigate the training-loss plateau phenomenon.
       We describe the model architecture, training procedure, and tasks used below.
     </p>
     <h3 style="margin-top:2em;">Model Architecture</h3>
@@ -149,11 +149,9 @@ title: Loss Plateau
   <div class="section">
     <h3>Experiment 2 — Task Diversity</h3>
     <p>
-      We train the model on multiple algorithmic tasks simultaneously (e.g., MWS, MWP, MWD, PS) using balanced batches. 
-      This setup examines whether shared representations across tasks can accelerate grokking on the hardest task, Modular Division. 
+      We train the model on multiple algorithmic tasks simultaneously (e.g., MWS, MWP, MWD, PS) using balanced batches. This setup examines whether shared representations across tasks can accelerate the loss plateau on algorithmic tasks. 
       To ensure <strong>fairness</strong>, the overall training batch size is kept constant across experiments. When multiple tasks are included in a batch, the number of training samples is divided evenly among all tasks, and each task is uniquely identified by a separate separator token. 
-      Notably, the loss plateau can emerge multiple times: the model often learns one task first, then others sequentially. 
-      We measure the plateau in terms of the total number of training samples observed until each task is fully learned.
+      Notably, the loss plateau can emerge multiple times: the model often learns one task first, then others sequentially. We measure the plateau in terms of the total number of training samples observed until each task is fully learned.
     </p>
     <div class="callout">
       <strong>Observation:</strong> Multi-task training allows the model to learn each task using fewer training samples and reduces the training loss plateau. The optimal attention map is able to form with less training samples seen. The loss also spikes as the model tries to learn several tasks.
@@ -169,7 +167,6 @@ title: Loss Plateau
     </div>
     <div class="card">
       <h3>Moving Window Product (MWP)</h3>
-      <p>Partial acceleration: validation rises earlier but full grokking is not yet achieved.</p>
       <figure class="figure" style="max-width:600px; margin:0 auto;">
         <img src="{{ site.baseurl }}/assets/images/MWP_diversity.png" alt="MWP Task Plateau">
         <figcaption class="figure-caption">
@@ -179,7 +176,6 @@ title: Loss Plateau
     </div>
     <div class="card">
       <h3>Moving Window Division (MWD)</h3>
-      <p>Strong acceleration; grokking delay reduced significantly, demonstrating the benefits of strict balanced batching.</p>
       <figure class="figure" style="max-width:600px; margin:0 auto;">
         <img src="{{ site.baseurl }}/assets/images/MWD_diversity.png" alt="MWD Task Plateau">
         <figcaption class="figure-caption">
@@ -233,19 +229,49 @@ title: Loss Plateau
     <div class="section">
       <h3>Experiment 3 — Transfer Learning</h3>
       <p>
-        The model is pretrained on a simpler task (MWS) before fine-tuning on a more difficult target task (e.g., Modular Division). 
-        This tests whether prior learning can shorten grokking delays on complex tasks.
+        Since incorporating task diversity into training shortens the loss plateau, and allows the model to learn the task on less training samples, we examine this phenoenon by conducting transfer learning. We pretrian the model on a taask before fine-tuning on a more difficult task.
       </p>
       <div class="callout">
-        <strong>Observation:</strong> Pretraining accelerates generalization, allowing the model to grok the target task much faster than training from scratch.
+        <strong>Observation:</strong> Pretraining tasks shortens the loss plateau significantly. It is observed that the attention (K, Q, V) matrices remain stable while their respective bias term shifts signifcantly.
       </div>
-      <!-- Optional figure -->
-      <!--
-      <figure class="figure">
-        <img src="{{ site.baseurl }}/assets/images/transfer_learning.png" alt="Transfer learning results">
-        <figcaption>Figure — Transfer learning accelerates grokking on harder tasks.</figcaption>
+      <h3>Same Target Function: Prefix Sum -> MWS</h3>
+      <p>
+        When pretraining on prefix sum and then transfering the model on MWS, the loss plateau disappears. Here, the attention map is different while the target functino is shared between the two tasks.
+      </p>
+      <figure class="figure" style="max-width:600px; margin:0 auto;">
+        <img src="{{ site.baseurl }}/assets/images/transfer_mws.png">
       </figure>
-      -->
+      <div class="card-grid">
+        <div class="card">
+          <h4>The initial attention map for initialization</h4>
+          <figure class="figure" style="max-width:600px; margin:0 auto;">
+            <img src="{{ site.baseurl }}/assets/images/transfer_mws_init_attn.png">
+          </figure>
+        </div>
+          <div class="card">
+          <h4>The final attention map for initialization</h4>
+          <figure class="figure" style="max-width:600px; margin:0 auto;">
+            <img src="{{ site.baseurl }}/assets/images/transfer_mws_fin_attn.png">
+          </figure>
+        </div>
+      </div>
+      <p>
+        Upon examination, the attention matrices weights remain stable while the bias terms shift signifanctly. The MLP weights also remain stable. This is verified by rerunning the experiment freezing the MLP layer and the same phenomena occured.
+      </p>
+      <h3>Same Attention Map: MWS -> MWP</h3>
+      <p>
+        When pretraining on MWS and finetuning on MWP, the loss plateau shortens significantly. Her, they share the same attention map but has different target functions.
+      </p>
+      <figure class="figure" style="max-width:600px; margin:0 auto;">
+        <img src="{{ site.baseurl }}/assets/images/transfer_mws_mwp.png">
+        <figcaption class="figure-caption">
+          Model shows significant acceleration and shortening of the loss plateau when pretrained on MWS.
+        </figcaption>
+      </figure>
+      <p>
+        Upon examination, the attention matrices weights and weights remain stable while MLP layers shifted significantly.
+      </p>
+    </div>
     </div>
   </div>
 </div>
