@@ -9,6 +9,7 @@ title: 📈 Home
     <a class="btn btn-primary" href="https://github.com/jetyue04/loss-plateau" target="_blank">GitHub Repository</a>
     <a class="btn btn-secondary" href="{{ site.baseurl }}/grokking/">Grokking →</a>
     <a class="btn btn-secondary" href="{{ site.baseurl }}/loss-plateau/">Loss Plateau →</a>
+    <a class="btn btn-primary" href="{{ site.baseurl }}/assets/report.pdf" target="_blank">📄 Read the Report</a>
   </div>
 </div>
 

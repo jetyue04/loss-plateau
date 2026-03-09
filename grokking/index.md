@@ -155,9 +155,10 @@ title: Grokking
       <figcaption>Figure 3 — Division + Multiplication (2-task). Both tasks grok at just ~0.7% training progress, the fastest result across all task combination experiments.</figcaption>
     </figure>
   </div>
+
   <!-- EXPERIMENT 2: OPTIMIZER -->
   <div class="section">
-    <h2 class="section-title">Experiment 2: Optimizer Noise</h2>
+    <h2 class="section-title">Experiment 2: SGD as a Generalization Catalyst</h2>
     <p class="section-intro">
       Our second strategy: replace AdamW with SGD. SGD introduces more gradient noise —
       essentially making the optimizer less smooth and more likely to escape the trap of memorization
@@ -181,6 +182,7 @@ title: Grokking
       <figcaption>Figure 4 — SGD (LR=0.005). Stable grokking at 44,900 steps with final validation accuracy of 86.32% — roughly 8× faster than the AdamW baseline.</figcaption>
     </figure>
   </div>
+
   <!-- EXPERIMENT 3: INITIALIZATION -->
   <div class="section">
     <h2 class="section-title">Experiment 3: Constrained Initialization</h2>
@@ -209,22 +211,25 @@ title: Grokking
         Final validation: <strong>73.75%</strong></p>
       </div>
     </div>
-    <figure class="figure">
-      <img src="https://raw.githubusercontent.com/jetyue04/loss-plateau/main/grokking/init_sparse.png"
-           alt="Sparse initialization result">
-      <figcaption>Figure 5 — Sparse Init (sparsity=0.9). Grokking delay reduced to just 1,050 steps with 99.68% final validation accuracy.</figcaption>
-    </figure>
-    <figure class="figure">
-      <img src="https://raw.githubusercontent.com/jetyue04/loss-plateau/main/grokking/init_small.png"
-           alt="Small initialization result">
-      <figcaption>Figure 6 — Small Init (scale=0.01). Also grokked at 1,050 steps, achieving 73.75% final validation accuracy.</figcaption>
-    </figure>
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+      <figure class="figure" style="flex: 1; min-width: 280px;">
+        <img src="https://raw.githubusercontent.com/jetyue04/loss-plateau/main/grokking/init_sparse.png"
+             alt="Sparse initialization result" style="max-width: 100%;">
+        <figcaption>Figure 5 — Sparse Init (sparsity=0.9). Grokking delay reduced to just 1,050 steps with 99.68% final validation accuracy.</figcaption>
+      </figure>
+      <figure class="figure" style="flex: 1; min-width: 280px;">
+        <img src="https://raw.githubusercontent.com/jetyue04/loss-plateau/main/grokking/init_small.png"
+             alt="Small initialization result" style="max-width: 100%;">
+        <figcaption>Figure 6 — Small Init (scale=0.01). Also grokked at 1,050 steps, achieving 73.75% final validation accuracy.</figcaption>
+      </figure>
+    </div>
     <div class="callout">
       <strong>Result:</strong> Both strategies reduced the grokking delay from ~332,000 steps
       to just <strong>1,050 steps</strong> — a <strong>~316× speedup</strong> that essentially
       eliminates the memorization plateau entirely.
     </div>
   </div>
+  
   <!-- SUMMARY -->
   <div class="section">
     <h2 class="section-title">Summary & Takeaways</h2>
@@ -265,14 +270,15 @@ title: Grokking
       reveal whether these acceleration effects are specific to our setting or more broadly applicable.
     </p>
   </div>
+
   <!-- REFERENCES -->
   <div class="section">
     <h2 class="section-title">References</h2>
     <p class="section-intro">
-      Power et al. (2022). Grokking: Generalization beyond overfitting on small algorithmic datasets. <em>arXiv:2201.02177</em>.<br><br>
-      Lyu, Jin, Li, Du, Lee &amp; Hu (2024). Dichotomy of Early and Late Phase Implicit Biases Can Provably Induce Grokking. <em>ICLR 2024</em>.<br><br>
-      Kim et al. (2025). Task Diversity Shortens the ICL Plateau. <em>arXiv preprint</em>.<br><br>
-      Lee et al. (2024). Grokfast: Accelerated Grokking by Amplifying Slow Gradients. <em>arXiv:2405.20233</em>.
+      Power et al. (2022). <a href="https://arxiv.org/abs/2201.02177" target="_blank">Grokking: Generalization Beyond Overfitting on Small Algorithmic Datasets.</a> <em>arXiv:2201.02177</em>.<br><br>
+Lyu, Jin, Li, Du, Lee &amp; Hu (2024). <a href="https://arxiv.org/abs/2311.02058" target="_blank">Dichotomy of Early and Late Phase Implicit Biases Can Provably Induce Grokking.</a> <em>ICLR 2024</em>.<br><br>
+Kim et al. (2025). <a href="https://arxiv.org/abs/2501.19512" target="_blank">Task Diversity Shortens the ICL Plateau.</a> <em>arXiv preprint</em>.<br><br>
+Lee et al. (2024). <a href="https://arxiv.org/abs/2405.20233" target="_blank">Grokfast: Accelerated Grokking by Amplifying Slow Gradients.</a> <em>arXiv:2405.20233</em>.
     </p>
   </div>
 </div>
