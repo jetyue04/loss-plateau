@@ -14,8 +14,25 @@ title: Loss Plateau
 </div>
 
 <div class="main-content">
-
   <div class="section">
+
+  <h2 class="section-title">What is the Training-Loss Plateau?</h2>
+
+  <p class="section-intro">
+    Early in training, transformer models often enter a long period where
+    the training loss barely decreases despite continued gradient updates.
+    This phenomenon is known as the <b>training-loss plateau</b>.
+  </p>
+
+  <!-- Main Plateau Figure -->
+  <div class="figure">
+    <img src="{{ site.baseurl }}/assets/images/plateau_curve.png" alt="Training loss plateau">
+    <p class="figure-caption">
+      Training loss remains nearly constant for many iterations before suddenly decreasing.
+    </p>
+  </div>
+</div>
+  <!-- <div class="section">
     <h2 class="section-title">What is the Training-Loss Plateau?</h2>
     <p class="section-intro">
       Before grokking even occurs, Transformers exhibit a separate stalling phenomenon
@@ -39,7 +56,7 @@ title: Loss Plateau
         faster, significantly shortening the plateau duration.</p>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <div class="section">
     <h2 class="section-title">Methods</h2>
