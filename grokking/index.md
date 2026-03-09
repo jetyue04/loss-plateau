@@ -41,7 +41,7 @@ title: Grokking
       memorized the training data in ~0.2% training progress but required <strong>~83.5%</strong> training progress, or 334,000 total steps, to truly generalize — a grokking delay of ~83.3% training progress.
     </div>
     <figure class="figure">
-      <img src="https://raw.githubusercontent.com/jetyue04/loss-plateau/main/grokking/grokking_plot.png"
+      <img src="{{ site.baseurl }}/assets/images/grokking_plot.png"
            alt="Baseline grokking at 0.2% training progress">
       <figcaption>Figure 1 — Baseline (AdamW, Division only). Training accuracy (orange dashed) reaches near perfect accuracy at around 0.2% training progress while validation accuracy (red) stays flat until the sudden transition at 83.5% training progress. The x-axis is on a log scale to make the gap visible.</figcaption>
     </figure>
@@ -138,7 +138,7 @@ title: Grokking
       </div>
     </div>
     <figure class="figure">
-      <img src="https://raw.githubusercontent.com/jetyue04/loss-plateau/main/grokking/task_diversity_plots/div_add_sub_mult.png"
+      <img src="{{ site.baseurl }}/assets/images/div_add_sub_mult.png"
            alt="4-task training result">
       <figcaption>Figure 2 — All four tasks trained simultaneously. The black curve shows the baseline (division only). All four tasks grok well before the baseline, with multiplication and division leading the way.</figcaption>
     </figure>
@@ -152,7 +152,7 @@ title: Grokking
       subtraction do not — making their joint training especially synergistic.
     </p>
     <figure class="figure">
-      <img src="https://raw.githubusercontent.com/jetyue04/loss-plateau/main/grokking/task_diversity_plots/div_mult.png"
+      <img src="{{ site.baseurl }}/assets/images/div_mult.png"
            alt="Div + Mult task combination">
       <figcaption>Figure 3 — Division + Multiplication (2-task). Both tasks grok at just ~0.7% training progress, the fastest result across all task combination experiments.</figcaption>
     </figure>
@@ -179,7 +179,7 @@ title: Grokking
       </div>
     </div>
     <figure class="figure">
-      <img src="https://raw.githubusercontent.com/jetyue04/loss-plateau/main/grokking/tommy_plots/sgd_final.png"
+      <img src="{{ site.baseurl }}/assets/images/sgd_final.png"
            alt="SGD LR=0.005: stable grokking">
       <figcaption>Figure 4 — SGD (LR=0.005). Stable grokking at 44,900 steps with final validation accuracy of 86.32% — roughly 8× faster than the AdamW baseline.</figcaption>
     </figure>
@@ -215,12 +215,12 @@ title: Grokking
     </div>
     <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
       <figure class="figure" style="flex: 1; min-width: 280px;">
-        <img src="https://raw.githubusercontent.com/jetyue04/loss-plateau/main/grokking/tommy_plots/init_sparse.png"
+        <img src="{{ site.baseurl }}/assets/images/init_sparse.png"
              alt="Sparse initialization result" style="max-width: 100%;">
         <figcaption>Figure 5 — Sparse Init (sparsity=0.9). Grokking delay reduced to just 1,050 steps with 99.68% final validation accuracy.</figcaption>
       </figure>
       <figure class="figure" style="flex: 1; min-width: 280px;">
-        <img src="https://raw.githubusercontent.com/jetyue04/loss-plateau/main/grokking/tommy_plots/init_small.png"
+        <img src="{{ site.baseurl }}/assets/images/init_small.png"
              alt="Small initialization result" style="max-width: 100%;">
         <figcaption>Figure 6 — Small Init (scale=0.01). Also grokked at 1,050 steps, achieving 73.75% final validation accuracy.</figcaption>
       </figure>

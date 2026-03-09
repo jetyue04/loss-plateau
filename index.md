@@ -140,7 +140,7 @@ title: Home
       <h4>Jet Yue</h4>
       <p>Training-Loss Plateau</p>
     </a>
-    <a href="SAMUEL_LINKEDIN_URL" target="_blank" class="team-card">
+    <a href="https://www.linkedin.com/in/samuel-cho-980704299/" target="_blank" class="team-card">
       <div class="avatar">S</div>
       <h4>Samuel Cho</h4>
       <p>Task Diversity & Grokking Dynamics</p>
