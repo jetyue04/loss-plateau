@@ -31,11 +31,6 @@ title: Grokking
         <p>We built the full training pipeline from scratch and ran original experiments on task diversity. The other experiments extend findings from prior research (Power et al., 2022; Lyu et al., 2024) with new results.</p>
       </div>
     </div>
-    <p style="text-align:center; margin-top: 1rem;">
-      <a href="https://github.com/jetyue04/loss-plateau" class="btn btn-secondary" target="_blank">📂 GitHub Repository</a>
-      &nbsp;
-      <a href="{{ site.baseurl }}/assets/report.pdf" class="btn btn-secondary" target="_blank">📄 Full Report</a>
-    </p>
   </div>
   <!-- WHAT IS GROKKING -->
   <div class="section">
