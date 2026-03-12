@@ -12,275 +12,270 @@ title: Grokking
   <p>How we reduced a 332,000-step generalization delay down to just 1,050 steps.</p>
 </div>
 <div class="main-content">
+  <!-- ELEVATOR PITCH -->
+  <div class="section">
+    <div class="callout">
+      <strong>The short version:</strong> AI models sometimes memorize training data perfectly but still can't answer new questions for a very long time — a phenomenon called <em>grokking</em>. We tested three strategies to shorten this delay, achieving speedups ranging from <strong>8× to 316×</strong>.
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <h3>🔬 What we did</h3>
+        <p>We trained a small AI model on simple math problems and tested three strategies — training on more varied problems, switching training algorithms, and changing how the model starts — to see which ones help it generalize faster.</p>
+      </div>
+      <div class="card">
+        <h3>🚫 What we didn't do</h3>
+        <p>We did not test large models, real-world tasks, or practical applications. Our results are specific to small models solving a controlled type of arithmetic — used here as a research tool to study how AI learns.</p>
+      </div>
+      <div class="card">
+        <h3>📎 Our contributions</h3>
+        <p>We built the full training pipeline from scratch and ran original experiments on task diversity. The other experiments extend findings from prior research (Power et al., 2022; Lyu et al., 2024) with new results.</p>
+      </div>
+    </div>
+    <p style="text-align:center; margin-top: 1rem;">
+      <a href="https://github.com/jetyue04/loss-plateau" class="btn btn-secondary" target="_blank">📂 GitHub Repository</a>
+      &nbsp;
+      <a href="{{ site.baseurl }}/assets/report.pdf" class="btn btn-secondary" target="_blank">📄 Full Report</a>
+    </p>
+  </div>
   <!-- WHAT IS GROKKING -->
   <div class="section">
     <h2 class="section-title">What is Grokking?</h2>
     <p class="section-intro">
-      Imagine a student who studies for a test by memorizing every answer in a textbook. At first, the student would fail
-      the test as the test does not have the same problems as the textbook that the student memorized. After reviewing the material long enough, however, the student is able to truly <em>understand</em> the underlying concepts and pass any version of the test. Grokking is the neural network equivalent of this experience. First described by Power et al. (2022), it refers to a learning phenomenon where a model achieves near-perfect training accuracy early on, then appears stuck for a very long time — before validation accuracy suddenly jumps to near-perfect as well.
+      Imagine a student who studies for a test by memorizing every answer in a textbook. At first, they would fail any test that asks new questions — because they memorized answers, not concepts. But after reviewing the material long enough, something clicks: they truly <em>understand</em> the underlying ideas and can answer any version of the test.
+    </p>
+    <p class="section-intro">
+      Grokking is the AI equivalent of this experience. First described by Power et al. (2022), it refers to a strange two-phase learning pattern where a model nails the training examples almost immediately, then appears completely stuck — before suddenly "getting it" and generalizing perfectly to new examples.
     </p>
     <div class="card-grid">
       <div class="card">
         <h3>Phase 1 — Memorization</h3>
-        <p>Training accuracy hits ~100% quickly. The model finds a lookup-table shortcut
-        but learns nothing generalizable. Validation accuracy stays near 0%.</p>
+        <p>The model quickly learns to answer every training question correctly — but only by remembering them like a lookup table. Ask it anything new and it fails. This happens very early in training.</p>
       </div>
       <div class="card">
         <h3>Phase 2 — Generalization</h3>
-        <p>Under continued weight-decay pressure, the model's internal understanding slowly
-        reorganizes into something more principled and rule-based. Validation accuracy then suddenly increases.</p>
+        <p>Much later, something shifts internally. The model stops relying on memorized answers and starts understanding the underlying pattern. Accuracy on new questions then jumps sharply.</p>
       </div>
     </div>
     <p class="section-intro">
-      Understanding what causes this delay, — and how to shorten it — has real practical value.
-      Training neural networks is expensive. If grokking can be accelerated, models could generalize
-      in a fraction of the compute time, making AI development faster and cheaper.
+      The problem is that the gap between Phase 1 and Phase 2 can be enormous — sometimes hundreds of thousands of additional training steps. Training AI is expensive, so shortening this gap has real practical value.
     </p>
     <div class="callout">
-      <strong>Our baseline:</strong> A small 2-layer decoder Transformer trained on modular division (mod 97)
-      memorized the training data in ~0.2% training progress but required <strong>~83.5%</strong> training progress, or 334,000 total steps, to truly generalize — a grokking delay of ~83.3% training progress.
+      <strong>Our baseline:</strong> Our model memorized the training data almost immediately, but needed <strong>334,000 total training steps</strong> before it could correctly answer new questions — a delay of over 330,000 steps.
     </div>
     <figure class="figure">
       <img src="{{ site.baseurl }}/assets/images/grokking_plot.png"
-           alt="Baseline grokking at 0.2% training progress">
-      <figcaption>Figure 1 — Baseline (AdamW, Division only). Training accuracy (orange dashed) reaches near perfect accuracy at around 0.2% training progress while validation accuracy (red) stays flat until the sudden transition at 83.5% training progress. The x-axis is on a log scale to make the gap visible.</figcaption>
+           alt="Line chart showing training accuracy reaching near 100% almost immediately, while accuracy on new questions stays near 0% for a very long time before suddenly jumping to 100% near the end of training.">
+      <figcaption>Figure 1 — Baseline results (division only). The orange dashed line shows how well the model does on training questions — it memorizes them almost instantly. The red line shows how well it does on new questions — it stays near 0% for the vast majority of training before the sudden jump. The x-axis is stretched so the enormous gap is visible; on a regular scale, the transition would appear as a tiny sliver at the far right.</figcaption>
     </figure>
   </div>
-
   <!-- WHY DOES IT HAPPEN -->
   <div class="section">
     <h2 class="section-title">Why Does Grokking Happen?</h2>
     <p class="section-intro">
-      Grokking isn't random — there's a mathematical reason for it. Recent theoretical work (Lyu et al., 2024)
-      proved that it arises from a <strong>dichotomy of implicit biases</strong> during training.
-      Early in training, the optimizer is biased toward simple memorization — it finds the easiest
-      solution that fits the training data, even if that solution doesn't generalize.
-      But as training continues under weight decay, the optimizer is slowly pushed toward discovering
-      more structured, efficient solutions — the kind that actually generalize. The transition between
-      these two regimes is what produces the sudden jump in validation accuracy we call grokking.
+      When an AI model trains, it is constantly trying to reduce its mistakes. Early on, the easiest way to do this is to simply memorize: remember exactly what answer goes with each training question. This works perfectly for the training set, but teaches the model nothing useful about the underlying pattern.
     </p>
     <p class="section-intro">
-      In short: <strong>weight decay is the driver of grokking</strong>. Without it, models memorize
-      and stay memorized. With it, the model is eventually forced to find a better answer —
-      it just takes a very long time by default.
+      Over time, a training technique called <strong>weight decay</strong> — which gently discourages the model from growing overly complicated — slowly pushes it away from the memorized solution toward a simpler, more general one. When the model finally finds that simpler solution, generalization happens suddenly and dramatically.
+    </p>
+    <p class="section-intro">
+      In short: the model takes the easy route first (memorization), and only later — under pressure — finds the right route (understanding). Our goal was to find ways to make that transition happen faster.
     </p>
   </div>
-
   <!-- EXPERIMENTAL SETUP -->
   <div class="section">
     <h2 class="section-title">Our Approach</h2>
     <p class="section-intro">
-      We used modular arithmetic for our experiments for a controlled setting where grokking is well-documented,
-      fully controlled, and easy to measure exactly. The task: given two numbers <em>a</em> and
-      <em>b</em>, predict the result of an arithmetic operation modulo 97 (e.g., 45 ÷ 23 mod 97).
-      We then systematically tested three strategies to accelerate the transition from memorization
-      to generalization.
+      We used <strong>clock (modular) arithmetic</strong> as our testing ground — a type of math where numbers wrap around after reaching a limit, just like a clock that resets after 12. For example, 10 + 5 on a 12-hour clock is 3, not 15. Our version wraps around at 97 instead of 12. The model's job: given two numbers and an operation, predict the correct wrap-around result.
+    </p>
+    <p class="section-intro">
+      We chose this setting because every possible question has a known correct answer, making it easy to measure generalization precisely — and because it is the same setting used in the original grokking research, making our results directly comparable.
+    </p>
+    <p class="section-intro">
+      All results are reported as <strong>training progress %</strong> — how far through training the model was when it generalized — rather than raw step counts. This makes it easy to compare experiments that ran for different lengths. We define "generalized" as when the model first answers at least 95% of new questions correctly.
     </p>
     <div class="card-grid">
       <div class="card">
-        <h3>Model</h3>
-        <p>2-layer decoder Transformer<br>
-        d_model=128, 4 attention heads<br>
-        ~422,627 parameters</p>
+        <h3>The Model</h3>
+        <p>A small AI model called a Transformer — the same family of architecture behind large language models like ChatGPT, but far smaller: around 400,000 internal connections, compared to billions in production systems.</p>
       </div>
       <div class="card">
-        <h3>Default Optimizer</h3>
-        <p>AdamW<br>
-        LR=1e-3, weight decay=1e-3<br>
-        Batch size=512, 50% train split</p>
+        <h3>The Training Algorithm</h3>
+        <p>By default we used AdamW, a popular and stable training algorithm. One experiment swapped this for SGD (Stochastic Gradient Descent), a simpler and noisier alternative.</p>
       </div>
       <div class="card">
-        <h3>Tasks (mod 97)</h3>
-        <p>Division: x·y⁻¹ mod p (hardest)<br>
-        Addition: (x+y) mod p<br>
-        Subtraction: (x−y) mod p<br>
-        Multiplication: (x·y) mod p</p>
+        <h3>The Tasks</h3>
+        <p>Four arithmetic operations, all using wrap-around math:<br>
+        Division (hardest to learn)<br>
+        Multiplication<br>
+        Addition<br>
+        Subtraction</p>
       </div>
     </div>
   </div>
-  
   <!-- EXPERIMENT 1: TASK DIVERSITY -->
   <div class="section">
     <h2 class="section-title">Experiment 1: Task Diversity</h2>
     <p class="section-intro">
-      Our first strategy: train on multiple arithmetic operations at the same time.
-      The intuition is that all four operations share the same underlying modular structure —
-      so a model trained on several tasks simultaneously is nudged toward learning
-      that shared structure rather than memorizing task-specific shortcuts.
-      This promotes the kind of general, algorithmic representations that support generalization.
+      Our first strategy: train on multiple types of arithmetic at the same time, rather than just one. The idea is that all four operations share the same underlying wrap-around structure. A model trained on all of them at once can't rely on memorizing shortcuts for any single task — it has to find the deeper pattern they all share.
     </p>
     <div class="callout">
-      <strong>Key observation from prior work:</strong> Not all tasks are equally hard to grok.
-      In single-task runs, addition groks at ~14% of training progress, multiplication at ~16%,
-      subtraction at ~37% — but division takes until <strong>83.5%</strong>. Division requires
-      computing modular inverses, making it the most structurally complex of the four.
+      <strong>Key observation:</strong> Not all tasks are equally hard to generalize. When trained alone, addition generalizes at ~14% training progress, multiplication at ~16%, subtraction at ~37% — but division takes until <strong>83.5%</strong>. Division is the hardest because it requires computing a mathematical inverse, a more complex operation than the others.
     </div>
     <p class="section-intro">
-      When we trained all four tasks together (for 1,600,000 steps, scaled proportionally for fairness),
-      every task grokked dramatically faster than the baseline:
+      When we trained all four tasks together — scaling total training time so each task got the same amount of attention as it would in a single-task run — every task generalized dramatically faster:
     </p>
     <div class="card-grid">
       <div class="card">
         <h3>1st — Multiplication</h3>
-        <p>Grokked at <strong>4.3%</strong> training progress<br>(68,250 steps)</p>
+        <p>Generalized at <strong>4.3%</strong> training progress<br>(68,250 steps)</p>
       </div>
       <div class="card">
         <h3>2nd — Division</h3>
-        <p>Grokked at <strong>4.7%</strong> training progress<br>(75,750 steps)</p>
+        <p>Generalized at <strong>4.7%</strong> training progress<br>(75,750 steps)</p>
       </div>
       <div class="card">
         <h3>3rd — Addition</h3>
-        <p>Grokked at <strong>6.5%</strong> training progress<br>(104,150 steps)</p>
+        <p>Generalized at <strong>6.5%</strong> training progress<br>(104,150 steps)</p>
       </div>
       <div class="card">
         <h3>4th — Subtraction</h3>
-        <p>Grokked at <strong>7.8%</strong> training progress<br>(124,650 steps)</p>
+        <p>Generalized at <strong>7.8%</strong> training progress<br>(124,650 steps)</p>
       </div>
     </div>
     <figure class="figure">
       <img src="{{ site.baseurl }}/assets/images/div_add_sub_mult.png"
-           alt="4-task training result">
-      <figcaption>Figure 2 — All four tasks trained simultaneously. The black curve shows the baseline (division only). All four tasks grok well before the baseline, with multiplication and division leading the way.</figcaption>
+           alt="Line chart showing four colored accuracy curves all reaching 95% accuracy before 10% training progress, compared to a black baseline curve that does not reach 95% until 83.5% training progress.">
+      <figcaption>Figure 2 — All four tasks trained together. The black curve is the single-task baseline (division only). Every colored curve crosses the 95% threshold well before 10% training progress — compared to the baseline's 83.5%. Training on variety pushed the model to understand rather than memorize.</figcaption>
     </figure>
     <p class="section-intro">
-      Not every task combination accelerates grokking equally, however. Examining two-task combinations,
-      we found a striking pattern: pairing division with multiplication produced the
-      <strong>fastest grokking across all two-task experiments</strong> — with both tasks grokking
-      at just ~0.7% of training progress. By contrast, pairing division with addition or subtraction
-      actually <em>slowed</em> grokking compared to the baseline. We hypothesize this is because
-      division and multiplication share a deep multiplicative group structure that addition and
-      subtraction do not — making their joint training especially synergistic.
+      Not every pairing helped equally. When we tested every possible two-task combination, pairing division with multiplication was by far the best — both tasks generalized at just ~0.7% training progress, a <strong>~119× speedup</strong>. By contrast, pairing division with addition or subtraction actually made things <em>worse</em> than training on division alone.
+    </p>
+    <p class="section-intro">
+      We think this is because division and multiplication are mathematically similar — both involve a kind of inverse operation — while addition and subtraction work differently. When two tasks are similar enough, the model finds shared patterns that help both. When they are too different, they may pull the model in conflicting directions.
+    </p>
+    <p class="section-intro">
+      <strong>What we learned along the way:</strong> In early runs, randomly mixing tasks in each training batch caused one task to dominate and hurt the others. We fixed this by scaling total training time with the number of tasks, ensuring each task always got equal representation.
     </p>
     <figure class="figure">
       <img src="{{ site.baseurl }}/assets/images/div_mult.png"
-           alt="Div + Mult task combination">
-      <figcaption>Figure 3 — Division + Multiplication (2-task). Both tasks grok at just ~0.7% training progress, the fastest result across all task combination experiments.</figcaption>
+           alt="Line chart showing division and multiplication both reaching 95% accuracy at around 0.7% training progress, compared to a black baseline reaching 95% at 83.5%.">
+      <figcaption>Figure 3 — Division + Multiplication trained together. Both generalize at just ~0.7% training progress — roughly 119× faster than division alone. This was the fastest result across all task combination experiments.</figcaption>
     </figure>
   </div>
-
   <!-- EXPERIMENT 2: OPTIMIZER -->
   <div class="section">
-    <h2 class="section-title">Experiment 2: SGD as a Generalization Catalyst</h2>
+    <h2 class="section-title">Experiment 2: Introducing Noise</h2>
     <p class="section-intro">
-      Our second strategy: replace AdamW with SGD. SGD introduces more gradient noise —
-      essentially making the optimizer less smooth and more likely to escape the trap of memorization
-      it gets stuck in. Think of it as shaking the model loose from a local trap.
+      Our second strategy: swap the default training algorithm for a noisier one. Our default algorithm (AdamW) carefully smooths each update to keep training as stable as possible. The alternative we tested (SGD) is less careful — its updates are rougher and less predictable. That roughness, it turns out, can help: it shakes the model out of the memorization trap, much like how jostling a stuck drawer can suddenly free it.
     </p>
     <div class="card-grid">
       <div class="card">
-        <h3>SGD LR=0.01 — Unstable</h3>
-        <p>Grokked at step <strong>16,950</strong> (~22× faster than baseline)
-        but catastrophically collapsed immediately after. Not usable in practice.</p>
+        <h3>Too much noise — Unstable</h3>
+        <p>The model generalized very quickly but then immediately fell apart. Too much noise is destabilizing — not usable in practice.</p>
       </div>
       <div class="card">
-        <h3>SGD LR=0.005 — Stable ✓</h3>
-        <p>Grokked at step <strong>44,900</strong> (~8× faster than baseline).
-        Final validation accuracy: <strong>86.32%</strong>. A genuine, stable speedup.</p>
+        <h3>Moderate noise — Stable ✓</h3>
+        <p>Generalized at step <strong>44,900</strong> — roughly <strong>8× faster</strong> than the baseline. Final accuracy: <strong>86%</strong>. A real speedup, but with a tradeoff.</p>
       </div>
     </div>
+    <p class="section-intro">
+      <strong>The tradeoff:</strong> The stable noisy run was 8× faster, but its final accuracy capped at ~86% rather than ~100%. The same roughness that helped escape memorization also prevented the model from fully converging later on. Whether this tradeoff is worth it depends on whether speed or accuracy matters more for a given use case.
+    </p>
     <figure class="figure">
       <img src="{{ site.baseurl }}/assets/images/sgd_final.png"
-           alt="SGD LR=0.005: stable grokking">
-      <figcaption>Figure 4 — SGD (LR=0.005). Stable grokking at 44,900 steps with final validation accuracy of 86.32% — roughly 8× faster than the AdamW baseline.</figcaption>
+           alt="Line chart showing the noisy training algorithm reaching 95% accuracy at step 44,900 but leveling off around 86% final accuracy, compared to the default algorithm reaching 95% at step 334,000 with near-100% final accuracy.">
+      <figcaption>Figure 4 — Moderate noise (SGD). Generalization happens 8× faster than the baseline, but final accuracy levels off at ~86% rather than ~100%. Notice the red curve plateaus rather than continuing to climb.</figcaption>
     </figure>
   </div>
-
   <!-- EXPERIMENT 3: INITIALIZATION -->
   <div class="section">
-    <h2 class="section-title">Experiment 3: Constrained Initialization</h2>
+    <h2 class="section-title">Experiment 3: Starting Small</h2>
     <p class="section-intro">
-      Our third — and most dramatic — strategy targets the root cause of grokking directly.
-      Standard initialization gives the model abundant capacity right from the start,
-      making it easy to memorize training data without learning anything generalizable.
-      What if we took that option away?
+      Our third — and most dramatic — strategy: limit the model's capacity right from the start. Normally, a model begins training with all its internal connections active, giving it plenty of room to build a complex memorization circuit. What if we dramatically reduced that starting capacity?
     </p>
     <div class="callout">
-      <strong>Hypothesis:</strong> If the model starts with very limited capacity — sparse or tiny weights —
-      it never has room to build a memorization shortcut. Instead, it is forced to find a
-      generalizing solution from the very beginning.
+      <strong>The idea:</strong> If the model starts with very few active connections, it cannot afford to memorize — it has to find the most efficient, general solution right away. Think of it like giving a student a tiny notecard instead of a full textbook to bring to an exam: they are forced to write down only the key concepts, not every answer.
     </div>
     <div class="card-grid">
       <div class="card">
-        <h3>Sparse Init (90% zeros)</h3>
-        <p>90% of weights zeroed at initialization.<br>
-        Grokking delay: <strong>1,050 steps</strong><br>
-        Final validation: <strong>99.68%</strong></p>
+        <h3>Sparse start (90% inactive)</h3>
+        <p>90% of the model's connections set to zero at the start.<br>
+        Generalization delay: <strong>1,050 steps</strong><br>
+        Final accuracy: <strong>99.68%</strong> ✅</p>
       </div>
       <div class="card">
-        <h3>Small Init (scale=0.01)</h3>
-        <p>All weights initialized at a tiny uniform scale.<br>
-        Grokking delay: <strong>1,050 steps</strong><br>
-        Final validation: <strong>73.75%</strong></p>
+        <h3>Tiny-scale start</h3>
+        <p>All connections initialized at a very small value.<br>
+        Generalization delay: <strong>1,050 steps</strong><br>
+        Final accuracy: <strong>73.75%</strong> ⚠️</p>
       </div>
     </div>
     <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
       <figure class="figure" style="flex: 1; min-width: 280px;">
         <img src="{{ site.baseurl }}/assets/images/init_sparse.png"
-             alt="Sparse initialization result" style="max-width: 100%;">
-        <figcaption>Figure 5 — Sparse Init (sparsity=0.9). Grokking delay reduced to just 1,050 steps with 99.68% final validation accuracy.</figcaption>
+             alt="Line chart showing both training accuracy and accuracy on new questions reaching near 100% within 1,050 steps, with almost no gap between them." style="max-width: 100%;">
+        <figcaption>Figure 5 — Sparse start (90% inactive). The model generalizes at just 1,050 steps with 99.68% final accuracy. Notice that the training and validation curves are nearly identical — the memorization phase has essentially vanished.</figcaption>
       </figure>
       <figure class="figure" style="flex: 1; min-width: 280px;">
         <img src="{{ site.baseurl }}/assets/images/init_small.png"
-             alt="Small initialization result" style="max-width: 100%;">
-        <figcaption>Figure 6 — Small Init (scale=0.01). Also grokked at 1,050 steps, achieving 73.75% final validation accuracy.</figcaption>
+             alt="Line chart showing accuracy on new questions reaching 95% at 1,050 steps but leveling off around 73.75% final accuracy." style="max-width: 100%;">
+        <figcaption>Figure 6 — Tiny-scale start. Also generalizes at 1,050 steps, but final accuracy levels off at 73.75% — suggesting that starting too small may limit how much the model can ultimately learn.</figcaption>
       </figure>
     </div>
     <div class="callout">
-      <strong>Result:</strong> Both strategies reduced the grokking delay from ~332,000 steps
-      to just <strong>1,050 steps</strong> — a <strong>~316× speedup</strong> that essentially
-      eliminates the memorization plateau entirely.
+      <strong>Result:</strong> Both approaches reduced the generalization delay from ~332,000 steps to just <strong>1,050 steps</strong> — a <strong>~316× speedup</strong>. The sparse start also maintained near-perfect final accuracy, making it the strongest overall result we found.
     </div>
+    <p class="section-intro">
+      <strong>Open question:</strong> It is unclear whether starting sparse would still work for larger, more powerful models — those models may genuinely need their full capacity to learn at all. Testing this is an important direction for future work.
+    </p>
   </div>
-  
   <!-- SUMMARY -->
   <div class="section">
     <h2 class="section-title">Summary & Takeaways</h2>
     <p class="section-intro">
-      Across three experiments, we demonstrated that the grokking delay is not a fixed property
-      of the problem — it can be dramatically shortened through targeted interventions.
-      A common thread runs through all three strategies: grokking is accelerated whenever
-      the model is pushed away from high-capacity memorization and toward structured,
-      generalizable representations.
+      Across three experiments, we showed that the delay between memorization and generalization is not a fixed feature of how AI learns — it can be significantly shortened. All three strategies share a common thread: they work by preventing the model from over-committing to memorization in the first place.
     </p>
     <div class="card-grid">
       <div class="card">
         <h3>Task Diversity</h3>
-        <p>4-task training (all operations)<br>
-        83.5% → 4.7% training progress for Division<br>
-        <strong>~18× speedup</strong></p>
+        <p>Train on all four operations at once<br>
+        83.5% → 4.7% progress for Division<br>
+        <strong>~18× speedup</strong><br>
+        ✅ Full accuracy maintained</p>
       </div>
       <div class="card">
-        <h3>SGD Optimizer</h3>
-        <p>LR=0.005, stable run<br>
+        <h3>Noisier Training</h3>
+        <p>Swap training algorithm to SGD<br>
         332,000 → 41,500 step delay<br>
-        <strong>~8× speedup</strong></p>
+        <strong>~8× speedup</strong><br>
+        ⚠️ Final accuracy capped at ~86%</p>
       </div>
       <div class="card">
-        <h3>Initialization</h3>
-        <p>Sparse or small-scale init<br>
+        <h3>Sparse Start</h3>
+        <p>Begin with 90% of connections inactive<br>
         332,000 → 1,050 step delay<br>
-        <strong>~316× speedup</strong></p>
+        <strong>~316× speedup</strong><br>
+        ✅ Full accuracy maintained</p>
       </div>
     </div>
-    <p class="section-intro">
-      There are open questions worth exploring further. Our experiments used a fixed model size
-      and a single prime modulus (97) — it remains unclear whether these results hold for larger
-      models or different settings. Our hypothesis about shared algebraic structure driving
-      multi-task acceleration is also still qualitative; future work applying interpretability
-      tools (or tools that let researchers inspect what a model has actually learned internally) could provide direct
-      mechanistic evidence. Finally, exploring task diversity beyond modular arithmetic could
-      reveal whether these acceleration effects are specific to our setting or more broadly applicable.
-    </p>
-  </div>
+<h3 style="margin-top: 2rem;">Why does this matter?</h3>
+<p class="section-intro">
+  Training AI models is slow and expensive. Anything that helps models generalize faster — without sacrificing accuracy — has direct practical value. Our results point to two particularly promising levers: training on diverse, related tasks, and starting with a constrained model. Both are simple to apply and produce large speedups in our setting. Whether these benefits carry over to larger, real-world models is the key open question.
+</p>
 
+<h3>Honest limitations</h3>
+<p class="section-intro">
+  Our experiments used a small, controlled research setting with a fixed model size and a single type of wrap-around (modular) arithmetic. We cannot say whether the same strategies would work for the large AI models used in real-world products. Our explanation for <em>why</em> task diversity helps is a hypothesis we did not directly verify by examining the model's internals. And our 95% accuracy threshold for defining "generalized" is a convention — small differences in timing between experiments should not be over-interpreted.
+</p>
+</div>
   <!-- REFERENCES -->
   <div class="section">
     <h2 class="section-title">References</h2>
     <p class="section-intro">
       Power et al. (2022). <a href="https://arxiv.org/abs/2201.02177" target="_blank">Grokking: Generalization Beyond Overfitting on Small Algorithmic Datasets.</a> <em>arXiv:2201.02177</em>.<br><br>
-Lyu, Jin, Li, Du, Lee &amp; Hu (2024). <a href="https://arxiv.org/abs/2311.02058" target="_blank">Dichotomy of Early and Late Phase Implicit Biases Can Provably Induce Grokking.</a> <em>ICLR 2024</em>.<br><br>
-Kim et al. (2025). <a href="https://arxiv.org/abs/2501.19512" target="_blank">Task Diversity Shortens the ICL Plateau.</a> <em>arXiv preprint</em>.<br><br>
-Lee et al. (2024). <a href="https://arxiv.org/abs/2405.20233" target="_blank">Grokfast: Accelerated Grokking by Amplifying Slow Gradients.</a> <em>arXiv:2405.20233</em>.
+      Lyu, Jin, Li, Du, Lee &amp; Hu (2024). <a href="https://arxiv.org/abs/2311.18817" target="_blank">Dichotomy of Early and Late Phase Implicit Biases Can Provably Induce Grokking.</a> <em>ICLR 2024</em>.<br><br>
+      Kim et al. (2025). <a href="https://arxiv.org/abs/2501.19512" target="_blank">Task Diversity Shortens the ICL Plateau.</a> <em>arXiv preprint</em>.<br><br>
+      Lee et al. (2024). <a href="https://arxiv.org/abs/2405.20233" target="_blank">Grokfast: Accelerated Grokking by Amplifying Slow Gradients.</a> <em>arXiv:2405.20233</em>.
     </p>
   </div>
 </div>
