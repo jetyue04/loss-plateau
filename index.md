@@ -150,7 +150,45 @@ title: Home
   </div>
 </div>
 
-  <div class="section">
+<div class="section">
+  <h2 class="section-title">Discussion & Implications</h2>
+  <p class="section-intro">
+    Our results suggest that both training-loss plateaus and grokking share a
+    common root cause: the model's early representations are too unconstrained
+    to learn efficiently. Interventions that restrict or guide early
+    representation learning — whether through initialization, optimizer choice,
+    or task diversity — consistently accelerate convergence.
+  </p>
+  <p>
+    These findings have practical implications for anyone training transformers
+    at scale: careful initialization and optimizer selection can dramatically
+    reduce the compute needed to reach generalization, potentially saving
+    significant GPU hours in real workloads.
+  </p>
+
+  <h3 class="subsection-title" style="margin-top:32px;">Limitations</h3>
+  <p>
+    All experiments are conducted on small toy arithmetic tasks (mod 97). While
+    these are standard benchmarks in grokking research, we cannot guarantee
+    the same speedups will transfer to large-scale language model training or
+    other domains. The interaction between our interventions (e.g., combining
+    SGD with sparse initialization) was not fully explored. Future work should
+    validate these findings on larger models and real NLP tasks.
+  </p>
+
+  <h3 class="subsection-title" style="margin-top:32px;">What Changed Along the Way</h3>
+  <p>
+    Early experiments with AdamW showed that grokking delay was extremely
+    sensitive to weight decay but still required hundreds of thousands of steps.
+    Switching to SGD introduced gradient noise that helped escape memorization
+    basins, but the biggest breakthrough came from initialization: restricting
+    early representational capacity via sparse or small-weight initialization
+    collapsed the grokking delay from ~332,000 steps to just 1,050 — a result
+    we did not anticipate from the optimizer experiments alone.
+  </p>
+</div>
+
+<div class="section">
   <h2 class="section-title">Team</h2>
   <div class="team-grid">
     <a href="https://www.linkedin.com/in/jyue04/" target="_blank" class="team-card">
