@@ -13,7 +13,7 @@ title: Home
   <div class="hero-links">
     <a class="btn btn-secondary" href="{{ site.baseurl }}/grokking/">Grokking →</a>
     <a class="btn btn-secondary" href="{{ site.baseurl }}/loss-plateau/">Loss Plateau →</a>
-    <a class="btn btn-primary" href="{{ site.baseurl }}/assets/poster.pdf" target="_blank">🖼️ View Poster</a>
+    <a class="btn btn-primary" href="{{ site.baseurl }}/assets/poster.pdf" target="_blank">🖼️ View the Poster</a>
     <a class="btn btn-primary" href="{{ site.baseurl }}/assets/report.pdf" target="_blank">📄 Read the Report</a>
     <a class="btn btn-primary" href="https://github.com/jetyue04/loss-plateau" target="_blank">GitHub Repository</a>
   </div>
@@ -31,7 +31,9 @@ title: Home
     <p>
       In this project we investigate whether these phenomena arise from similar
       optimization dynamics, and whether the same interventions can shorten
-      both forms of stalled learning.
+      both forms of stalled learning. We focus exclusively on small-scale
+      modular arithmetic tasks; generalization to large language models is
+      left for future work.
     </p>
   </div>
 
