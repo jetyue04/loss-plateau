@@ -285,17 +285,19 @@ After a successful run, the following files are produced:
 
 ```
 .
-├── README.md           # This file
-├── requirements.txt    # Python dependencies with pinned versions (pip)
-├── environment.yml     # Conda environment specification
-├── run.py              # Entry point: all / test / clean build targets
-├── data.py             # Dataset generation, vocabulary, tokenization
-├── model.py            # Decoder-only Transformer architecture
-├── train.py            # Training loop, evaluation, checkpointing, grokking detection
-├── utils.py            # Plotting and visualization utilities
-├── grokking_plot.png   # Example output plot (baseline run)
-└── checkpoints/        # Auto-created during training; stores checkpoint.pt
+├── README.md                # This file
+├── requirements.txt         # Python dependencies with pinned versions (pip)
+├── environment.yml          # Conda environment specification
+├── run.py                   # Entry point: all / test / clean build targets
+├── data.py                  # Dataset generation, vocabulary, tokenization
+├── model.py                 # Decoder-only Transformer architecture
+├── train.py                 # Training loop, evaluation, checkpointing, grokking detection
+├── utils.py                 # Plotting and visualization utilities
+├── grokking_plot.png        # Example output plot (baseline: division only)
+└── all_four_tasks_plot.png  # Example output plot (all four tasks simultaneously)
 ```
+
+> **Note**: `checkpoints/` is not included in the repo — it is created automatically the first time you run training and stores `checkpoint.pt` (model weights, optimizer state, and full training history).
 
 **Code organization principles:**
 - `data.py`, `model.py`, `train.py`, `utils.py` — library modules containing all implementation logic
