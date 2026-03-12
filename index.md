@@ -8,7 +8,7 @@ title: Home
   <p class="hero-subtitle">
     Transformer models waste enormous compute stuck in two training stalls —
     loss plateaus and grokking. We identify what causes them and show targeted
-    interventions that cut grokking delay by up to <strong>316×</strong>.
+    interventions that cut grokking delay by up to <strong>316× through sparse initialization</strong>.
   </p>
   <div class="hero-links">
     <a class="btn btn-secondary" href="{{ site.baseurl }}/grokking/">Grokking →</a>
@@ -86,6 +86,19 @@ title: Home
       </p>
     </div>
   </div>
+</div>
+
+<div class="section">
+  <h2 class="section-title">Dataset</h2>
+  <p class="section-intro">
+    All experiments use synthetically generated modular arithmetic data —
+    expressions of the form <code>a OP b (mod p)</code> where OP is addition,
+    subtraction, or division, and p = 97. This setup is standard in grokking
+    research because the task is simple enough to train quickly yet complex
+    enough to exhibit both memorization and generalization phases. Data is
+    generated programmatically; there is no external dataset, no train/test
+    leakage, and no sensitive or private information involved.
+  </p>
 </div>
 
 <div class="section">
