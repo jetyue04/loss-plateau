@@ -263,6 +263,7 @@ title: Grokking
   Our experiments used a small, controlled research setting with a fixed model size and a single type of wrap-around (modular) arithmetic. We cannot say whether the same strategies would work for the large AI models used in real-world products. Our explanation for <em>why</em> task diversity helps is a hypothesis we did not directly verify by examining the model's internals. And our 95% accuracy threshold for defining "generalized" is a convention — small differences in timing between experiments should not be over-interpreted.
 </p>
 </div>
+
   <!-- REFERENCES -->
   <div class="section">
     <h2 class="section-title">References</h2>
