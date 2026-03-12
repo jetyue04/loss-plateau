@@ -13,6 +13,7 @@ title: Home
   <div class="hero-links">
     <a class="btn btn-secondary" href="{{ site.baseurl }}/grokking/">Grokking →</a>
     <a class="btn btn-secondary" href="{{ site.baseurl }}/loss-plateau/">Loss Plateau →</a>
+    <a class="btn btn-primary" href="{{ site.baseurl }}/assets/poster.pdf" target="_blank">🖼️ View Poster</a>
     <a class="btn btn-primary" href="{{ site.baseurl }}/assets/report.pdf" target="_blank">📄 Read the Report</a>
     <a class="btn btn-primary" href="https://github.com/jetyue04/loss-plateau" target="_blank">GitHub Repository</a>
   </div>
@@ -185,6 +186,17 @@ title: Home
     early representational capacity via sparse or small-weight initialization
     collapsed the grokking delay from ~332,000 steps to just 1,050 — a result
     we did not anticipate from the optimizer experiments alone.
+  </p>
+</div>
+
+<!-- REFERENCES -->
+<div class="section">
+  <h2 class="section-title">References</h2>
+  <p class="section-intro">
+    Power et al. (2022). <a href="https://arxiv.org/abs/2201.02177" target="_blank">Grokking: Generalization Beyond Overfitting on Small Algorithmic Datasets.</a> <em>arXiv:2201.02177</em>.<br><br>
+    Lyu, Jin, Li, Du, Lee &amp; Hu (2024). <a href="https://arxiv.org/abs/2311.18817" target="_blank">Dichotomy of Early and Late Phase Implicit Biases Can Provably Induce Grokking.</a> <em>ICLR 2024</em>.<br><br>
+    Kim et al. (2025). <a href="https://arxiv.org/abs/2410.05448" target="_blank">Task Diversity Shortens the ICL Plateau.</a> <em>arXiv preprint</em>.<br><br>
+    Lee et al. (2024). <a href="https://arxiv.org/abs/2405.20233" target="_blank">Grokfast: Accelerated Grokking by Amplifying Slow Gradients.</a> <em>arXiv:2405.20233</em>.
   </p>
 </div>
 
