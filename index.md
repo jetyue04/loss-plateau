@@ -101,7 +101,7 @@ title: Home
 
 <div class="section">
   <h2 class="section-title">Key Findings</h2>
-  <p class="section-intro">
+  <p>
   Our experiments reveal that training stalls arise from inefficient early
   representation learning. Several interventions significantly accelerate
   training dynamics across both loss plateaus and grokking.
