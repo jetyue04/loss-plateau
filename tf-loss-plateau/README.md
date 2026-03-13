@@ -1,6 +1,6 @@
 # tf-loss-plateau
 
-This is the code for the DSC180A project by Jet Yue with Prof. Tianhao Wang. The repo is based on the paper *"What Happens During the Loss Plateau? Understanding Abrupt Learning in Transformers"* (NeurIPS 2025) [arXiv: 2506.13688](https://arxiv.org/abs/2506.13688). This project extends on the paper by looking at the effect of task diversity.
+This is the code for the DSC180B project by Jet Yue with Prof. Tianhao Wang. The repo is based on the paper *"What Happens During the Loss Plateau? Understanding Abrupt Learning in Transformers"* (NeurIPS 2025) [arXiv: 2506.13688](https://arxiv.org/abs/2506.13688). This project extends on the paper by looking at the effect of task diversity.
 
 ## Overview
 
@@ -44,3 +44,6 @@ python train.py --config path/to/config.yaml
 
 ### Data
 No external data is required. All task data is generated programmatically based on the configuration.
+
+### Expected Outputs
+The train script is configured to log into wandb automatically for all plots and checkpoints.
