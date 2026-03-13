@@ -65,7 +65,7 @@ title: Grokking
         <p>Much later, something shifts internally. The model stops relying on memorized answers and starts understanding the underlying pattern. Accuracy on new questions then jumps sharply.</p>
       </div>
     </div>
-    
+
     <p>
       <br>The gap between Phase 1 and Phase 2 can be enormous, sometimes hundreds of thousands of additional training steps.
       Training AI is expensive, so shortening this gap has real practical value.
@@ -181,6 +181,7 @@ title: Grokking
       generalized at just ~0.7% training progress, a <strong>~119x speedup</strong>. Pairing division with addition
       or subtraction actually made things <em>worse</em> than training on division alone.
     </p>
+
     <p>
       We think this is because division and multiplication are mathematically similar (both involve a kind of inverse
       operation) while addition and subtraction work differently. When two tasks are similar enough, the model finds
@@ -313,6 +314,7 @@ title: Grokking
       diverse, related tasks and starting with a constrained model. Both are simple to apply and produce large
       speedups in our setting. Whether these benefits carry over to larger, real-world models is the key open question.
     </p>
+    
     <h3 class="subsection-title">Limitations</h3>
     <p>
       Our experiments used a small, controlled research setting with a fixed model size and a single type of
