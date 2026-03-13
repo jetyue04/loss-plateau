@@ -65,6 +65,7 @@ title: Grokking
         <p>Much later, something shifts internally. The model stops relying on memorized answers and starts understanding the underlying pattern. Accuracy on new questions then jumps sharply.</p>
       </div>
     </div>
+    
     <p>
       <br>The gap between Phase 1 and Phase 2 can be enormous, sometimes hundreds of thousands of additional training steps.
       Training AI is expensive, so shortening this gap has real practical value.
