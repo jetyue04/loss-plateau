@@ -57,6 +57,8 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
+Addtionally, navigate to each submodule for the installation/dependencies.
+
 ## Running Experiments
 
 Each module contains example scripts and notebooks to reproduce the results:
@@ -65,14 +67,14 @@ Each module contains example scripts and notebooks to reproduce the results:
 
 ```bash
 cd tf-loss-plateau
-python train.py --config configs/default.yaml
+python train.py --config configs/mws.yaml
 ```
 
 * **Grokking:**
 
 ```bash
 cd grokking
-python run_grokking.py --config configs/grokking.yaml
+python run.py
 ```
 ## Dataset
 All datasets used in this project are synthetically generated and do not require external downloads.
