@@ -314,11 +314,8 @@ title: Grokking
       accuracy has direct practical value. Our results point to two particularly promising levers: training on
       diverse, related tasks and starting with a constrained model. Both are simple to apply and produce large
       speedups in our setting. Whether these benefits carry over to larger, real-world models is the key open question.
-      <br>
     </p>
-
-
-    <h3 class="subsection-title">Limitations</h3>
+    <h3 class="subsection-title" style="margin-top: 1rem;">Limitations</h3>
     <p>
       Our experiments used a small, controlled research setting with a fixed model size and a single type of
       wrap-around arithmetic. We cannot say whether the same strategies would work for large AI models used in
