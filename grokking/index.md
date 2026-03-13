@@ -41,13 +41,7 @@ title: Grokking
         <p>We built the full training pipeline from scratch and ran original experiments on task diversity. Other experiments extend prior research (Power et al., 2022; Lyu et al., 2024) with new results.</p>
       </div>
     </div>
-    <p style="text-align:center; margin-top: 1rem;">
-      <a href="https://github.com/jetyue04/loss-plateau" class="btn btn-secondary" target="_blank">GitHub Repository</a>
-      &nbsp;
-      <a href="{{ site.baseurl }}/assets/report.pdf" class="btn btn-secondary" target="_blank">Full Report</a>
-    </p>
   </div>
-
   <!-- WHAT IS GROKKING -->
   <div class="section">
     <h2 class="section-title">What is Grokking?</h2>
@@ -72,7 +66,7 @@ title: Grokking
       </div>
     </div>
     <p>
-      The gap between Phase 1 and Phase 2 can be enormous, sometimes hundreds of thousands of additional training steps.
+      <br>The gap between Phase 1 and Phase 2 can be enormous, sometimes hundreds of thousands of additional training steps.
       Training AI is expensive, so shortening this gap has real practical value.
     </p>
     <div class="callout">
@@ -95,12 +89,12 @@ title: Grokking
       training set, but teaches the model nothing useful about the underlying pattern.
     </p>
     <p>
-      Over time, a training technique called <strong>weight decay</strong>, which gently discourages the model from
+      <br>Over time, a training technique called <strong>weight decay</strong>, which gently discourages the model from
       growing overly complicated, slowly pushes it toward a simpler, more general solution. When the model finally
       finds that simpler solution, generalization happens suddenly and dramatically.
     </p>
     <p>
-      In short: the model takes the easy route first (memorization), and only later, under pressure, finds the right
+      <br>In short: the model takes the easy route first (memorization), and only later, under pressure, finds the right
       route (understanding). Our goal was to find ways to make that transition happen faster.
     </p>
   </div>
@@ -176,7 +170,7 @@ title: Grokking
       </div>
     </div>
     <figure class="figure">
-      <img src="{{ site.baseurl }}/assets/images/div_add_sub_mult.png"
+      <img src="{{ site.baseurl }}/assets/images/sgd_final.png"
            alt="Line chart showing four colored accuracy curves all reaching 95% before 10% training progress, compared to a black baseline curve that does not reach 95% until 83.5%.">
       <figcaption>Figure 2 - All four tasks trained together. The black curve is the single-task baseline (division only). Every colored curve crosses the 95% threshold well before 10% training progress, compared to the baseline's 83.5%. Training on variety pushed the model to understand rather than memorize.</figcaption>
     </figure>
@@ -224,7 +218,7 @@ title: Grokking
       </div>
     </div>
     <p>
-      <strong>The tradeoff:</strong> The stable run was 8x faster, but final accuracy capped at ~86% rather than ~100%.
+      <br><strong>The tradeoff:</strong> The stable run was 8x faster, but final accuracy capped at ~86% rather than ~100%.
       The same roughness that helped escape memorization also prevented the model from fully converging later on.
       Whether this tradeoff is worth it depends on whether speed or accuracy matters more for a given use case.
     </p>
