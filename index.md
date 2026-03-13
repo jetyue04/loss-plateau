@@ -94,13 +94,7 @@ title: Home
 <div class="section">
   <h2 class="section-title">Dataset</h2>
   <p class="section-intro">
-    All experiments use synthetically generated modular arithmetic data —
-    expressions of the form <code>a OP b (mod p)</code> where OP is addition,
-    subtraction, or division, and p = 97. This setup is standard in grokking
-    research because the task is simple enough to train quickly yet complex
-    enough to exhibit both memorization and generalization phases. Data is
-    generated programmatically; there is no external dataset, no train/test
-    leakage, and no sensitive or private information involved.
+    All experiments use synthetically generated modular arithmetic data in an online manner. The tasks are chosen such that the model can solve the task to perfect accuracy. There are no external dataset, no train/test leakage and no sensitive or private information involved.
   </p>
 </div>
 
@@ -155,7 +149,7 @@ title: Home
 
 <div class="section">
   <h2 class="section-title">Discussion & Implications</h2>
-  <p class="section-intro">
+  <p>
     Our results suggest that both training-loss plateaus and grokking share a
     common root cause: the model's early representations are too unconstrained
     to learn efficiently. Interventions that restrict or guide early
@@ -195,10 +189,42 @@ title: Home
 <div class="section">
   <h2 class="section-title">References</h2>
   <p class="section-intro">
-    Power et al. (2022). <a href="https://arxiv.org/abs/2201.02177" target="_blank">Grokking: Generalization Beyond Overfitting on Small Algorithmic Datasets.</a> <em>arXiv:2201.02177</em>.<br><br>
-    Lyu, Jin, Li, Du, Lee &amp; Hu (2024). <a href="https://arxiv.org/abs/2311.18817" target="_blank">Dichotomy of Early and Late Phase Implicit Biases Can Provably Induce Grokking.</a> <em>ICLR 2024</em>.<br><br>
-    Kim et al. (2025). <a href="https://arxiv.org/abs/2410.05448" target="_blank">Task Diversity Shortens the ICL Plateau.</a> <em>arXiv preprint</em>.<br><br>
-    Lee et al. (2024). <a href="https://arxiv.org/abs/2405.20233" target="_blank">Grokfast: Accelerated Grokking by Amplifying Slow Gradients.</a> <em>arXiv:2405.20233</em>.
+
+    Power, A., Burda, Y., Edwards, H., Babuschkin, I., & Misra, V. (2022). 
+    <a href="https://arxiv.org/abs/2201.02177" target="_blank">
+    Grokking: Generalization Beyond Overfitting on Small Algorithmic Datasets
+    </a>. <em>arXiv:2201.02177</em>.
+    <br><br>
+
+    Lyu, K., Jin, T., Li, Y., Du, S., Lee, J. D., & Hu, W. (2024). 
+    <a href="https://arxiv.org/abs/2311.18817" target="_blank">
+    Dichotomy of Early and Late Phase Implicit Biases Can Provably Induce Grokking
+    </a>. <em>ICLR 2024</em>.
+    <br><br>
+
+    Kim, J., Kwon, S., Choi, J. Y., Park, J., Cho, J., Lee, J. D., & Ryu, E. K. (2025). 
+    <a href="https://arxiv.org/abs/2410.05448" target="_blank">
+    Task Diversity Shortens the ICL Plateau
+    </a>. <em>arXiv:2410.05448</em>.
+    <br><br>
+
+    Lee, S., et al. (2024). 
+    <a href="https://arxiv.org/abs/2405.20233" target="_blank">
+    Grokfast: Accelerated Grokking by Amplifying Slow Gradients
+    </a>. <em>arXiv:2405.20233</em>.
+    <br><br>
+
+    Gopalani, P., & Hu, W. (2025). 
+    <a href="https://arxiv.org/abs/2506.13688" target="_blank">
+    What Happens During the Loss Plateau? Understanding Abrupt Learning in Transformers
+    </a>. <em>arXiv:2506.13688</em>.
+    <br><br>
+
+    He, J., Pan, X., Chen, S., & Yang, Z. (2025). 
+    <a href="https://arxiv.org/abs/2503.12734" target="_blank">
+    In-Context Linear Regression Demystified: Training Dynamics and Mechanistic Interpretability of Multi-Head Softmax Attention
+    </a>. <em>arXiv:2503.12734</em>.
+
   </p>
 </div>
 
