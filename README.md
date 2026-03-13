@@ -1,13 +1,21 @@
 # loss-plateau
 
-This project explores the phenomenon of **training-loss plateaus** in deep learning models, particularly in transformer architectures. It is organized into **two separate modules**, each focusing on different aspects of training dynamics and reproducibility:
+## Problem Description
+Transformer models, which power modern AI systems such as GPT and BERT, often spend significant compute in inefficient training regimes where learning appears to stall. Two commonly observed phenomena are:
 
-1. **Transformer Loss Plateau (TF Loss Plateau)**
-   This module investigates how transformer models experience extended periods of nearly constant training loss (plateaus), how these plateaus relate to model architecture and learning dynamics, and strategies to analyze and visualize them.
+- Training-loss plateaus – extended periods during which training loss remains nearly constant before suddenly decreasing.
 
-2. **Grokking**
-   This module focuses on the **grokking phenomenon**, where models suddenly generalize after a long period of overfitting. It provides experiments, visualizations, and analysis to reproduce and study this effect.
+- Grokking (generalization plateau) – a phenomenon where a model initially memorizes the training data and only generalizes after a long delay.
 
+Despite being studied independently, these behaviors may arise from similar optimization dynamics.
+
+In this project, we investigate whether these phenomena share common underlying causes and whether the same interventions can shorten both forms of stalled learning. To isolate these dynamics, we focus on controlled modular arithmetic tasks, allowing us to systematically analyze transformer training behavior.
+
+The project is divided into two modules:
+
+- Transformer Loss Plateau (TF Loss Plateau) – studies prolonged plateaus in training loss during optimization.
+
+- Grokking – studies delayed generalization after extended overfitting.
 ---
 
 ## Getting Started
@@ -17,7 +25,39 @@ Each module has its own set of instructions and reproducibility steps. Please na
 * [TF Loss Plateau Instructions](./tf-loss-plateau)
 * [Grokking Instructions](./grokking)
 
-### Running Experiments
+### Directory Structure
+```
+loss-plateau/
+│
+├── tf-loss-plateau/        # Transformer loss plateau experiments
+│   ├── train.py
+│   ├── configs/
+│   └── utils/
+│
+├── grokking/               # Grokking experiments
+│   ├── run_grokking.py
+│   ├── configs/
+│   └── analysis/
+│
+├── docs/                   # Project website files
+│
+├── requirements.txt
+└── README.md
+```
+
+## Installation
+Clone the repository:
+```bash
+git clone https://github.com/jetyue04/loss-plateau.git
+cd loss-plateau
+```
+
+Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+## Running Experiments
 
 Each module contains example scripts and notebooks to reproduce the results:
 
@@ -34,6 +74,20 @@ python train.py --config configs/default.yaml
 cd grokking
 python run_grokking.py --config configs/grokking.yaml
 ```
+## Dataset
+All datasets used in this project are synthetically generated and do not require external downloads.
+
+## Expected Outputs 
+Running the experiments will generate:
+- Training Logs
+
+- Saved Model Checkpoints
+
+Plots and Visualizations
+
+- Generated plots include:
+
+Additoinally, the tf-loss-plateau module is generated to automatically log into weights and biases for visualization.
 
 ## Project Website
 
