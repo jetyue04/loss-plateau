@@ -23,7 +23,7 @@ title: Home
 
   <div class="section">
     <h2 class="section-title">Core Question</h2>
-    <p class="section-intro">
+    <p>
       Transformer models (neural networks that power modern AI systems like GPT and BERT) often spend enormous amounts of compute stuck in inefficient
       training regimes. These stalls appear in two well-known forms:
       <b>training-loss plateaus</b> and <b>grokking (generalization plateau)</b>.
