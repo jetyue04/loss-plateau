@@ -63,7 +63,7 @@ title: Home
 
 <div class="section">
   <h2 class="section-title">Our Approach</h2>
-  <p class="section-intro">
+  <p>
     We test whether shared interventions can accelerate both phenomena.
   </p>
 
@@ -94,7 +94,7 @@ title: Home
 
 <div class="section">
   <h2 class="section-title">Dataset</h2>
-  <p class="section-intro">
+  <p>
     All experiments use synthetically generated modular arithmetic data in an online manner. The tasks are chosen such that the model can solve the task to perfect accuracy. There are no external dataset, no train/test leakage and no sensitive or private information involved.
   </p>
 </div>
