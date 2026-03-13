@@ -292,6 +292,16 @@ title: Loss Plateau
   </div>
 
   <div class="section">
+    <h2 class="section-title">Why It Matters & Limitations</h2>
+    <p class="section-intro">
+      Understanding training-loss plateaus helps researchers and practitioners identify inefficient learning phases in Transformer models, allowing them to design interventions—like task diversity or transfer learning—that accelerate training and improve generalization. Insights from these small-scale experiments can inform   strategies for larger models and real-world applications where compute is costly.
+    </p>
+    <p class="section-intro">
+      <strong>Limitations:</strong> 
+      This study focuses exclusively on small modular arithmetic tasks using shallow Transformers. Results may not directly generalize to large language models or complex real-world tasks. Additionally, only certain interventions were tested (task diversity and transfer learning), leaving other optimization strategies unexplored.           Finally, some observed phenomena, such as attention formation and representation collapse, may manifest differently at larger scales or in models with more layers and heads.
+    </p>
+    </div>
+  <div class="section">
   <h2 class="section-title">References</h2>
   <p class="section-intro">
     Jaeyeon Kim, Sehyun Kwon, Joo Young Choi, Jongho Park, Jaewoong Cho, Jason D. Lee, Ernest K. Ryu (2025). 
