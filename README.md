@@ -39,8 +39,6 @@ loss-plateau/
 │   ├── configs/
 │   └── analysis/
 │
-├── docs/                   # Project website files
-│
 ├── requirements.txt
 └── README.md
 ```
