@@ -110,13 +110,10 @@ title: Loss Plateau
     </div>
     <div class="card">
       <h3>Tasks</h3>
-      <ul>
-        <li><strong>MWS</strong> – Moving Window Sum</li>
-        <li><strong>MWP</strong> – Moving Window Product</li>
-        <li><strong>MWD</strong> – Moving Window Difference</li>
-        <li><strong>PS</strong> – Prefix Sum</li>
-      </ul>
-      <p>Sequences have length 16 and use modulus 17.</p>
+      <p>  We selected small, deterministic sequence tasks based on modular arithmetic.
+      Each task is simple enough that the model can achieve 100% accuracy,
+      making it ideal to study training dynamics and the appearance of
+      loss plateaus without complications from task difficulty.</p>
     </div>
   </div>
 </div>
