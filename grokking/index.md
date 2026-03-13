@@ -183,6 +183,7 @@ title: Grokking
     </p>
 
     <p>
+    <br>
       We think this is because division and multiplication are mathematically similar (both involve a kind of inverse
       operation) while addition and subtraction work differently. When two tasks are similar enough, the model finds
       shared patterns that help both. When they are too different, they may pull the model in conflicting directions.
@@ -313,8 +314,9 @@ title: Grokking
       accuracy has direct practical value. Our results point to two particularly promising levers: training on
       diverse, related tasks and starting with a constrained model. Both are simple to apply and produce large
       speedups in our setting. Whether these benefits carry over to larger, real-world models is the key open question.
+      <br>
     </p>
-    
+
     <h3 class="subsection-title">Limitations</h3>
     <p>
       Our experiments used a small, controlled research setting with a fixed model size and a single type of
