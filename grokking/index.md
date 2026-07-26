@@ -188,16 +188,18 @@ title: Grokking
       operation) while addition and subtraction work differently. When two tasks are similar enough, the model finds
       shared patterns that help both. When they are too different, they may pull the model in conflicting directions.
     </p>
-    <figure class="figure" style="max-width: 90%;">
+    <figure class="figure">
       <img src="{{ site.baseurl }}/assets/images/div_mult.png"
-           alt="Line chart showing division and multiplication both reaching 95% accuracy at around 0.7% training progress, compared to a black baseline reaching 95% at 83.5%.">
+           alt="Line chart showing division and multiplication both reaching 95% accuracy at around 0.7% training progress, compared to a black baseline reaching 95% at 83.5%." style="max-width: 90%;">
       <figcaption>Figure 3 - Division and Multiplication trained together. Both generalize at just ~0.7% training progress, roughly 119x faster than division alone. This was the fastest result across all task combination experiments.</figcaption>
     </figure>
     <h3 class="subsection-title">What we learned along the way</h3>
     <p>
       In our earlier runs, randomly mixing tasks in each training batch caused one task to dominate and hurt the others. In each training step, the model looks at a batch of examples and updates its internal weights based on those examples. When batches were drawn randomly from a mix of tasks, some tasks appeared far more often than others just by chance. The task that showed up most got the strongest influence over the weight updates, while underrepresented tasks barely got to train or "practice" and ended up learning more slowly or not at all.
-
-We fixed this by scaling total training steps proportionally with the number of tasks: 400,000 steps per task, so two tasks ran for 800,000 steps, three for 1,200,000, and so on. This ensures every task receives equal training exposure regardless of how many are combined.
+    </p>
+    
+    <p>
+    <br>We fixed this by scaling total training steps proportionally with the number of tasks: 400,000 steps per task, so two tasks ran for 800,000 steps, three for 1,200,000, and so on. This ensures every task receives equal training exposure regardless of how many are combined.
     </p>
   </div>
 
