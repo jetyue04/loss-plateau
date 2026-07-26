@@ -170,9 +170,9 @@ title: Grokking
         <p>Generalized at <strong>7.8%</strong> training progress (124,650 steps)</p>
       </div>
     </div>
-    <figure class="figure" style="max-width: 90%;">
+    <figure class="figure">
       <img src="{{ site.baseurl }}/assets/images/div_add_sub_mult.png"
-           alt="Line chart showing four colored accuracy curves all reaching 95% before 10% training progress, compared to a black baseline curve that does not reach 95% until 83.5%.">
+           alt="Line chart showing four colored accuracy curves all reaching 95% before 10% training progress, compared to a black baseline curve that does not reach 95% until 83.5%." style="max-width: 90%; display: block; margin: 0 auto;">
       <figcaption>Figure 2 - All four tasks trained together. The black curve is the single-task baseline (division only). Every colored curve crosses the 95% threshold well before 10% training progress, compared to the baseline's 83.5%. Training on variety pushed the model to understand rather than memorize.</figcaption>
     </figure>
     <h3 class="subsection-title">Two-task combinations</h3>
