@@ -190,7 +190,7 @@ title: Grokking
     </p>
     <figure class="figure">
       <img src="{{ site.baseurl }}/assets/images/div_mult.png"
-           alt="Line chart showing division and multiplication both reaching 95% accuracy at around 0.7% training progress, compared to a black baseline reaching 95% at 83.5%." style="max-width: 90%;">
+           alt="Line chart showing division and multiplication both reaching 95% accuracy at around 0.7% training progress, compared to a black baseline reaching 95% at 83.5%." style="max-width: 90%; display: block; margin: 0 auto;">
       <figcaption>Figure 3 - Division and Multiplication trained together. Both generalize at just ~0.7% training progress, roughly 119x faster than division alone. This was the fastest result across all task combination experiments.</figcaption>
     </figure>
     <h3 class="subsection-title">What we learned along the way</h3>
