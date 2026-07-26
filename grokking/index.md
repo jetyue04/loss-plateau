@@ -170,8 +170,8 @@ title: Grokking
         <p>Generalized at <strong>7.8%</strong> training progress (124,650 steps)</p>
       </div>
     </div>
-    <figure class="figure">
-      <img src="{{ site.baseurl }}/assets/images/sgd_final.png"
+    <figure class="figure" style="max-width: 90%;">
+      <img src="{{ site.baseurl }}/assets/images/div_add_sub_mult.png"
            alt="Line chart showing four colored accuracy curves all reaching 95% before 10% training progress, compared to a black baseline curve that does not reach 95% until 83.5%.">
       <figcaption>Figure 2 - All four tasks trained together. The black curve is the single-task baseline (division only). Every colored curve crosses the 95% threshold well before 10% training progress, compared to the baseline's 83.5%. Training on variety pushed the model to understand rather than memorize.</figcaption>
     </figure>
@@ -188,16 +188,16 @@ title: Grokking
       operation) while addition and subtraction work differently. When two tasks are similar enough, the model finds
       shared patterns that help both. When they are too different, they may pull the model in conflicting directions.
     </p>
-    <figure class="figure">
+    <figure class="figure" style="max-width: 90%;">
       <img src="{{ site.baseurl }}/assets/images/div_mult.png"
            alt="Line chart showing division and multiplication both reaching 95% accuracy at around 0.7% training progress, compared to a black baseline reaching 95% at 83.5%.">
       <figcaption>Figure 3 - Division and Multiplication trained together. Both generalize at just ~0.7% training progress, roughly 119x faster than division alone. This was the fastest result across all task combination experiments.</figcaption>
     </figure>
     <h3 class="subsection-title">What we learned along the way</h3>
     <p>
-      In early runs, randomly mixing tasks in each training batch caused one task to dominate and hurt the others.
-      We fixed this by scaling total training time with the number of tasks, ensuring each task always received
-      equal representation.
+      In our earlier runs, randomly mixing tasks in each training batch caused one task to dominate and hurt the others. In each training step, the model looks at a batch of examples and updates its internal weights based on those examples. When batches were drawn randomly from a mix of tasks, some tasks appeared far more often than others just by chance. The task that showed up most got the strongest influence over the weight updates, while underrepresented tasks barely got to train or "practice" and ended up learning more slowly or not at all.
+
+We fixed this by scaling total training steps proportionally with the number of tasks: 400,000 steps per task, so two tasks ran for 800,000 steps, three for 1,200,000, and so on. This ensures every task receives equal training exposure regardless of how many are combined.
     </p>
   </div>
 
